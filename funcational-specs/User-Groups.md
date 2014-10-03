@@ -15,8 +15,8 @@ The types of people participating in the OADA ecosystem include
 [farmers](#user-content-farmers), [landowners](#user-content-landowners),
 [software developers](#user-content-software-developers),
 [local agents](#user-content-local-agents),
-[equipment/device manufacturers](#user-content-equipment-device-manufacturers),
-[storage providers](#user-content-storage-providers), and
+[equipment/device manufacturers](#user-content-equipmentdevice-manufacturers),
+[storage providers](#user-content-cloud-storage-providers), and
 [application providers](#user-content-application-providers).
 
 ### Farmers

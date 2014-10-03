@@ -22,18 +22,18 @@ overview of the basic components of the OADA ecosystem
 
 # OADA Participant Roles
 
-[OADA Roles](OADA-Roles)
+[OADA Roles](OADA-Roles.md)
 
 # Federated Identity
 
-[OADA Federated Identity](Federated-Identity)
+[OADA Federated Identity](Federated-Identity.md)
 
 # User Groups
 
-[User Group Descriptions](User-Groups)
+[User Group Descriptions](User-Groups.md)
 
 # Use Cases
 
-[Use Cases](Use-Cases)
+[Use Cases](Use-Cases.md)
 
 
