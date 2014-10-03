@@ -31,10 +31,6 @@
 * [Copy Resource](REST-API-Examples.md#copy-resource)
 * [Make Existing Resource a Derivative of Another](REST-API-Examples.md#make-existing-resource-a-derivative-of-another)
 
-# Query Parameters
-
-* [Filter](Query-Param-filter.md)
-
 # Supported HTTP
 
 * [HTTP Headers](HTTP-Headers-for-REST-API.md)

@@ -29,7 +29,7 @@ To better convey what each example is accomplishing we describe them with severa
 
 # Federated Login
 
-[[federated_login.png]]
+![Federated login](federated_login.png "Federated login")
 
 Frank logs into his agcloud.com OADA account with an OADA compliant Android app
 using his agidentity.com federated identity.
@@ -160,7 +160,7 @@ fragment and stores it for later use.
 
 # Resource Upload
 
-[[resource_upload.png]]
+![Resource upload](resource_upload.png "Resource upload")
 
 Frank's telematics device records yield measurements through the entire day into
 a GeoJSON file.  While Frank finishes his work for the day he touches the "sync
@@ -257,7 +257,7 @@ Etag: "9083423jkadfu9382x"
 
 # Resource Update
 
-[[resource_update.png]]
+![Resource update](resource_update.png "Resource update")
 
 Whenever Frank's tractor is on, his telematics device records the
 number of hours it has been running. Periodically, the telematics device updates
@@ -429,7 +429,7 @@ Etag: "893rjdklia9w383984"
 
 # Resource Sharing
 
-[[resource_sharing.png]]
+![Resource sharing](resource_sharing.png "Resource sharing")
 
 Frank instructs his OADA complaint Android app to share a resource with Andy.
 Now Andy can access it directly with his own account.
@@ -538,7 +538,7 @@ Etag: "aodskjfoa3j9af7883"
 
 # Field Discovery
 
-[[field_discovery.png]]
+![Field discovery](field_discovery.png "Field discovery")
 
 Frank drives his tractor to a field and starts planting. Instead of asking Frank
 what field he is in, the monitor automatically discovers the current
@@ -645,7 +645,7 @@ Etag: "qewriuquicjdkcj832"
 
 # Manual Resource Syncing
 
-[[resource_syncing.png]]
+![Resource syncing](resource_syncing.png "Resource syncing")
 
 Frank uses his OADA compliant Android app to discover his planting prescription
 resource via the prescription configurations. He proceeds to edit the resource
@@ -705,7 +705,7 @@ Etag: "ajja97823jfaksdhfx"
 
 # Automatic Resource Syncing
 
-[[resource_auto_syncing.png]]
+![Resource auto syncing](resource_auto_syncing.png "Resource auto syncing")
 
 Frank wants to store the same resource at two different OADA implementations. Frank also wants these two OADA implementations to keep the copies of the resource synchronized with each other automatically.
 
