@@ -277,7 +277,7 @@ between these two implementations is identical.
    back to the OADA entity that initiated the authentication request (viz.
    agcloud.com).
 
-[[oada_federated_identity.jpg|align=center]]
+![OADA Federated Identity](oada_federated_identity.jpg "OADA Federated Identity")
 
 | OADA Entity | SAML Entity | ODIC Entity |
 | ----------- | ----------- | ----------- |
