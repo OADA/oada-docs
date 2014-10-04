@@ -41,12 +41,12 @@ volume of incoming requests, the team will look for potential new members from
 the set of active contributors.  The project lead will invite individuals to the
 group of TC’s and provision access as needed.
 
-All code is released via the [MIT license][mit-license], as specified in the
-LICENSE file at the root of each repository.  The LICENSE file must remain
-intact for any pull requests.
+All code is released via the [Apache 2.0 license][apache2-license], as specified
+in the LICENSE file at the root of each repository.  The LICENSE file must
+remain intact for any pull requests.
 
 [oada-github]: https://github.com/OADA
 [oada-dev-list]: https://groups.google.com/forum/?#!forum/oada-dev
 [oada-wiki]: https://github.com/OADA/oada-wiki/wiki
-[mit-license]: http://opensource.org/licenses/MIT
+[apache2-license]: http://opensource.org/licenses/Apache-2.0
 
