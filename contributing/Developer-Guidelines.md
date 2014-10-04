@@ -26,10 +26,10 @@ and discussed via the [community developers mailing list][oada-dev-list].  The
 TC team will use the community discussion to prioritize and decide on features
 for each version’s targeted release date.
 
-Project documentation will be community-driven and hosted via the main
-organization [Github Wiki][oada-wiki].  Documentation is usually the primary
-metric by which projects are judged in the developer community, so contributions
-to the documentation are highly encouraged as a good way to get involved.
+Project documentation will be community-driven and hosted via the
+[oada-docs][oada-docs] repository.  Documentation is usually the primary metric
+by which projects are judged in the developer community, so contributions to the
+documentation are highly encouraged as a good way to get involved.
 
 The process for becoming a TC is merit-based and by invitation only.  A
 developer wishing to become a TC should:
@@ -47,6 +47,6 @@ remain intact for any pull requests.
 
 [oada-github]: https://github.com/OADA
 [oada-dev-list]: https://groups.google.com/forum/?#!forum/oada-dev
-[oada-wiki]: https://github.com/OADA/oada-wiki/wiki
+[oada-docs]: https://github.com/OADA/oada-docs
 [apache2-license]: http://opensource.org/licenses/Apache-2.0
 
