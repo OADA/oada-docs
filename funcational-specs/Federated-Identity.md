@@ -101,7 +101,7 @@ Farmer is the ultimate arbitrar on who gets access to his / her data.
 
 2. Frank navigates to desired folder, viz. 2011/Harvest/Field1
 
-Frank’s client uses https://agcloud.com/oada/resources API with OAuth 2.0 access
+Frank’s client uses https://agcloud.com/resources API with OAuth 2.0 access
 token to navigate Frank’s data.
 
 3. Frank selects to share 2011/Harvest/Field1 with Andy
@@ -198,7 +198,7 @@ HTTP/1.1 200 OK
 6. Andy’s browser popup passes the OAuth 2.0 token to the outer app for
    inclusion with future API requests.
 
-Andy’s client uses https://agcloud.com/oada/resources API with OAuth 2.0 access
+Andy’s client uses https://agcloud.com/resources API with OAuth 2.0 access
 token to access Frank’s data.
 
 # Federated Identity Architecture
