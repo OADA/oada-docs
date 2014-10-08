@@ -1,7 +1,7 @@
 # OADA API Endpoint Overview
 
 * [`/resources`](#user-content-resources)
-* [`/configurations`](#user-content/configurations)
+* [`/bookmarks`](#user-content-bookmarks)
 * [`/about`](#user-content-about)
 * [`/users`](#user-content-users)
 * [`/groups`](#user-content-groups)
@@ -12,18 +12,25 @@
 
 ## `/resources/{resourceId}`
 
-OADA's `/resources` are the meat of the OADA API and are also the most
+OADA's `/resources` are the meat of the OADA API and therefore are also the most
 complex. It's responsibilities include:
 
 - Storing all data: binary files, JSON documents, etc.
 - Storing user defined metadata about the resource.
-- Transform and represent data in multiple formats.
-- Organize the data in a parent/child structure (think Google Drive).
-- Share data with other users.
+- Transforming and representing data in multiple formats.
+- Organizing data in a parent/child structure (think Google Drive).
+- Shearing data with other users.
 
-In order to accomplish these tasks with more ease, the following
-endpoints beneath `/resources/{resourceId}` are defined:
-- `/data`
+Most OADA endpoints are actually resources with a valid resource id. There are just given their own endpoint to enable easier and automatic discovery of that information. The same documents can be requested directly using the `/resources/{resourceId}` endpoint as well.
+
+### Accessing Stored Data
+Stored data can be directly accessed with a GET request on the `/resources/{resourceId}` endpoint. 
+If the data is in a JSON format sub-documents can be directly accessed by appending the JSON keys of interest to the end of  `/resources/{resourceId}`. The mapping follows [RFC 6901 JavaScript Object Notation (JSON) Pointer][rfc6901]. If the data is a binary format then the binary blob is returned directly. If the data is a binary format and the OADA specific `_meta` document is also requested (see below) then the response is of the `Multipart/mixed` media type where one part is the `_meta` JSON document and the other is the binary blob. A `302 Found` may be returned if the resource is available at an alternative location, such as a Content Delivery Network (CDN).
+
+### The Data's Meta Data
+In order to accomplish tasks like storing user defined metadata, sharing resource with other users, creating a file structure, and synchronizing resources across clouds each resource has a well defined metadata sub-document called `_meta`. `_meta` lives at the root of a resource, that is at `/resources/{resourceId}/_meta` and is a reserved JSON key at the root of the resource's data document.
+
+The following endpoints, JSON sub-documents, reside under `_meta`:
 - `/meta`
 - `/formats`
 - `/parents`
@@ -31,207 +38,212 @@ endpoints beneath `/resources/{resourceId}` are defined:
 - `/permissions`
 - `/syncs`
 
-All of the above endpoints return a JSON document except for `/data`, which may
-be any media type.
-
 ### Example `/resource/{resourceId}` document
 
-The following example is an "expanded" version of document. This means that
-`href` keys are resolved and included embedded in result. Therefore, the
-response documents for the `/resources/{resourceId}` sub-endpoints are also
-shown.
+The following is a example of JSON data with `view` set to also return the `_meta` document. That is both the native data and the OADA specific `_meta` metadata document is returned all together as one JSON ouptut.
 
-```json
+```http
+GET /resource/ixm24ws?view={"_meta": true} HTTP/1.1
+Host: agcloud.com
+Accept: application/json
+Authorization: Bearer ajCX83jfax.arfvFA323df
+
 {
-    "href": "https://api.agcloud.com/resources/ixm24ws",
-    "etag": "lajscfa938f23fuj8x",
+  "totalYield": {
+    "value": 5.6,
+    "unit": "bushel"
+  },
+  "type": "FeatureCollection",
+  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
+  "features": [{
+    "....": "...."
+  },
+  "_meta": {
+    "_id": "/resources/ixm24ws/_meta",
+    "_etag": "lajscfa938f23fuj8x",
     "name": "Frank's Yield",
     "mimeType": "application/vnd.oada.yield+json",
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
-        "href": "https://api.agcloud.com/users/kdufe3f",
-        "account": "frank@agidentity.com",
-        "name": "Frank Fellow",
-        "picture": {
-            "href": "http://www.gravatar.com/avatar/c7e1ee573f"
-        },
-        "email": "frank@agcloud.com"
+      "_id": "/users/kdufe3f",
+      "etag": "a98345kjgfvjvcvkrc",
+      "account": "frank@agidentity.com",
+      "name": "Frank Fellow",
+      "picture": {
+     	 "href": "http://www.gravatar.com/avatar/c7e1ee573f"
+      },
+ 	  "email": "frank@agcloud.com"
     },
     "modified": "1985-04-12T23:20:50.52Z",
     "modifiedBy": {
-        "href": "https://api.agcloud.com/users/kdufe3f",
+      "_id": "/users/kdufe3f",
+      "_etag": "a98345kjgfvjvcvkrc",
+      "account": "frank@agidentity.com",
+      "name": "Frank Fellow",
+      "picture": {
+     	 "href": "http://www.gravatar.com/avatar/c7e1ee573f"
+      },
+ 	  "email": "frank@agcloud.com"
+    },
+    "meta": {
+      "href": "/resources/ixm24ws/_meta/meta",
+  	  "_etag": "ewiudfaw82y3udhcxz",
+   	  "totalYield": {
+   	    "value": 5.6,
+   	    "unit": "bushel"
+      }
+    },
+    "formats": {
+      "_id": "/resources/ixm24ws/_meta/format",
+      "_etag": "iafueic9jcklhvcyfa",
+      "transforms": {
+        "application/vnd.oada.yield+json": {
+          "original": true,
+          "lossy": false,
+          "name": "OADA GeoJSON Yield Open Format",
+          "openFormat": true
+        },
+        "application/json": {
+          "lossy": false,
+          "name": "JavaScript Object Notation",
+          "openFormat": false
+        },
+        "application/netcdf": {
+          "lossy": false,
+          "name": "Network Common Data Form",
+          "openFormat": true
+        },
+        "application/shape": {
+          "lossy": false,
+          "name": "Esri Shapefile",
+          "openFromat": false
+        }
+      }
+    },
+    "parents": {
+      "_id": "/resources/ixm24ws/_meta/parents",
+      "_etag": "oui9032uc8y78a9chx",
+      "items": [{
+        "_id": "/resources/ixm24ws/_meta/parents/me30fzp",
+        "resource": {
+          "_id": "/resources/me30fzp"
+        }
+      },
+      {
+        "_id": "/resources/ixm24ws/_meta/parents/me30fzp",
+        "resource": {
+          "_id": "/resources/me30fzp"
+        }
+      }]
+    },
+    "children": {
+      "_id": "/resources/ixm24ws/_meta/children",
+      "_etag": "asjc93uciasduf3jxj",
+      "items": [{
+        "_id": "/resources/ixm24ws/_meta/children/kl3j93s",
+        "resource": {
+          "_id": "/resources/kl3j93s"
+        }
+      },
+      {
+        "_id": "/resources/ixm24ws/_meta/parents/op302xa",
+        "resource": {
+          "_id": "/resources/op302xa"
+        }
+      }]
+    },
+    "permissions": {
+      "_id": "/resources/ixm24ws/_meta/permissions",
+      "_etag": "cvxfj23fjr9ifu932f",
+      "items": [{
+        "_id": "/resources/ixm24ws/_meta/permissions/kdufe3f",
+      "user": {
+        "_id": "/users/kdufe3f",
+        "_etag": "a98345kjgfvjvcvkrc",
         "account": "frank@agidentity.com",
         "name": "Frank Fellow",
         "picture": {
-            "href": "http://www.gravatar.com/avatar/c7e1ee573f"
+       	   "href": "http://www.gravatar.com/avatar/c7e1ee573f"
         },
-        "email": "frank@agcloud.com"
-    },
-    "data": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/data",
-        "etag": "aj3ja8ecuidshfaifx",
-        "totalYield": {
-            "value": 5.6,
-            "unit": "bushel"
-        },
-        "type": "FeatureCollection",
-        "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
-        "features": [{
-               "....": "...."
-        }]
-    },
-    "meta": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/meta",
-        "etag": "ewiudfaw82y3udhcxz",
-        "totalYield": {
-            "value": 5.6,
-            "unit": "bushel"
-        }
-    },
-    "formats": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/format",
-        "etag": "iafueic9jcklhvcyfa",
-        "transforms": {
-            "application/vnd.oada.yield+json": {
-                "original": true,
-                "lossy": false,
-                "name": "OADA GeoJSON Yield Open Format",
-                "openFormat": true
-            },
-            "application/json": {
-                "lossy": false,
-                "name": "JavaScript Object Notation",
-                "openFormat": false
-            },
-            "application/netcdf": {
-                "lossy": false,
-                "name": "Network Common Data Form",
-                "openFormat": true
-            },
-            "application/shape": {
-                "lossy": false,
-                "name": "Esri Shapefile",
-                "openFromat": false
-            }
-        }
-    },
-    "parents": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/parents",
-        "etag": "oui9032uc8y78a9chx",
-        "items": [{
-            "href": "https://api.agcloud.com/resources/ixm24ws/parents/me30fzp",
-            "resource": {
-                "href": "https://api.agcloud.com/resources/me30fzp"
-            }
-        },
-        {
-            "href": "https://api.agcloud.com/resources/ixm24ws/parents/me30fzp",
-            "resource": {
-                "href": "https://api.agcloud.com/resources/me30fzp"
-            }
-        }]
-    },
-    "children": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/children",
-        "etag": "asjc93uciasduf3jxj",
-        "items": [{
-            "href": "https://api.agcloud.com/resources/ixm24ws/children/kl3j93s",
-            "resource": {
-                "href": "https://api.agcloud.com/resources/kl3j93s"
-            }
-        },
-        {
-            "href": "https://api.agcloud.com/resources/ixm24ws/parents/op302xa",
-            "resource": {
-                "href": "https://api.agcloud.com/resources/op302xa"
-            }
-        }]
-    },
-    "permissions": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/permissions",
-        "etag": "cvxfj23fjr9ifu932f",
-        "items": [{
-            "href": "https://api.agcloud.com/resources/ixm24ws/permissions/kdufe3f",
-            "user": {
-                "href": "https://api.agcloud.com/users/idnmz83",
-                "account": "frank@agidentity.com",
-                "name": "Frank Fellow",
-                "picture": {
-                    "href": "http://www.gravatar.com/avatar/c7e1ee573f"
-                },
-                "email": "frank@agcloud.com"
-            },
-            "type": "user",
-            "level": "owner"
-        }]
+ 	    "email": "frank@agcloud.com"
+      },
+      "type": "user",
+      "level": "owner"
+      }]
     },
     "syncs": {
-        "href": "https://api.openag.io/resources/ixm24ws/syncs",
-        "etag": "kj3idua8c78dji3weauowfusofgcykjhaelwr38d",
-        "items": [{
-            "href": "https://api.openag.io/resources/ixm24ws/syncs/2xf382s",
-            "etag": "cjkawq8327r4ifhjuihdvfaewytr43kj5haief7a",
-            "type": "poll",
-            "url": "https://api.agcloud.com/resources/jdkx82d",
-            "headers": {
-                "X-Custom": "Custom Value"
-            },
-            "latest_etag": "d3fc9278c677bdb7af3781a1ebc2ec090c14f5f3",
-            "interval": 3600,
-            "authorization": {
-                "href": "https://api.openag.io/authorizations/8ackam3"
-            }
-        }, {
-            "href": "https://api.openag.io/resources/ixm24ws/syncs/2xf382s",
-            "etag": "cjkawq8327r4ifhjuihdvfaewytr43kj5haief7a",
-            "type": "push",
-            "url": "https://api.agcloud.com/resources/jdkx82d",
-            "headers": {
-                "X-Custom": "Custom Value"
-            },
-            "events": ["change"],
-            "authorization": {
-                "href": "https://api.openag.io/authorizations/8ackam3"
-            }
-        }]
+      "_id": "/resources/ixm24ws/_meta/syncs",
+      "_etag": "kj3idua8c78dji3weauowfusofgcykjhaelwr38d",
+      "items": [{
+        "_id": "/resources/ixm24ws/_meta/syncs/2xf382s",
+        "_etag": "cjkawq8327r4ifhjuihdvfaewytr43kj5haief7a",
+        "type": "poll",
+        "url": "https://api.agcloud.com/resources/jdkx82d",
+        "headers": {
+          "X-Custom": "Custom Value"
+        },
+        "latest_etag": "d3fc9278c677bdb7af3781a1ebc2ec090c14f5f3",
+        "interval": 3600,
+        "authorization": {
+          "_id": "/authorizations/8ackam3"
+        }
+      },
+      {
+        "_id": "/resources/ixm24ws/_meta/syncs/2xf382s",
+        "_etag": "cjkawq8327r4ifhjuihdvfaewytr43kj5haief7a",
+        "type": "push",
+        "url": "https://api.agcloud.com/resources/jdkx82d",
+        "headers": {
+          "X-Custom": "Custom Value"
+        },
+        "events": ["change"],
+        "authorization": {
+          "_id": "/authorizations/8ackam3"
+        }
+      }]
     }
+  }
 }
 ```
 
-# `/configurations`
+# `/bookmarks`
 
-## `/configurations/{key 1}/.../{key N}`
+## `/bookmarks/{key 1}/.../{key N}`
+`/bookmarks` provides a standard way to link to interesting resources in a way that others can automatically discover them.
+ They are just plain resources and so they may be shared, synchronized, and managed the same way.
+ 
+### Keys
+The number of levels of keys is arbitrary. To improve interoperability between clouds, applications, and devices, OADA will define a standard set of standard bookmark keys. For example,
 
-- OADA's `/configurations` allow API consumers to automatically discover interesting
-  resources without having to search them all manually.
-- Configurations can only store `href`'s to resources and other lower level
-  configurations.
-- The number of levels of keys is abritary.
-- To improve interoperability between clouds, applications, and devices, OADA
-  will define a standard set of configuration keys. For example,
-    - /configurations/fields
-    - /configurations/seeds
-    - /configurations/prescriptions/planting
-    - /configurations/prescriptions/fertilizing
-    - etc.
+- /bookmarks/fields
+- /bookmarks/seeds
+- /bookmarks/prescriptions/planting
+- /bookmakrs/prescriptions/fertilizing
+- etc.
 
-### Example `/configurations` document
+### Example `/bookmarks` document
 
-```json
+```http
+GET /bookmarks HTTP/1.1
+Host: agcloud.com
+Accept: application/json
+Authorization: Bearer ajCX83jfax.arfvFA323df
+
 {
-    "href": "https://api.agcloud.com/configurations",
-    "etag": "jd983954u7tu90t7dx",
-    "items": {
-        "fields": {
-            "href": "https://api.agcloud.com/configurations/fields"
-        },
-        "prescriptions": {
-            "href": "https://api.agcloud.com/configurations/prescriptions"
-        }
+  "fields": {
+    "_id": "/resources/XcHd76xz"
+  },
+  "seeds": {
+    "_id": "/resources/Mf98adfs"
+  },
+  "prescriptions": {
+    "planting": {
+      "_id": "/resources/ETYGcaf4"
     },
-    "resource": {
-        "href": "https://api.agcloud.com/resources/fd8as8c"
+    "fertilizing": {
+      "_id": "/resources/jaefy7Sx"
     }
+  }
 }
 ```
 
@@ -239,135 +251,132 @@ shown.
 
 ## `/users/{userId}`
 
-- OADA's `/users` allow API consumers to discover details of any *known* user's
-  real personal identity, such as:
-    - Real name
-    - Email
-    - Avatar
-- Knowledge of personal identity makes sharing a lot nicer.
-    - A user can see a picture and real name of another *before* sharing data.
-- A user becomes *known* to you when:
-    - It is local to the cloud and its profile is "public".
-    - It has previously shared files with you.
-- A cloud  can not return real identity information for a particular federated
-  identity until it logs into the cloud.
-    - Later versions of OADA may consider user discovery across the federation.
+`/users` provides details of another user's identity, such as, real name, email address, avatar, etc assuming that user is *known* to the end user. Another user becomes *known* when it is:
+
+- Local to the cloud and has a public profile.
+- Has previously shared files with the end user.
+
+Knowledge of personal identity makes sharing a lot easier and less error prone. For example, a user can see a picture and real name of another *before* sharing data.
+
+Users are just plain resources and so they may be shared, synchronized, and managed in the same way.
+
+### Federated Identity
+
+Currently a cloud is not expected to return information for an arbitrary federated identity unless that identity has previously logged into the cloud and the owner of the identity agreed to share the personal information. Later versions of OADA may consider user discovery across the federation.
+    
+### `me` userId
+
+The 'me' userId is a special id that refers the currently logged in user. This can be used by an application to "bootstrap" itself. That is, the application can automatically discover the necessary information to show the user a reasonable first screen. For example, locating the root resource or the user's bookmarks resource.
 
 ### Example `/users/{userId}` document
 
-```json
+```http
+GET /users/kdufe3f HTTP/1.1
+Host: agcloud.com
+Accept: application/json
+Authorization: Bearer ajCX83jfax.arfvFA323df
+
 {
-    "href": "https://api.agcloud.com/users/kdufe3f",
-    "etag": "a98345kjgfvjvcvkrc",
-    "account": "frank@agidentity.com",
-    "name": "Frank Fellow",
-    "picture": {
-        "url": "http://www.gravatar.com/avatar/c7e1ee573fc6b0956a4455560d5839d9"
-    },
-    "email": "frank@agcloud.com"
-}
-```
-
-# `/about`
-
-- OADA's `/about` allows API consumers to discover the currently logged in user
-  and any information needed to "bootstrap" the application or device.
-    - "Bootstrapping" is the application or device discovering the necessary
-      information to show the user a reasonable first screen.
-        - For example, locating the resource which is the top most parent of all
-          other resources.
-
-### Example `/about` document
-
-```json
-{
-    "href": "https://api.agcloud.com/about",
-    "etag": "ajs938r8c87au4t3jm",
-    "rootResource": {
-        "href": "https://api.agcloud.com/resources/jx9j3x8"
-    },
-    "currentUser": {
-        "href": "https://api.agcloud.com/users/kdufe3f"
-    }
+  "account": "frank@agidentity.com",
+  "name": "Frank Fellow",
+  "picture": {
+    "href": "http://www.gravatar.com/avatar/c7e1ee573f"
+  },
+  "email": "frank@agcloud.com",
+  "rootResource": {
+    "_id": "jx9j3x8"
+  },
+  "currentUser": {
+    "_id": "kdufe3f"
+  }
 }
 ```
 
 # `/groups`
 ## `/groups/{groupId}`
+`/groups` list, creates, and manages groups of users. They can be used to allocate resource permissions more flexibly. For example, at any time a user can be added or removed from a group and all previously shared files are automatically become accessible or inaccessible, respectively.
 
-- OADA's `/groups` allows an API consumer to create and manage groups of users.
-- Groups can be used to allocate resource permissions more flexibly.
-    - For example, users can be added to a group at any time and all previously
-      shared files are automatically accessible.
+Groups are just plain resources and so they may be shared, synchronized, and managed in the same way.
 
 ### Example `/groups/{groupId}` document
 
-```json
+```http
+GET /groups/jf72jsd HTTP/1.1
+Host: agcloud.com
+Accept: application/json
+Authorization: Bearer ajCX83jfax.arfvFA323df
+
 {
-    "href": "https://api.agcloud.com/groups/jf72jsd",
-    "etag": "kjasfd9c7ua3c772rx",
-    "name": "Employees",
-    "members": [{
-        "href": "https://api.agcloud.com/users/kdufe3f"
-    },
-    {
-        "href": "https://api.openagi.io/users/3jkxi82"
-    }]
+  "name": "Employees",
+  "members": [{
+    "_id": "kdufe3f"
+  },
+  {
+    "_id": "3jkxi82"
+  }]
 }
 ```
 
 # `/authorizations`
 ## `/authorizations/{authorizationId}`
 
-- OADA's `/authorizations` allows an API consumer to create and manage
-  authorizations for a third party.
-- Currently it is meant to manage OAuth 2.0 tokens, but could hypothetically
-  manage any type of authorization.
+`/authorizations` list, creates, and manages the current user's authorizations for a third party. Currently it is meant to manage OAuth 2.0 tokens, but could hypothetically manage any type of authorization.
 
 ### Example `/authorizations/{authorizationId}` document
 
-```json
+```http
+GET /groups/jf72jsd HTTP/1.1
+Host: agcloud.com
+Accept: application/json
+Authorization: Bearer ajCX83jfax.arfvFA323df
+
 {
-    "href": "https://api.agcloud.com/authorizations/8ackam3",
-    "etag": "fkjasdc9772893r7ex",
-    "user": {
-        "href": "https://api.agcloud.com/users/fjf23cd"
-    },
-    "scope": "resources groups",
-    "created": "1985-04-12T23:20:50.52Z",
-    "modified": "1985-04-12T23:20:50.52Z",
-    "expires": "1985-05-12T23:20:50.52Z"
+  "user": {
+    "_id": "fjf23cd"
+  },
+  "scope": "resources groups",
+  "created": "1985-04-12T23:20:50.52Z",
+  "modified": "1985-04-12T23:20:50.52Z",
+  "expires": "1985-05-12T23:20:50.52Z"
 }
 ```
 
 # `/.well-known`
 
-- OADA's `/.well-known` allows an API consumer to find the base URI for a
-  particular domain's OADA API as well as discover the needed details to
-  authorize users.
-- This endpoint follows [RFC 5785](http://www.ietf.org/rfc/rfc5785.txt)
-- Currently two required documents
-    - `/.well-known/oada-configuration` - discover OADA base and authorization
-      URI's
-    - `/.well-known/openid-configuration` - discover OpenId Connect endpoints
-      to initiate a federated idenity assertion
+`/.well-known` allows an application to automatticly discover the details of an OADA compliant API. For example, it can use it to locate the API's base URI for a particular domain or discover the authencation and client discovery endpoints. It follows [RFC 5785 Defining Well-Known Uniform Resource Identifiers (URIs)][rfc5785].
+
+This endpoint MUST exist at the root of a clouds' domain or subdomain. For example, if a cloud wants to be known as agcloud.com then `.well-known` MUST be found at: `agcloud.com/.well-known`. The API MAY be hsoted at another domain or sub-domain as along the well-known documents are correctly configured.
+
+## `/.well-known/oada-configuration`
+
+Used to discovery any OADA API global details, such as the OADA API base URI, authorization and token endpoints to gain an OADA token, and if and where the provider hosts OADA client discovery.
 
 ### Example `/.well-known/oada-configuration` document
 
-```json
+```http
+GET /.well-known/oada-configuration HTTP/1.1
+Host: agcloud.com
+Accept: application/json
+
 {
     "authorizationEndpoint": "http://id.openag.io/connect/authorize",
     "tokenEndpoint": "http://api.agcloud.com/connect/token",
-    "OADABaseUri": "https://api.agcloud.com"
+    "OADABaseUri": "https://api.agcloud.com",
+    "clientDiscovery": "https://api.agcloud.com/clientDiscovery"
 }
 ```
+## `/.well-known/openid-configuration`
+
+Standard OpenID Connect discovery document. It is optional for OpenID Connect but required by OADA.
+[Open ID Connect Discovery 1.0 Standard][oidc-openid-configuration]
 
 ### Example `/.well-known/openid-configuration` document
 
-Note: This example document comes directly from the
-[Open ID Connect Discovery 1.0 Standard](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfigurationResponse)
+```http
+GET /.well-known/openid-configuration HTTP/1.1
+Host: agcloud.com
+Accept: application/json
 
-```json
 {
     "issuer": "https://api.agcloud.com",
     "authorization_endpoint": "https://api.agcloud.com/connect/authorize",
@@ -398,3 +407,7 @@ Note: This example document comes directly from the
     "ui_locales_supported": ["en-US"]
 }
 ```
+
+[rfc6901]: http://www.ietf.org/rfc/rfc6901.txt
+[rfc5785]: http://www.ietf.org/rfc/rfc5785.txt
+[oidc-openid-configuration]: http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfigurationResponse
