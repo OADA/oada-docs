@@ -15,9 +15,9 @@ All OADA API errors should be reflected with an appropriate response status code
 
 Where:
 
-- *code* - HTTP response code
-- *status* - HTTP response name
-- *href* - A link to documentation that might be helpful to resolve the issue
-- *title* - The title, or short description, of the error that occurred.
-- *detail* - A detailed description of the error that occurred.
-- *userMessage* - A simple, polite, and helpful message that an application can show to its user to explain the trouble.
+- **code** - HTTP response code
+- **status** - HTTP response name
+- **href** - A link to documentation that might be helpful to resolve the issue
+- **title** - The title, or short description, of the error that occurred.
+- **detail** - A detailed description of the error that occurred.
+- **userMessage** - A simple, polite, and helpful message that an application can show to its user to explain the trouble.
