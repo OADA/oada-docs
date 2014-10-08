@@ -61,13 +61,13 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
     "....": "...."
   }],
   "_meta": {
-    "_id": "/resources/ixm24ws/_meta",
+    "_id": "ixm24ws/_meta",
     "_etag": "lajscfa938f23fuj8x",
     "name": "Frank's Yield",
     "mimeType": "application/vnd.oada.yield+json",
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
-      "_id": "/users/kdufe3f",
+      "_id": "kdufe3f",
       "etag": "a98345kjgfvjvcvkrc",
       "account": "frank@agidentity.com",
       "name": "Frank Fellow",
@@ -78,7 +78,7 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
     },
     "modified": "1985-04-12T23:20:50.52Z",
     "modifiedBy": {
-      "_id": "/users/kdufe3f",
+      "_id": "kdufe3f",
       "_etag": "a98345kjgfvjvcvkrc",
       "account": "frank@agidentity.com",
       "name": "Frank Fellow",
@@ -96,7 +96,7 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
       }
     },
     "formats": {
-      "_id": "/resources/ixm24ws/_meta/format",
+      "_id": "ixm24ws/_meta/format",
       "_etag": "iafueic9jcklhvcyfa",
       "transforms": {
         "application/vnd.oada.yield+json": {
@@ -123,44 +123,44 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
       }
     },
     "parents": {
-      "_id": "/resources/ixm24ws/_meta/parents",
+      "_id": "ixm24ws/_meta/parents",
       "_etag": "oui9032uc8y78a9chx",
       "items": [{
-        "_id": "/resources/ixm24ws/_meta/parents/me30fzp",
+        "_id": "ixm24ws/_meta/parents/me30fzp",
         "resource": {
-          "_id": "/resources/me30fzp"
+          "_id": "me30fzp"
         }
       },
       {
-        "_id": "/resources/ixm24ws/_meta/parents/me30fzp",
+        "_id": "ixm24ws/_meta/parents/me30fzp",
         "resource": {
-          "_id": "/resources/me30fzp"
+          "_id": "me30fzp"
         }
       }]
     },
     "children": {
-      "_id": "/resources/ixm24ws/_meta/children",
+      "_id": "ixm24ws/_meta/children",
       "_etag": "asjc93uciasduf3jxj",
       "items": [{
-        "_id": "/resources/ixm24ws/_meta/children/kl3j93s",
+        "_id": "ixm24ws/_meta/children/kl3j93s",
         "resource": {
-          "_id": "/resources/kl3j93s"
+          "_id": "kl3j93s"
         }
       },
       {
-        "_id": "/resources/ixm24ws/_meta/parents/op302xa",
+        "_id": "ixm24ws/_meta/parents/op302xa",
         "resource": {
-          "_id": "/resources/op302xa"
+          "_id": "op302xa"
         }
       }]
     },
     "permissions": {
-      "_id": "/resources/ixm24ws/_meta/permissions",
+      "_id": "ixm24ws/_meta/permissions",
       "_etag": "cvxfj23fjr9ifu932f",
       "items": [{
-        "_id": "/resources/ixm24ws/_meta/permissions/kdufe3f",
+        "_id": "ixm24ws/_meta/permissions/kdufe3f",
       "user": {
-        "_id": "/users/kdufe3f",
+        "_id": "kdufe3f",
         "_etag": "a98345kjgfvjvcvkrc",
         "account": "frank@agidentity.com",
         "name": "Frank Fellow",
@@ -174,10 +174,10 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
       }]
     },
     "syncs": {
-      "_id": "/resources/ixm24ws/_meta/syncs",
+      "_id": "ixm24ws/_meta/syncs",
       "_etag": "kj3idua8c78dji3weauowfusofgcykjhaelwr38d",
       "items": [{
-        "_id": "/resources/ixm24ws/_meta/syncs/2xf382s",
+        "_id": "ixm24ws/_meta/syncs/2xf382s",
         "_etag": "cjkawq8327r4ifhjuihdvfaewytr43kj5haief7a",
         "type": "poll",
         "url": "https://api.agcloud.com/resources/jdkx82d",
@@ -187,11 +187,11 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
         "latest_etag": "d3fc9278c677bdb7af3781a1ebc2ec090c14f5f3",
         "interval": 3600,
         "authorization": {
-          "_id": "/authorizations/8ackam3"
+          "_id": "8ackam3"
         }
       },
       {
-        "_id": "/resources/ixm24ws/_meta/syncs/2xf382s",
+        "_id": "ixm24ws/_meta/syncs/2xf382s",
         "_etag": "cjkawq8327r4ifhjuihdvfaewytr43kj5haief7a",
         "type": "push",
         "url": "https://api.agcloud.com/resources/jdkx82d",
@@ -200,7 +200,7 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
         },
         "events": ["change"],
         "authorization": {
-          "_id": "/authorizations/8ackam3"
+          "_id": "8ackam3"
         }
       }]
     }
@@ -233,17 +233,17 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
   "fields": {
-    "_id": "/resources/XcHd76xz"
+    "_id": "XcHd76xz"
   },
   "seeds": {
-    "_id": "/resources/Mf98adfs"
+    "_id": "Mf98adfs"
   },
   "prescriptions": {
     "planting": {
-      "_id": "/resources/ETYGcaf4"
+      "_id": "ETYGcaf4"
     },
     "fertilizing": {
-      "_id": "/resources/jaefy7Sx"
+      "_id": "jaefy7Sx"
     }
   }
 }
