@@ -42,10 +42,12 @@ The following endpoints, JSON sub-documents, reside under `_meta`:
 
 The following is a example of JSON data with `view` set to also return the `_meta` document. That is both the native data and the OADA specific `_meta` metadata document is returned all together as one JSON ouptut.
 
+(URL decoded URI is: /resource/ixm24ws?view={_meta: true}
+
 ```http
-GET /resource/ixm24ws?view={"_meta": true} HTTP/1.1
+GET /resource/ixm24ws?view=%7B_meta%3A%20true%7D HTTP/1.1
 Host: agcloud.com
-Accept: application/json
+Content-Type: application/json
 Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
@@ -226,7 +228,7 @@ The number of levels of keys is arbitrary. To improve interoperability between c
 ```http
 GET /bookmarks HTTP/1.1
 Host: agcloud.com
-Accept: application/json
+Content-Type: application/json
 Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
@@ -273,7 +275,7 @@ The 'me' userId is a special id that refers the currently logged in user. This c
 ```http
 GET /users/kdufe3f HTTP/1.1
 Host: agcloud.com
-Accept: application/json
+Content-Type: application/json
 Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
@@ -303,7 +305,7 @@ Groups are just plain resources and so they may be shared, synchronized, and man
 ```http
 GET /groups/jf72jsd HTTP/1.1
 Host: agcloud.com
-Accept: application/json
+Content-Type: application/json
 Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
@@ -327,7 +329,7 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 ```http
 GET /groups/jf72jsd HTTP/1.1
 Host: agcloud.com
-Accept: application/json
+Content-Type: application/json
 Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
@@ -356,7 +358,7 @@ Used to discovery any OADA API global details, such as the OADA API base URI, au
 ```http
 GET /.well-known/oada-configuration HTTP/1.1
 Host: agcloud.com
-Accept: application/json
+Content-Type: application/json
 
 {
     "authorizationEndpoint": "http://id.openag.io/connect/authorize",
@@ -375,7 +377,7 @@ Standard OpenID Connect discovery document. It is optional for OpenID Connect bu
 ```http
 GET /.well-known/openid-configuration HTTP/1.1
 Host: agcloud.com
-Accept: application/json
+Content-Type: application/json
 
 {
     "issuer": "https://api.agcloud.com",
