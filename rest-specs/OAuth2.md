@@ -30,19 +30,19 @@
 
   * Implicit flow:
 
-  **Request**
-    ```http
-    GET /authorize?response_type=token&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
-    Host: agcloud.com
-    ```
+   **Request**
+   ```http
+   GET /authorize?response_type=token&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
+   Host: agcloud.com
+   ```
 
   * Authorization flow:
 
-    **Request**
-    ```http
-    GET authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fagcloud%2Ecom%2Fcb HTTP/1.1
-    Host: agcloud.com
-    ```
+   **Request**
+   ```http
+   GET authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fagcloud%2Ecom%2Fcb HTTP/1.1
+   Host: agcloud.com
+   ```
 
 3. AgCloud challenges the user to login or uses a current and valid session to
    identify the user. AgCloud may initiate an OpenID Connect flow if the end
@@ -51,20 +51,20 @@
   * Implicit flow - Upon login success, the user agent is redirected to
     'redirect_uri' with the token embedded directly in the URI fragment:
 
-    **Response**
-    ```http
-    HTTP/1.1 302 Found
-    Location: http://agcloud.com/cb#access_token=2YotnFZFEjr1zCsicMWpAA&state=xyz&token_type=example&expires_in=3600
-    ```
+   **Response**
+   ```http
+   HTTP/1.1 302 Found
+   Location: http://agcloud.com/cb#access_token=2YotnFZFEjr1zCsicMWpAA&state=xyz&token_type=example&expires_in=3600
+   ```
 
   * Authorization flow - Upon login success, the user agent is redirected to
     `redirect_uri` with a authorization code.
 
-    **Response**
-    ```http
-    HTTP/1.1 302 Found
-    Location: https://agcloud.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&state=xyz
-    ```
+   **Response**
+   ```http
+   HTTP/1.1 302 Found
+   Location: https://agcloud.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&state=xyz
+   ```
 
 4. (*Authorization flow only*) The client trades the authorization code for a
    token at the token endpoint:
