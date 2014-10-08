@@ -10,8 +10,7 @@
 # API Endpoint Overview
 
 * [/resources](REST-API-Overview.md#resources)
-* [/configurations](REST-API-Overview.md#configurations)
-* [/about](REST-API-Overview.md#about)
+* [/bookmarks](REST-API-Overview.md#bookmarks)
 * [/users](REST-API-Overview.md#users)
 * [/groups](REST-API-Overview.md#groups)
 * [/authorizations](REST-API-Overview.md#authorizations)
