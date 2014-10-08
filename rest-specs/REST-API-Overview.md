@@ -59,7 +59,7 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
   "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
   "features": [{
     "....": "...."
-  },
+  }],
   "_meta": {
     "_id": "/resources/ixm24ws/_meta",
     "_etag": "lajscfa938f23fuj8x",
