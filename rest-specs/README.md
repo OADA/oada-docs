@@ -42,3 +42,10 @@
 # OAuth 2.0 and OpenID Conect Flows
 
 * [OAuth 2.0](OAuth2.md)
+
+# Standard Names
+
+* [OAuth 2.0 Scopes](Standard-Scopes.md)
+* [Bookmarks](Standard-Bookmarks.md)
+* [Media Types](Standard-Media-Types.md)
+* [Resource Formats](Standard-Resource-Formats.md)
