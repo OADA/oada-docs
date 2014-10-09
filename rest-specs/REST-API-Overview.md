@@ -69,18 +69,16 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
       "_id": "kdufe3f",
-      "etag": "a98345kjgfvjvcvkrc",
       "account": "frank@agidentity.com",
       "name": "Frank Fellow",
       "picture": {
      	 "href": "http://www.gravatar.com/avatar/c7e1ee573f"
       },
- 	  "email": "frank@agcloud.com"
+      "email": "frank@agcloud.com"
     },
     "modified": "1985-04-12T23:20:50.52Z",
     "modifiedBy": {
       "_id": "kdufe3f",
-      "_etag": "a98345kjgfvjvcvkrc",
       "account": "frank@agidentity.com",
       "name": "Frank Fellow",
       "picture": {
@@ -89,16 +87,14 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
  	  "email": "frank@agcloud.com"
     },
     "meta": {
-      "href": "/resources/ixm24ws/_meta/meta",
-  	  "_etag": "ewiudfaw82y3udhcxz",
+      "_id": "/resources/ixm24ws/_meta/meta",
    	  "totalYield": {
    	    "value": 5.6,
    	    "unit": "bushel"
       }
     },
     "formats": {
-      "_id": "ixm24ws/_meta/format",
-      "_etag": "iafueic9jcklhvcyfa",
+      "_id": "ixm24ws/_meta/formats",
       "transforms": {
         "application/vnd.oada.yield+json": {
           "original": true,
@@ -125,61 +121,42 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
     },
     "parents": {
       "_id": "ixm24ws/_meta/parents",
-      "_etag": "oui9032uc8y78a9chx",
       "items": [{
-        "_id": "ixm24ws/_meta/parents/me30fzp",
-        "resource": {
-          "_id": "me30fzp"
-        }
+        "_id": "me30fzp"
       },
       {
-        "_id": "ixm24ws/_meta/parents/me30fzp",
-        "resource": {
-          "_id": "me30fzp"
-        }
+        "_id": "me30fzp"
       }]
     },
     "children": {
       "_id": "ixm24ws/_meta/children",
-      "_etag": "asjc93uciasduf3jxj",
       "items": [{
-        "_id": "ixm24ws/_meta/children/kl3j93s",
-        "resource": {
-          "_id": "kl3j93s"
-        }
+        "_id": "kl3j93s"
       },
       {
-        "_id": "ixm24ws/_meta/parents/op302xa",
-        "resource": {
-          "_id": "op302xa"
-        }
+        "_id": "op302xa"
       }]
     },
     "permissions": {
       "_id": "ixm24ws/_meta/permissions",
-      "_etag": "cvxfj23fjr9ifu932f",
       "items": [{
         "_id": "ixm24ws/_meta/permissions/kdufe3f",
-      "user": {
-        "_id": "kdufe3f",
-        "_etag": "a98345kjgfvjvcvkrc",
-        "account": "frank@agidentity.com",
-        "name": "Frank Fellow",
-        "picture": {
-       	   "href": "http://www.gravatar.com/avatar/c7e1ee573f"
+        "user": {
+          "_id": "kdufe3f",
+          "account": "frank@agidentity.com",
+          "name": "Frank Fellow",
+          "picture": {
+       	    "href": "http://www.gravatar.com/avatar/c7e1ee573f"
+          },
+          "email": "frank@agcloud.com"
         },
- 	    "email": "frank@agcloud.com"
-      },
-      "type": "user",
-      "level": "owner"
+        "type": "user",
+        "level": "owner"
       }]
     },
     "syncs": {
       "_id": "ixm24ws/_meta/syncs",
-      "_etag": "kj3idua8c78dji3weauowfusofgcykjhaelwr38d",
       "items": [{
-        "_id": "ixm24ws/_meta/syncs/2xf382s",
-        "_etag": "cjkawq8327r4ifhjuihdvfaewytr43kj5haief7a",
         "type": "poll",
         "url": "https://api.agcloud.com/resources/jdkx82d",
         "headers": {
@@ -192,8 +169,6 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
         }
       },
       {
-        "_id": "ixm24ws/_meta/syncs/2xf382s",
-        "_etag": "cjkawq8327r4ifhjuihdvfaewytr43kj5haief7a",
         "type": "push",
         "url": "https://api.agcloud.com/resources/jdkx82d",
         "headers": {
