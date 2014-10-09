@@ -37,6 +37,7 @@ The following endpoints, JSON sub-documents, reside under `_meta`:
 - `/children`
 - `/permissions`
 - `/syncs`
+- `/derivatives`
 
 ### Example `/resource/{resourceId}` document
 
@@ -178,6 +179,15 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
         "authorization": {
           "_id": "8ackam3"
         }
+      }]
+    },
+    "derivatives": {
+      "_id": "ixm24ws/_meta/derivatives",
+      "items": [{
+        "_id": "kl3j93s"
+      },
+      {
+        "_id": "op302xa"
       }]
     }
   }
