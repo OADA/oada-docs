@@ -1,11 +1,11 @@
 # REST API Specification
 
-## Current - v0.2
+## Current - v0.3
 
 * The current API spec lives here:
   [http://github.com/OADA/oada-api-spec](http://github.com/OADA/oada-api-spec).
 * An easier to read HTML visualization of the spec lives here:
-  [http://openag.io/docs/v0_2.html](http://openag.io/docs/v0_2.html)
+  [http://openag.io/docs/v0_3.html](http://openag.io/docs/v0_3.html)
 
 # API Endpoint Overview
 
