@@ -6,17 +6,19 @@ To better convey what each example is accomplishing we describe them with severa
 * **Frank**
     * Is a farmer.
     * Stores his data in agcloud.com.
-    * Uses a federated identity from agidentity.com.
+    * Uses a federated identity from farmeridentity.com.
     * Has an OADA compliant telematics device.
     * Has OADA compliant apps on his Android tablet.
 * **Andy**
     * Is a agronomist.
     * Wants to access Frank's data at agcloud.com.
+    * Uses a federated identity from agronomistidentity.com
 
 # Examples
 
 * [Federated Login](#federated-login)
-* [Resource Upload](#resource-upload)
+* [JSON Resource Upload](#json-resource-upload)
+* [Binary Resource Upload](#binary-resource-upload)
 * [Resource Update](#resource-update)
 * [Resource Sharing](#resource-sharing)
 * [Field Discovery](#field-discovery)
@@ -32,10 +34,10 @@ To better convey what each example is accomplishing we describe them with severa
 ![Federated login](federated_login.png "Federated login")
 
 Frank logs into his agcloud.com OADA account with an OADA compliant Android app
-using his agidentity.com federated identity.
+using his farmeridentity.com federated identity.
 
 To begin the process Frank's app discovers the authorization endpoints and
-agcloud.com's OADA base URI by querying the well-known oada-configurations URI.
+agcloud.com's OADA base URI by issuing a GET request on the .well-known oada-configuration URI.
 
 **Request**
 ```http
@@ -47,12 +49,13 @@ Accept: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
+Content-Type: application/json
 
 {
-    "authorizationEndpoint": "http://api.agcloud.com/authorize",
-    "tokenEndpoint": "http://api.agcloud.com/token",
-    "OADABaseUri": "https://api.agcloud.com"
+  "authorizationEndpoint": "http://api.agcloud.com/authorize",
+  "tokenEndpoint": "http://api.agcloud.com/token",
+  "OADABaseUri": "https://api.agcloud.com",
+  "clientDiscovery": "https://api.agcloud.com/clientDiscovery"
 }
 ```
 
@@ -63,7 +66,7 @@ used.
 
 **Request**
 ```http
-GET /authorize?response_type=token&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Flocalhost HTTP/1.1
+GET /authorize?response_type=token&client_id=s6BhdRkqt3@agidentity.com&state=xyz&redirect_uri=https%3A%2F%2Flocalhost HTTP/1.1
 Host: api.agcloud.com
 Accept: text/html,application/xhtml+xml,application/xml
 ```
@@ -71,7 +74,7 @@ Accept: text/html,application/xhtml+xml,application/xml
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: text/html; charset=UTF-8
+Content-Type: text/html
 
 <html>
 ...
@@ -81,26 +84,65 @@ Content-Type: text/html; charset=UTF-8
 Agcloud.com's response is an HTML web page that challenges Frank to login with
 local user credentials or with an OADA federated account.
 
-Frank elects to login with the OADA federated identity `frank@agidentity.com`.
-If agidentity.com's OpenId Connect endpoint is unknown to agcloud.com then it
-queries `agidentity.com/.well-known/openid-configuration` to discover the
+Frank elects to login with the OADA federated identity `frank@farmeridentity.com` using his user-agent which generates a GET request back to agcloud.com.
+If farmeridentity.com's OpenId Connect endpoint is unknown to agcloud.com then it
+queries `farmeridentity.com/.well-known/openid-configuration` to discover the
 correct URL.
 
-Once the correct URL is known, agcloud.com generates a redirect response to the
+**Request**
+```http
+GET /.well-known/openid-configuration HTTP/1.1
+Host: farmeridentity.com
+Accept: application/json
+```
+
+**Response**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  issuer: "https://farmeridentity.com",
+  authorization_endpoint: "https://farmeridentity.com/oada/fed/auth",
+  token_endpoint: "https://farmeridentity/oada/fed/token",
+  userinfo_endpoint: "https://farmeridentity/oada/fed/userInfo",
+  jwks_uri: "https://farmeridentity.com/oada/fed/certs",
+  response_types_supported: [
+    "code",
+    "token",
+    "id_token",
+    "code token",
+    "code id_token",
+    "token id_token",
+    "code token id_token"
+  ],
+  subject_types_supported: [
+    "public"
+  ],
+  id_token_alg_values_supported: [
+    "RS256"
+  ],
+  token_endpoint_auth_methods_supported: [
+    "client_secret_post"
+  ]
+}
+```
+
+Once the correct URL is known, agcloud.com responds to the above user-agent GET request with a redirect to the 
 OpenID Connect endpoint. This begins the  OpenID Connect flow.
 
 **Response**
 ```http
 HTTP/1.1 302 Found
-Location: https://agidentity.com/authorize?response_type=id_token%20token&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fapi.agcloud.com%2Fcb&scope=openid%20profile&state=af0ifjsldkj&nonce=n-0S6_WzA2Mj HTTP/1.1
+Location: https://farmeridentity.com/authorize?response_type=id_token%20token&client_id=s6BhdRkqt3@agidentity.com&redirect_uri=https%3A%2F%2Fapi.agcloud.com%2Fcb&scope=openid%20profile&state=af0ifjsldkj&nonce=n-0S6_WzA2Mj HTTP/1.1
 ```
 
-Therefore, Frank's user-agent makes the redirect request to agidentity.com
+Therefore, Frank's user-agent makes a request to farmeridentity.com
 
 **Request**
 ```http
-GET /authorize?response_type=code&client_id=s6bhdrkqt3&redirect_uri=https%3a%2f%2fapi.agcloud.com%2fcb&scope=openid%20profile HTTP/1.1
-Host: agidentity.com
+GET /authorize?response_type=code&client_id=s6bhdrkqt3@agidentity.com&redirect_uri=https%3a%2f%2fapi.agcloud.com%2fcb&scope=openid%20profile HTTP/1.1
+Host: farmeridentity.com
 Accept: text/html,application/xhtml+xml,application/xml
 ```
 
@@ -114,12 +156,11 @@ Content-Type: text/html; charset=UTF-8
 </html>
 ```
 
-agidentity.com's response is also an HTML web page that challenges Frank
+farmeridentity.com's response is an HTML web page that challenges Frank
 to login with his local user credentials (the federated identity).
 
-When Frank successfully logs in and confirms that agcloud.com may access his
-profile information, e.g., real name, email, etc.  agidentity.com issues a
-redirect response back to agcloud.com.
+After Frank successfully logs in he is asked to confirm that agcloud.com may access his
+profile information, e.g., real name, email, etc. If Frank agrees farmeridentity.com issues a redirect response back to agcloud.com.
 
 **Response**
 ```http
@@ -127,9 +168,8 @@ HTTP/1.1 302 Found
 Location: https://api.agcloud.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&state=af0ifjsldkj
 ```
 
-Therefore, Frank's user-agent makes the associated request and so ends the
-OpenId Connect flow and resumes the original OAuth 2.0 from the users
-perspective.
+Frank's user-agent makes the request and therefore completes the
+OpenId Connect flow. The original OAuth 2.0 resumes.
 
 **Request**
 ```http
@@ -138,16 +178,12 @@ Host: api.agcloud.com
 Accept: text/html,application/xhtml+xml,application/xml
 ```
 
-Now agcloud.com communicates with agidentity.com using standard OpenID Connect
-protocol to receive an `id_token` that asserts Frank's identity and a document
-that contains his profile information.
+In the background, agcloud.com communicates with farmeridentity.com using  the standard OpenID Connect
+protocol to retrieve an `id_token` that asserts Frank's identity and a JSON document that contains his profile information.
 
-If the `id_token` is valid then agcloud.com considers the authorization
-challenge successfully completed for the identity `frank@agidentity.com` and
-generates an OAuth 2.0 token.
+If the `id_token` is valid agcloud.com considers Frank as logged in as the identity `frank@agidentity.com` and it generates an OAuth 2.0 token.
 
-As a result Agcloud.com responds with redirect that includes the token generated
-token.
+Agcloud.com then responds to the above GET request with a redirect that includes the generated token.
 
 **Response**
 ```http
@@ -155,57 +191,39 @@ HTTP/1.1 302 Found
 Location: https://localhost#access_token=SlAV32hkKG&token_type=bearer&expires_in=3600&state=af0ifjsldkj
 ```
 
-Finally, the Android app parses the `access_token` from the Location RUI
+Finally, the Android app parses the `access_token` from the Location URI
 fragment and stores it for later use.
 
-# Resource Upload
+# JSON Resource Upload
 
 ![Resource upload](resource_upload.png "Resource upload")
 
-Frank's telematics device records yield measurements through the entire day into
-a GeoJSON file.  While Frank finishes his work for the day he touches the "sync
-to OADA cloud" button.  As a result, Frank's telematics device uploads the
-GeoJSON file as a new resource to Frank's agcloud.com.
+Frank's telematics device records yield measurements through the entire day into a GeoJSON file. Just before Frank finishes his work for the day he touches the "sync to OADA cloud" button.  As a result, Frank's telematics device uploads the entire GeoJSON file as a new resource to Frank's agcloud.com.
 
 **Assumptions**
 
-- The telematics device already has authorization and a valid token.
-
-To both create a new resource and upload the associated data simultaneously a
-POST request with `Content-Type` equal to  `multipart/form-data` is made. The
-JSON resource document is sent with the form-data name `resource` and the data
-with form-data name `data`.
+* The telematics device already has authorization and a valid token (SlAV32hkKG).
 
 **Request**
 ```http
 POST /resources HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
-Content-Type: multipart/form-data; boundary=AaB03x
-Content-Length: 496
-
---AaB03x
-Content-Disposition: form-data; name="resource"
-Content-Type: application/json
-
-{
-    "name": "Frank's Yeild"
-}
-
---AaB03x
-Content-Disposition: form-data; name="data"
 Content-Type: application/vnd.oada.yield+json
 
 {
-    "totalYield": {
-        "value": 5.6,
-        "unit": "bushel"
-    },
-    "type": "FeatureCollection",
-    "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
-    "features": [{
-            ....
-    }
+  "totalYield": {
+    "value": 5.6,
+    "unit": "bushel"
+  },
+  "type": "FeatureCollection",
+  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
+  "features": [{
+      "....": "...."
+  }],
+  "_meta": {
+    "name": "Frank's Yield"
+  }
 }
 ```
 
@@ -213,47 +231,152 @@ Content-Type: application/vnd.oada.yield+json
 ```http
 HTTP/1.1 201 Created
 Location: /resources/ixm24ws
-Content-Type: application/json
+Content-Type: application/vnd.oada.yield+json
 Etag: "9083423jkadfu9382x"
 
 {
-    "href": "https://api.agcloud.com/resources/ixm24ws",
-    "etag": "alsjfadksja9388x7d",
-    "guid": "https://api.agcloud.com/resources/ixm24ws",
-    "changeId": "jc4dcx6",
-    "name": "Frank's Yield",
+  "totalYield": {
+    "value": 5.6,
+    "unit": "bushel"
+  },
+  "type": "FeatureCollection",
+  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
+  "features": [{
+      "....": "...."
+  }],
+  "_meta": {
+    "_id": "ixm24ws",
+    "_etag": "alsjfadksja9388x7d",
+    "changeId": 1,
+    "name": "Frank's Yield"
     "mimeType": "application/vnd.oada.yield+json",
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
-        "href": "https://api.agcloud.com/users/kdufe3f"
+      "_id": "kdufe3f"
     },
     "modified": "1985-04-12T23:20:50.52Z",
     "modifiedBy": {
-        "href": "https://api.agcloud.com/users/kdufe3f"
-    },
-    "data": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/data"
+      "_id": "kdufe3f"
     },
     "meta": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/meta"
+      "_id": "ixm24ws/meta"
     },
     "formats": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/formats"
+      "_id": "ixm24ws/formats"
     },
     "parents": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/parents"
+      "_id": "ixm24ws/parents"
     },
     "children": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/children"
+      "_id": "ixm24ws/children"
     },
     "derivatives": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/derivatives"
+      "_id": "ixm24ws/derivatives"
     },
     "permissions": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/permissions"
+      "_id": "ixm24ws/permissions"
+    },
+    "derivatives": {
+      "_id": "ixm24ws/derivatives"
     }
+  }
 }
 ```
+
+Because `_meta` was given in the original POST request the response assumed that the view for `_meta` should implicitly be truthy. If the original POST contained only the native document, then only the native document would have been returned.
+
+# Binary Resource Upload
+
+![Resource upload](resource_upload.png "Resource upload")
+
+Frank's telematics device records yield measurements through the entire day into a shape file.  Just before Frank finishes his work for the day he touches the "sync to OADA cloud" button.  As a result, Frank's telematics device uploads the
+entire shape file as a new resource to Frank's agcloud.com.
+
+**Assumptions**
+
+- The telematics device already has authorization and a valid token (SlAV32hkKG).
+
+To set the new resource's metadata  and upload the associated data simultaneously a POST request with the header `Content-Type: multipart/form-data` is made. The JSON metadata document is sent with the form-data named `metadata` and the data with form-data named `data`.
+
+**Request**
+```http
+POST /resources HTTP/1.1
+Host: api.agcloud.com
+Authentication: Bearer SlAV32hkKG
+Content-Type: multipart/form-data; boundary=AaB03x
+
+--AaB03x
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{
+  "_meta": {
+    "name": "Frank's Yield"
+  }
+}
+
+--AaB03x
+Content-Disposition: form-data; name="data"
+Content-Type: application/shape
+
+...binary data...
+```
+
+**Response**
+```http
+HTTP/1.1 201 Created
+Location: /resources/Kcdi32S
+Content-Type: Multipart/mixed; boundary="Ox6Csz";
+
+--Ox6Csz
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/vnd.oada.metadata+json
+
+{
+  "_meta": {
+    "_id": "Kcdi32S",
+    "_etag": "JzlCjsjaljcaw8723x",
+    "changeId": 1,
+    "name": "Frank's Yield"
+    "mimeType": "application/shape",
+    "created": "1985-04-12T23:20:50.52Z",
+    "createdBy": {
+      "_id": "kdufe3f"
+    },
+    "modified": "1985-04-12T23:20:50.52Z",
+    "modifiedBy": {
+      "_id": "kdufe3f"
+    },
+    "meta": {
+      "_id": "Kcdi32S/meta"
+    },
+    "formats": {
+      "_id": "Kcdi32S/formats"
+    },
+    "parents": {
+      "_id": "Kcdi32S/parents"
+    },
+    "children": {
+      "_id": "Kcdi32S/children"
+    },
+    "derivatives": {
+      "_id": "Kcdi32S/derivatives"
+    },
+    "permissions": {
+      "_id": "Kcdi32S/permissions"
+    },
+    "derivatives" {
+      "_id": "Kcdi32S/derivatives"
+  }
+}
+
+--Ox6Csz
+Content-Disposition: form-data; name="data"
+Content-Type: application/shape
+
+...binary data...
+```
+Because `_meta` was given in the original POST request the response assumed that the view for `_meta` should implicitly be truthy. If the original POST contained only the native document, then only the native document would have been returned.
 
 # Resource Update
 
@@ -265,99 +388,94 @@ a tractor status resource in Frank's agcloud.com with the new total runtime.
 
 **Assumptions**
 
-- The tractor status resource is already known.
-- The telematics device already has authorization and a valid token.
-
-For this example assume the following resource already exists:
+- The tractor status resource already exists (Resource ID: kdj83mx).
+- The telematics device already has authorization and a valid token (SlAV32hkKG).
 
 **Request**
 ```http
-GET /resources/kdj83mx/data HTTP/1.1
+GET /resources/kdj83mx HTTP/1.1
 Host: api.agcloud.com
+Authentication: Bearer SlAV32hkKG
 Accept: application/json
 ```
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
+HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 133
 Etag: "686897696a7c876b7e"
 
 {
-    "hours": 1523,
-    "fuel_level": "80%",
-    "service_intervals": {
-        "50_hour": -4,
-        "100_hour": 46
-    }
+  "hours": 1523,
+  "fuel_level": "80%",
+  "service_intervals": {
+    "50_hour": -4,
+    "100_hour": 46
+  }
 }
 ```
 
-Then if the telematics device needs to update the `hours` field to `1524`, then
-it should also update the `service_intervals` to `-5` and `46` for `50_hour` and
+The telematics device wants to update the `hours` field to `1524`. It will also update the `service_intervals` to `-5` and `46` for `50_hour` and
 `100_hour` respectively.
 
 This can be accomplished several ways.
 
-*With PUT:*
+## With PUT
 
 **Request**
 ```http
-PUT /resources/kdj83mx/data HTTP/1.1
+PUT /resources/kdj83mx HTTP/1.1
 Host: api.agcloud.com
+Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
-Content-Length: 133
 If-Match: "686897696a7c876b7e"
 
 {
-    "hours": 1524,
-    "fuel_level": "80%",
-    "service_intervals": {
-        "50_hour": -5,
-        "100_hour": 45
-    }
+  "hours": 1524,
+  "fuel_level": "80%",
+  "service_intervals": {
+    "50_hour": -5,
+    "100_hour": 45
+  }
 }
 ```
 
-Notice the `If-Match` header provides some concurrency protection.
+Notice the `If-Match` header provides concurrency protection. That is the PUT will fail if the document has changed since the initial GET.
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
+HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 133
 Etag: "893rjdklia9w383984"
 
 {
-    "hours": 1524,
-    "fuel_level": "80%",
-    "service_intervals": {
-        "50_hour": -5,
-        "100_hour": 45
-    }
+  "hours": 1524,
+  "fuel_level": "80%",
+  "service_intervals": {
+    "50_hour": -5,
+    "100_hour": 45
+  }
 }
-
 ```
 
-*With two separate puts to update each section of the document:*
+## With two separate puts to update each section of the document independently
+
+*Unless the application carefully considers concurrency issues this method may result in a inconsistent document.*
 
 **Request**
 ```http
-PUT /resources/kdj83mx/data/hours HTTP/1.1
+PUT /resources/kdj83mx/hours HTTP/1.1
 Host: api.agcloud.com
+Authentication: Bearer SlAV32hkKG
 Content-Type: plain/text
-Content-Length: 4
-If-Match: "686897696a7c876b7e"
 
 1524
 ```
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
+HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 133
 Etag: "asf9cka3a08345rjj4"
 
 1524
@@ -365,47 +483,46 @@ Etag: "asf9cka3a08345rjj4"
 
 **Request**
 ```http
-PUT /resources/kdj83mx/data/service_intervals HTTP/1.1
+PUT /resources/kdj83mx/service_intervals HTTP/1.1
 Host: api.agcloud.com
+Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
-Content-Length: 78
 If-Match: "asf9cka3a08345rjj4"
 
 {
-    "50_hour": -5,
-    "100_hour": 45
+  "50_hour": -5,
+  "100_hour": 45
 }
 ```
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
+HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 133
 Etag: "893rjdklia9w383984"
 
 {
-    "50_hour": -5,
-    "100_hour": 45
+  "50_hour": -5,
+  "100_hour": 45
 }
 ```
 
-*With PATCH:*
+## With PATCH
 
 **Request**
 ```http
-PATCH /resources/kdj83mx/data HTTP/1.1
+PATCH /resources/kdj83mx HTTP/1.1
 Host: api.agcloud.com
+Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
-Content-Length: 133
 If-Match: "686897696a7c876b7e"
 
 {
-    "hours": 1524,
-    "service_intervals": {
-        "50_hour": -5,
-        "100_hour": 45
-    }
+  "hours": 1524,
+  "service_intervals": {
+    "50_hour": -5,
+    "100_hour": 45
+  }
 }
 ```
 
@@ -413,16 +530,15 @@ If-Match: "686897696a7c876b7e"
 ```http
 HTTP/1.1 200 Ok
 Content-Type: application/json
-Content-Length: 133
 Etag: "893rjdklia9w383984"
 
 {
-    "hours": 1524,
-    "fuel_level": "80%",
-    "service_intervals": {
-        "50_hour": -5,
-        "100_hour": 45
-    }
+  "hours": 1524,
+  "fuel_level": "80%",
+  "service_intervals": {
+    "50_hour": -5,
+    "100_hour": 45
+  }
 }
 
 ```
@@ -436,48 +552,41 @@ Now Andy can access it directly with his own account.
 
 **Assumptions**
 
-- Frank's Android app already has authorization and a valid token for Frank's
-  user agcloud.com.
-- Andy's OADA application already has authorization and a valid token for Andy's
-  user at agcloud.com.
+- Frank's Android app already has authorization and a valid token for Frank's agcloud.com user (SlAV32hkKG).
+- Andy's OADA application already has authorization and a valid token for Andy's agcloud.com user (kaJH38da3x).
 
-To share `/resources/ixm24ws`, the GeoJSON yield resource we made earlier, with Andy as an owner, `userId = jdx83jx` we need to add a new entry to the resource permission document.
+To share `/resources/ixm24ws`, the GeoJSON yield resource created earlier, with Andy as an owner, `userId = jdx83jx`, a new entry to the resource's permission document must be added.
 
 **Request**
 ```http
-POST /resources/ixm24ws/permissions HTTP/1.1
+POST /resources/ixm24ws/_meta/permissions HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
-Content-Length: 496
 
 {
-    "user": {
-        "href": "https://api.agcloud.com/users/jdx83jx"
-    },
-    "type": "user",
-    "level": "owner"
+  "user": {
+    "_id": "jdx83jx"
+  },
+  "type": "user",
+  "level": "owner"
 }
-
 ```
 
 **Response**
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
-Location: /resources/ixm24ws/permissions/9mxjs7c
-Etag: "9083423jkadfu9382x"
+Location: /resources/ixm24ws/_meta/permissions/9mxjs7c
+Etag: "xJDS9fd8f2838fxay4"
 
 {
-    "href": "https://api.agcloud.com/resources/ixm24ws/permissions",
-    "etag": "9238fasjakdfaf39f7",
-    "user": {
-        "href": "https://api.agcloud.com/users/jdx83jx"
-    },
-    "type": "user",
-    "level": "owner"
+  "user": {
+    "_id": "jdx83jx"
+  },
+  "type": "user",
+  "level": "owner"
 }
-
 ```
 
 Now Andy can access the resource with his identity.
@@ -493,46 +602,20 @@ Accept: application/json
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
+HTTP/1.1 200 OK
 Content-Type: application/json
 Etag: "aodskjfoa3j9af7883"
 
 {
-    "href": "https://api.agcloud.com/resources/ixm24ws",
-    "etag": "alsjfadksja9388x7d",
-    "guid": "https://api.agcloud.com/resources/ixm24ws",
-    "changeId": "jc4dcx6",
-    "name": "Frank's Yield",
-    "mimeType": "application/vnd.oada.yield+json",
-    "created": "1985-04-12T23:20:50.52Z",
-    "createdBy": {
-        "href": "https://api.agcloud.com/users/kdufe3f"
-    },
-    "modified": "1985-04-12T23:20:50.52Z",
-    "modifiedBy": {
-        "href": "https://api.agcloud.com/users/kdufe3f"
-    },
-    "data": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/data"
-    },
-    "meta": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/meta"
-    },
-    "formats": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/formats"
-    },
-    "parents": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/parents"
-    },
-    "children": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/children"
-    },
-    "derivatives": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/derivatives"
-    },
-    "permissions": {
-        "href": "https://api.agcloud.com/resources/ixm24ws/permissions"
-    }
+  "totalYield": {
+    "value": 5.6,
+    "unit": "bushel"
+  },
+  "type": "FeatureCollection",
+  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
+  "features": [{
+      "....": "...."
+  }]
 }
 ```
 
@@ -542,20 +625,19 @@ Etag: "aodskjfoa3j9af7883"
 
 Frank drives his tractor to a field and starts planting. Instead of asking Frank
 what field he is in, the monitor automatically discovers the current
-set of fields using the fields configuration on Frank's agcloud.com storage.
+set of fields using the fields bookmark on Frank's agcloud.com storage.
 However, the resource is in the Shape format but the monitor only understands
-GeoJSON. Therefore, the monitor requests a Shape to GeoJSON transformation when
-downloading the resource.
+GeoJSON. Therefore, the monitor requests a Shape to GeoJSON transformation.
 
 **Assumptions**
 
-- Frank's monitor device already has authorization and a valid token.
+- Frank's monitor device already has authorization and a valid token (SlAV32hkKG).
 
-The fields resource is located via the field configurations.
+The fields resource is located via the field bookmark.
 
 **Request**
 ```http
-GET /configurations/fields HTTP/1.1
+GET /bookmarks/fields HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Accept: application/json
@@ -564,82 +646,73 @@ Accept: application/json
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
+HTTP/1.1 200 OK
 Content-Type: application/json
 Etag: "aodskjfoa3j9af7883"
 
 {
-    "href": "https://api.agcloud.com/configurations/fields",
-    "etag": "jkx6yc3c7cja89434inc8ascfjdkasfjc8i7a37x",
-    "items": {},
-    "resource": {
-        "href": "https://api.agcloud.com/resources/fd8as8c"
-    }
+  "_id": "fd8as8c"
 }
 ```
 
-Now that the resource is known the formats document needs to be consulted to
-determine if the fields can be returned in an acceptable format, in this case `application/vns.oada.fields+json`.
+Now that the fields resource is known, Frank's monitor must consult the formats metadata document to determine if the fields can be returned in an acceptable format. In this case the desired format is `application/vns.oada.fields+json`.
 
 **Request**
 ```http
-GET /resources/fd8as8c/formats HTTP/1.1
+GET /resources/fd8as8c/_meta/formats HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Accept: application/json
-
 ```
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
+HTTP/1.1 200 OK
 Content-Type: application/json
 Etag: "qewriuquicjdkcj832"
 
 {
-    "href": "https://api.agcloud.com/resources/fd8as8c/formats",
-    "etag": "mnewahfau3&83djcx2",
-    "transforms": {
-        "application/vnd.oada.field+json": {
-            “original”: true,
-            "lossy": false,
-            "name": "OADA GeoJSON Field Open Format",
-            "openFormat": true
-        },
-        "application/shape": {
-            "lossy": false,
-            "name": "Esri Shapefile",
-            "openFromat": false
-        }
+  "_id": "fd8as8c/_meta/formats",
+  "_etag": "qewriuquicjdkcj832",
+  "transforms": {
+    "application/vnd.oada.field+json": {
+      “original”: true,
+      "lossy": false,
+      "name": "OADA GeoJSON Field Open Format",
+      "openFormat": true
+    },
+    "application/shape": {
+      "lossy": false,
+      "name": "Esri Shapefile",
+      "openFromat": false
     }
+  }
 }
 ```
 
-This resource can be transformed into the desired format, so the resource is
-downloaded.
+`application/vnd.oada.field+json` is present in the `transforms` key and AgCloud can transform the native file into the desired format via a GET request `Accept` header.
 
 **Request**
 ```http
-GET /resources/fd8as8c/data HTTP/1.1
+GET /resources/fd8as8c HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Accept: application/vnd.oada.field+json
-
 ```
 
 **Response**
 ```http
 HTTP/1.1 200 Ok
-Content-Type: application/json
+Content-Type: application/vnd.oada.field+json
 Etag: "qewriuquicjdkcj832"
 
 {
-    "type": "GeometeryCollection",
-    ...
-    "features": [{
-            ....
-    }
-    ...
+  "type": "GeometeryCollection",
+  "...": "...",
+  "features": [{
+    "...": "..."
+  },
+  "...": "..."
 }
 ```
 
@@ -647,30 +720,18 @@ Etag: "qewriuquicjdkcj832"
 
 ![Resource syncing](resource_syncing.png "Resource syncing")
 
-Frank uses his OADA compliant Android app to discover his planting prescription
-resource via the prescription configurations. He proceeds to edit the resource
-and sync it back to his agcloud.com storage. This same prescription resource was
-discovered and downloaded by Frank's monitor.  However, the monitor
-periodically checks the adcloud.com storage for changes in the resource and
-automatically re-downloads it.
+Frank uses an OADA compliant Android app to discover his planting prescription resource via the prescription bookmark. He proceeds to edit it and sync it back to agcloud.com. This same prescription resource was previously discovered and downloaded by Frank's monitor.  However, to stay synchronized the monitor periodically checks the agcloud.com for changes to the resource.
 
 **Assumptions**
 
-- Frank's monitor device already has authorization and a valid token.
+- Frank's monitor device already has authorization and a valid token (SlAV32hkKG).
+- Both the Android app and monitor have already discovered and downloaded the prescription resource. The discovered resource ID is `ajd82mx` and the original Etag was `k23odjuasidfjasdkf`.
 
-It is assumed that both the app and the monitor have successfully discovered and
-downloaded the prescription planting resource with the help of
-`/configurations/prescriptions/planting` using the techniques previously
-described.
-
-The discovered resource is `/resources/ajd82mx` and the original resource Etag
-is `k23odjuasidfjasdkf`.
-
-To poll for an update a request with the `If-None-Match` is made periodically.
+Update polls can be accomplished by issuing GET requests with `If-None-Match` headers periodically.
 
 **Request**
 ```http
-GET /resources/fd8as8c/data HTTP/1.1
+GET /resources/fd8as8c HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Accept: application/vnd.oada.prescription.planting+json
@@ -690,16 +751,16 @@ Etag: "k23odjuasidfjasdkf"
 
 ```
 
-*Available changes*
+*Changes Available*
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
+HTTP/1.1 200 OK
 Content-Type: applcation/json
 Etag: "ajja97823jfaksdhfx"
 
 {
-    ...
+  "...": "..."
 }
 ```
 
@@ -707,97 +768,93 @@ Etag: "ajja97823jfaksdhfx"
 
 ![Resource auto syncing](resource_auto_syncing.png "Resource auto syncing")
 
-Frank wants to store the same resource at two different OADA implementations. Frank also wants these two OADA implementations to keep the copies of the resource synchronized with each other automatically.
+Frank stores the same resource in two different OADA implementations. Frank wants the two copies to stay synchronized with each other automatically.
 
 **Assumptions**
 
 * Frank uses both openag.io and agcloud.com OADA cloud services.
-* The resource being synchronized is known as
-  "http://api.agcloud.com/resources/ajd82mx" and
-  "http://api.openag.io/resources/xl2nfd0"
+* The resources being synchronized are known as
+  `http://api.agcloud.com/resources/ajd82mx` and
+  `http://api.openag.io/resources/xl2nfd0`
 * openag.io is capable of receiving push notifications at
   https://api.openag.io/notifications.
 * agcloud.com is capable of receiving push notifications at
   https://api.agcloud.com/notifications.
 
-To synchronize the resources, either a push or poll sync must be established between both clouds in both directions.
+Synchronization of the resources is accomplished by establishing either a push or poll sync between both clouds, in both directions.
 
 *"poll" synchronization between both clouds*
 
 **Request - api.agcloud.com**
 ```http
-POST /resources/ajd82mx/syncs HTTP/1.1
+POST /resources/ajd82mx/_meta/syncs HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
-    "type": "poll",
-    "url": "http://api.openag.io/resources/xl2nfd0",
-    "headers": {},
-    "interval": 3600,
-    "authorization": {
-        "href": "https://api.agcloud.com/authorizations/8ackam3"
-    }
+  "type": "poll",
+  "url": "http://api.openag.io/resources/xl2nfd0",
+  "headers": {},
+  "interval": 3600,
+  "authorization": {
+    "_id": "8ackam3"
+  }
 }
 ```
 **Response**
 ```http
-HTTP/1.1 200 Ok
-Location: resources/ajd82mx/syncs/xjf3ft6
+HTTP/1.1 200 OK
+Location: resources/ajd82mx/_meta/syncs/xjf3ft6
 Content-Type: application/json
 Etag: "zjalkwjc3ldsua43ir"
 
 {
-    "href": "https://api.agcloud.com/resources/ajd82mx/syncs/xjf3ft6",
-    "etag": "zjalkwjc3ldsua43ir",
-    "type": "poll",
-    "url": "http://api.openag.io/resources/xl2nfd0",
-    "headers": {},
-    "lastChangeId": "uc47fcs",
-    "interval": 3600,
-    "authorization": {
-        "href": "https://api.agcloud.com/authorizations/8ackam3"
-    }
+  "type": "poll",
+  "url": "http://api.openag.io/resources/xl2nfd0",
+  "headers": {},
+  "lastChangeId": "uc47fcs",
+  "interval": 3600,
+  "authorization": {
+    "_id": "8ackam3"
+  }
 }
 ```
 
 **Request - api.openag.io**
 ```http
-POST /resources/xl2nfd0/syncs HTTP/1.1
+POST /resources/xl2nfd0/_meta/syncs HTTP/1.1
 Host: api.openag.io
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
-    "type": "poll",
-    "url": "http://api.agcloud.com/resources/ajd82mx",
-    "headers": {},
-    "interval": 3600,
-    "authorization": {
-        "href": "https://api.openag.io/authorizations/3dcif83"
-    }
+  "type": "poll",
+  "url": "http://api.agcloud.com/resources/ajd82mx",
+  "headers": {},
+  "interval": 3600,
+  "authorization": {
+    "_id": "3dcif83"
+  }
 }
 ```
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
-Location: /resources/xl2nfd0/syncs/8dkvf4r
+HTTP/1.1 200 OK
+Location: /resources/xl2nfd0/_meta/syncs/8dkvf4r
 Content-Type: application/json
 Etag: "kdjvjklasfje498u39"
 
 {
-    "href": "https://api.openag.io/resources/xl2nfd0/syncs/8dkvf4r",
-    "etag": "kdjvjklasfje498u39",
-    "type": "poll",
-    "url": "http://api.agcloud.com/resources/ajd82mx",
-    "headers": {},
-    "lastChangeId": "fur4cxs5",
-    "interval": 3600,
-    "authorization": {
-        "href": "https://api.openag.io/authorizations/3dcif83"
-    }
+  "type": "poll",
+  "url": "http://api.agcloud.com/resources/ajd82mx",
+  "headers": {},
+  "lastChangeId": "fur4cxs5",
+  "interval": 3600,
+  "authorization": {
+    "_id": "3dcif83"
+  }
 }
 ```
 
@@ -805,132 +862,100 @@ Etag: "kdjvjklasfje498u39"
 
 **Request - api.agcloud.com**
 ```http
-POST /resources/ajd82mx/syncs HTTP/1.1
+POST /resources/ajd82mx/_meta/syncs HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
-    "type": "push",
-    "url": "http://api.openag.io/notifications",
-    "headers": {},
-    "events": ["change"],
-    "authorization": {
-        "href": "https://api.agcloud.com/authorizations/8ackam3"
-    }
+  "type": "push",
+  "url": "http://api.openag.io/notifications",
+  "headers": {},
+  "events": ["change"],
+  "authorization": {
+    "_id": "8ackam3"
+  }
 }
 ```
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
-Location: resources/ajd82mx/syncs/xjf3ft6
+HTTP/1.1 200 OK
+Location: resources/ajd82mx/_meta/syncs/xjf3ft6
 Content-Type: application/json
 Etag: "zjalkwjc3ldsua43ir"
 
 {
-    "href": "https://api.agcloud.com/resources/ajd82mx/syncs/xjf3ft6",
-    "etag": "zjalkwjc3ldsua43ir",
-    "type": "push",
-    "url": "http://api.openag.io/notifications",
-    "headers": {},
-    "events": ["change"],
-    "authorization": {
-        "href": "https://api.agcloud.com/authorizations/8ackam3"
-    }
+  "type": "push",
+  "url": "http://api.openag.io/notifications",
+  "headers": {},
+  "events": ["change"],
+  "authorization": {
+    "_id": "8ackam3"
+  }
 }
 ```
 
 **Request - api.openag.io**
 ```http
-POST /resources/xl2nfd0/syncs HTTP/1.1
+POST /resources/xl2nfd0/_meta/syncs HTTP/1.1
 Host: api.openag.io
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
-    "type": "push",
-    "url": "http://api.agcloud.com/notifications",
-    "headers": {},
-    "events": ["changed"],
-    "authorization": {
-        "href": "https://api.openag.io/authorizations/3dcif83"
-    }
+  "type": "push",
+  "url": "http://api.agcloud.com/notifications",
+  "headers": {},
+  "events": ["changed"],
+  "authorization": {
+    "_id": "3dcif83"
+  }
 }
 ```
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
-Location: /resources/xl2nfd0/syncs/8dkvf4r
+HTTP/1.1 200 OK
+Location: /resources/xl2nfd0/_meta/syncs/8dkvf4r
 Content-Type: application/json
 Etag: "kdjvjklasfje498u39"
 
 {
-    "href": "https://api.openag.io/resources/xl2nfd0/syncs/8dkvf4r",
-    "etag": "kdjvjklasfje498u39",
-    "type": "push",
-    "url": "http://api.agcloud.com/notifications",
-    "headers": {},
-    "events": ["changed"],
-    "authorization": {
-        "href": "https://api.openag.io/authorizations/3dcif83"
-    }
+  "type": "push",
+  "url": "http://api.agcloud.com/notifications",
+  "headers": {},
+  "events": ["changed"],
+  "authorization": {
+    "_id": "3dcif83"
+  }
 }
 ```
 
 *One push and one poll*
 
-It is also possible to establish the synchronization as type poll in one direction and type push in the other. The documents for each sync type are the same as the above examples.
+It is possible to establish the synchronization by conducting polls in one direction and pushes in the other. The documents for each sync type are the same as the above examples.
 
 # View Changes
 
-Frank's file syncing application wants to discover all of the resources that have changed since the last time it checked. The last time Frank's app checked it had processed all changes up to and including the change id  `xje4dfg`.
+Frank's file syncing application wants to discover all resources that have changed since the last time it checked. The last time Frank's app checked it had processed all changes up to and including the change id  `6`.
 
-**Request**
-```http
-GET /changes?lastChangeId=xje4dfg&_expand=1 HTTP/1.1
-Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
-
-```
-
-**Response**
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "href": "https://api.agcloud.com/changes?lastChangeId=xje4dfg",
-    "etag": "jxw39cxuca9wu3asd9",
-    "items": [{
-        "href": "https://api.agcloud.com/changes/vda33d4",
-        "etag": "xkjaf8wcadskjcaw3e",
-        "changeId": "vda33d4",
-        "deleted": "false",
-        "resource": {
-            "href": "https://api.agcloud.com/resources/dxkf337"
-        }
-    },
-    {
-        "href": "https://api.agcloud.com/changes/jft567d",
-        "etag": "jcnjasdhfweuhfc737",
-        "changeId": "jft567d",
-        "deleted": "true",
-        "resource": {
-            "href": "https://api.agcloud.com/resources/dxkf337"
-        }
-    }]
-}
-```
+*"view" and changeId are still being finalized"*
 
 # View Changes for a Resource and Its Children
 
-Frank's application wants to discover all changes that occurred to either the given resource or any resource in its tree of children. The last time Frank's app checked it had processed all changes up to and including the change id  `cmf4df6`.
+Frank's application wants to discover all changes that occurred to either the given resource or any resource in its tree of children. 
+
+**Assumptions** 
+
+* Change ID `15` was the last changeId that Frank's app processed for the given resource.
+
+
+*Decoded GET URI: /resources/ixm24ws?view={"view": { "_meta": {"changeId": {"$gt": 15}}}}*
 
 **Request**
 ```http
-GET /resources/ixm24ws/changes?lastChangeId=cmf4df6 HTTP/1.1
+GET /resources/ixm24ws?view=%7B%22view%22%3A%20%7B%20%22_meta%22%3A%20%7B%22changeId%22%3A%20%7B%22%24gt%22%3A%2015%7D%7D%7D%7D HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 
@@ -941,37 +966,34 @@ Authentication: Bearer SlAV32hkKG
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-{
-    "href": "https://api.agcloud.com/changes?lastChangeId=xje4dfg",
-    "etag": "jxw39cxuca9wu3asd9",
-    "items": [{
-        "href": "https://api.agcloud.com/changes/jc4dcx6"
-    },
-    {
-        "href": "https://api.agcloud.com/changs/xj3jdc5"
-    }]
-}
+[
+  {
+    "_id": "jc4dcx6"
+  },
+  {
+    "_id": "xj3jdc5"
+  }
+]
 ```
 
 # Copy Resource
 
-Frank wants to make copy of by a GeoJSON OADA yield resource but in shape format.
+Frank wants to make copy of a GeoJSON OADA yield resource but as a shape file.
 
-This is accomplished by creating a new derivatives entry (POST) in the originating resource.
+This is accomplished by creating a new derivatives entry in the originating resource.
 
 **Request**
 ```http
-POST /resources/ixm24ws/derivatives?_expand=1 HTTP/1.1
+POST /resources/ixm24ws/_meta/derivatives HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
-Content-Length: 129
 
 {
-    "contentType": "application/shape",
-    "parents": [{
-        "href": "https://api.agcloud.com/resource/jd983dc"
-    }]
+  "contentType": "application/shape",
+  "parents": [{
+    "_id": "jd983dc"
+  }]
 }
 ```
 
@@ -979,68 +1001,33 @@ Content-Length: 129
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
-Location: /resources/ixm24ws/derivatives/jed82ar
+Location: /resources/ixm24ws/_meta/derivatives/jed82ar
 
 {
-    "contentType": "application/shape",
-    "resource": {
-        "href": "https://api.agcloud.com/resources/x82d7cs",
-        "etag": "axlskdjc9au37cicua",
-        "guid": "https://api.agcloud.com/resources/x82d7cs",
-        "changeId": "jc4dcx6",
-        "name": "Frank's Yield",
-        "mimeType": "application/shape",
-        "created": "1985-04-13T03:20:50.52Z",
-        "createdBy": {
-            "href": "https://api.agcloud.com/users/kdufe3f"
-        },
-        "modified": "1985-04-13T03:20:50.52Z",
-        "modifiedBy": {
-            "href": "https://api.agcloud.com/users/kdufe3f"
-        },
-        "data": {
-            "href": "https://api.agcloud.com/resources/x82d7cs/data"
-        },
-        "meta": {
-            "href": "https://api.agcloud.com/resources/x82d7cs/meta"
-        },
-        "formats": {
-            "href": "https://api.agcloud.com/resources/x82d7cs/formats"
-        },
-        "parents": {
-            "href": "https://api.agcloud.com/resources/x82d7cs/parents"
-        },
-        "children": {
-            "href": "https://api.agcloud.com/resources/x82d7cs/children"
-        },
-        "derivatives": {
-            "href": "https://api.agcloud.com/resources/x82d7cs/derivatives"
-        },
-        "permissions": {
-            "href": "https://api.agcloud.com/resources/x82d7cs/permissions"
-        }
-    }
+  "contentType": "application/shape",
+  "parents": [{
+    "_id": "jd983dc"
+  }]
 }
 ```
 
 # Make Existing Resource a Derivative of Another
 
-Frank modified a shape based yield map already existing in his OADA cloud using a non-OADA compliant application. After uploading the result as a new resource he wants to make it a derivative of the original.
+Frank modified a shape file yield map resource using a non-OADA compliant application. After uploading the result as a new resource he wants to make it a derivative of the original.
 
-This is accomplished by adding a derivatives entry (PUT) to the originating resource.
+This is accomplished by adding a derivatives entry to the originating resource.
 
 **Request**
 ```http
-POST /resources/ixm24ws/derivatives HTTP/1.1
+POST /resources/ixm24ws/_meta/derivatives HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
-Content-Length: 143
 
 {
-    "resource": {
-        "href": "https://api.agcloud.com/resource/fx3dfa3"
-    }
+  "resource": {
+    "_id": "fx3dfa3"
+  }
 }
 ```
 
@@ -1048,13 +1035,13 @@ Content-Length: 143
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
-Location: /resources/ixm24ws/derivatives/xjd83jf
+Location: /resources/ixm24ws/_meta/derivatives/xjd83jf
 Etag: "ckjlwj387fcakdfjk3"
 
 {
-    "contentType": "application/shape",
-    "resource": {
-        "href": "https://api.agcloud.com/resource/fx3dfa3"
-    }
+  "contentType": "application/shape",
+  "resource": {
+    "_id": "fx3dfa3"
+  }
 }
 ```
