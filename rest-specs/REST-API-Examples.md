@@ -1,7 +1,9 @@
 # OADA REST API Examples
 
 ## Characters
-To better convey what each example is accomplishing we describe them with several fictitious characters. You have probably seen them scattered throughout OADA publications, but just in below is a quick reminder of them.
+To better convey what each example is accomplishing we describe them with
+several fictitious characters. You have probably seen them scattered throughout
+OADA publications, but just in below is a quick reminder of them.
 
 * **Frank**
     * Is a farmer.
@@ -37,7 +39,8 @@ Frank logs into his agcloud.com OADA account with an OADA compliant Android app
 using his farmeridentity.com federated identity.
 
 To begin the process Frank's app discovers the authorization endpoints and
-agcloud.com's OADA base URI by issuing a GET request on the .well-known oada-configuration URI.
+agcloud.com's OADA base URI by issuing a GET request on the
+.well-known/oada-configuration URI.
 
 **Request**
 ```http
@@ -61,12 +64,12 @@ Content-Type: application/json
 
 The second step is to start the OAuth 2.0 procedure by making an implicit flow
 request to the specified `authorizationEndpoint`. Implicit flow is used because
-it makes most sense for an Android app. However, other OAuth 2.0 flows could be
+it makes most sense for an Android app. However, other OAuth 2.0 flows may be
 used.
 
 **Request**
 ```http
-GET /authorize?response_type=token&client_id=s6BhdRkqt3@agidentity.com&state=xyz&redirect_uri=https%3A%2F%2Flocalhost HTTP/1.1
+GET /authorize?response_type=token&client_id=s6BhdRkqt3%40agidentity.com&state=xyz&redirect_uri=https%3A%2F%2Flocalhost HTTP/1.1
 Host: api.agcloud.com
 Accept: text/html,application/xhtml+xml,application/xml
 ```
@@ -81,13 +84,15 @@ Content-Type: text/html
 </html>
 ```
 
-Agcloud.com's response is an HTML web page that challenges Frank to login with
-local user credentials or with an OADA federated account.
+Agcloud.com's response is an HTML page that challenges Frank to login with local
+user credentials or an OADA federated identity.
 
-Frank elects to login with the OADA federated identity `frank@farmeridentity.com` using his user-agent which generates a GET request back to agcloud.com.
-If farmeridentity.com's OpenId Connect endpoint is unknown to agcloud.com then it
-queries `farmeridentity.com/.well-known/openid-configuration` to discover the
-correct URL.
+Frank elects to login with the OADA federated identity
+`frank@farmeridentity.com` and therefore his user-agent  generates a GET request
+back to agcloud.com.  If farmeridentity.com's OpenId Connect endpoint is unknown
+to agcloud.com then it queries
+`farmeridentity.com/.well-known/openid-configuration` to discover the correct
+URL.
 
 **Request**
 ```http
@@ -102,12 +107,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  issuer: "https://farmeridentity.com",
-  authorization_endpoint: "https://farmeridentity.com/oada/fed/auth",
-  token_endpoint: "https://farmeridentity/oada/fed/token",
-  userinfo_endpoint: "https://farmeridentity/oada/fed/userInfo",
-  jwks_uri: "https://farmeridentity.com/oada/fed/certs",
-  response_types_supported: [
+  "issuer": "https://farmeridentity.com",
+  "authorization_endpoint": "https://farmeridentity.com/oada/fed/auth",
+  "token_endpoint": "https://farmeridentity/oada/fed/token",
+  "userinfo_endpoint": "https://farmeridentity/oada/fed/userInfo",
+  "jwks_uri": "https://farmeridentity.com/oada/fed/certs",
+  "response_types_supported": [
     "code",
     "token",
     "id_token",
@@ -116,32 +121,33 @@ Content-Type: application/json
     "token id_token",
     "code token id_token"
   ],
-  subject_types_supported: [
+  "subject_types_supported": [
     "public"
   ],
-  id_token_alg_values_supported: [
+  "id_token_alg_values_supported": [
     "RS256"
   ],
-  token_endpoint_auth_methods_supported: [
+  "token_endpoint_auth_methods_supported": [
     "client_secret_post"
   ]
 }
 ```
 
-Once the correct URL is known, agcloud.com responds to the above user-agent GET request with a redirect to the 
-OpenID Connect endpoint. This begins the  OpenID Connect flow.
+Once the correct URL is known, agcloud.com responds to the above user-agent GET
+request with a redirect to the OpenID Connect endpoint. This begins the  OpenID
+Connect flow.
 
 **Response**
 ```http
 HTTP/1.1 302 Found
-Location: https://farmeridentity.com/authorize?response_type=id_token%20token&client_id=s6BhdRkqt3@agidentity.com&redirect_uri=https%3A%2F%2Fapi.agcloud.com%2Fcb&scope=openid%20profile&state=af0ifjsldkj&nonce=n-0S6_WzA2Mj HTTP/1.1
+Location: https://farmeridentity.com/authorize?response_type=id_token%20token&client_id=s6BhdRkqt3%40agidentity.com&redirect_uri=https%3A%2F%2Fapi.agcloud.com%2Fcb&scope=openid%20profile&state=af0ifjsldkj&nonce=n-0S6_WzA2Mj HTTP/1.1
 ```
 
-Therefore, Frank's user-agent makes a request to farmeridentity.com
+Therefore, Frank's user-agent makes a GET request to farmeridentity.com
 
 **Request**
 ```http
-GET /authorize?response_type=code&client_id=s6bhdrkqt3@agidentity.com&redirect_uri=https%3a%2f%2fapi.agcloud.com%2fcb&scope=openid%20profile HTTP/1.1
+GET /authorize?response_type=code&client_id=s6bhdrkqt3%40agidentity.com&redirect_uri=https%3a%2f%2fapi.agcloud.com%2fcb&scope=openid%20profile HTTP/1.1
 Host: farmeridentity.com
 Accept: text/html,application/xhtml+xml,application/xml
 ```
@@ -156,11 +162,13 @@ Content-Type: text/html; charset=UTF-8
 </html>
 ```
 
-farmeridentity.com's response is an HTML web page that challenges Frank
-to login with his local user credentials (the federated identity).
+farmeridentity.com's response is an HTML page that challenges Frank to login
+with his local user credentials, in this case the account of Frank's federated
+identity.
 
-After Frank successfully logs in he is asked to confirm that agcloud.com may access his
-profile information, e.g., real name, email, etc. If Frank agrees farmeridentity.com issues a redirect response back to agcloud.com.
+After a successfully log in Frank is asked if agcloud.com is allowed to access
+his profile information, e.g., real name, email, etc. When Frank agrees
+farmeridentity.com issues a redirect response back to agcloud.com.
 
 **Response**
 ```http
@@ -168,7 +176,7 @@ HTTP/1.1 302 Found
 Location: https://api.agcloud.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&state=af0ifjsldkj
 ```
 
-Frank's user-agent makes the request and therefore completes the
+Frank's user-agent makes the redirect GET request and therefore completes the
 OpenId Connect flow. The original OAuth 2.0 resumes.
 
 **Request**
@@ -178,12 +186,16 @@ Host: api.agcloud.com
 Accept: text/html,application/xhtml+xml,application/xml
 ```
 
-In the background, agcloud.com communicates with farmeridentity.com using  the standard OpenID Connect
-protocol to retrieve an `id_token` that asserts Frank's identity and a JSON document that contains his profile information.
+In the background, agcloud.com communicates with farmeridentity.com using
+standard OpenID Connect protocol to retrieve the actual `id_token` that asserts
+Frank's identity and a JSON document which contains Frank's personal profile
+information.
 
-If the `id_token` is valid agcloud.com considers Frank as logged in as the identity `frank@agidentity.com` and it generates an OAuth 2.0 token.
+When agcloud.com validates the `id_token` Frank is considered logged as the
+identity `frank@agidentity.com` and an OAuth 2.0 token is generated.
 
-Agcloud.com then responds to the above GET request with a redirect that includes the generated token.
+Agcloud.com responds to the above GET request with a redirect that includes the
+generated token.
 
 **Response**
 ```http
@@ -198,17 +210,22 @@ fragment and stores it for later use.
 
 ![Resource upload](resource_upload.png "Resource upload")
 
-Frank's telematics device records yield measurements through the entire day into a GeoJSON file. Just before Frank finishes his work for the day he touches the "sync to OADA cloud" button.  As a result, Frank's telematics device uploads the entire GeoJSON file as a new resource to Frank's agcloud.com.
+Frank's telematics device records yield measurements throughout an entire day as
+a GeoJSON file. Just before Frank finishes his work for the day he touches the
+"sync to OADA cloud" button.  As a result, Frank's telematics device uploads the
+entire GeoJSON file as a new resource to Frank's agcloud.com.
 
 **Assumptions**
 
-* The telematics device already has authorization and a valid token (SlAV32hkKG).
+* The telematics device already has authorization and a valid token
+  (SlAV32hkKG).
 
 **Request**
 ```http
 POST /resources HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authent
+cation: Bearer SlAV32hkKG
 Content-Type: application/vnd.oada.yield+json
 
 {
@@ -248,7 +265,7 @@ Etag: "9083423jkadfu9382x"
     "_id": "ixm24ws",
     "_etag": "alsjfadksja9388x7d",
     "changeId": 1,
-    "name": "Frank's Yield"
+    "name": "Frank's Yield",
     "mimeType": "application/vnd.oada.yield+json",
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
@@ -283,20 +300,29 @@ Etag: "9083423jkadfu9382x"
 }
 ```
 
-Because `_meta` was given in the original POST request the response assumed that the view for `_meta` should implicitly be truthy. If the original POST contained only the native document, then only the native document would have been returned.
+Because `_meta` was given in the original POST request the response assumed that
+the view for `_meta` should implicitly be truthy. If the original POST contained
+only the native document, then only the native document would have been
+returned.
 
 # Binary Resource Upload
 
 ![Resource upload](resource_upload.png "Resource upload")
 
-Frank's telematics device records yield measurements through the entire day into a shape file.  Just before Frank finishes his work for the day he touches the "sync to OADA cloud" button.  As a result, Frank's telematics device uploads the
+Frank's telematics device records yield measurements throughout the entire day
+as a shape file. Just before Frank finishes his work for the day he touches the
+"sync to OADA cloud" button.  As a result, Frank's telematics device uploads the
 entire shape file as a new resource to Frank's agcloud.com.
 
 **Assumptions**
 
-- The telematics device already has authorization and a valid token (SlAV32hkKG).
+- The telematics device already has authorization and a valid token
+  (SlAV32hkKG).
 
-To set the new resource's metadata  and upload the associated data simultaneously a POST request with the header `Content-Type: multipart/form-data` is made. The JSON metadata document is sent with the form-data named `metadata` and the data with form-data named `data`.
+To set the new resource's metadata  and upload the associated data
+simultaneously a POST request with the header `Content-Type:
+multipart/form-data` is made. The JSON metadata document is sent with the
+form-data named `metadata` and the data with form-data named `data`.
 
 **Request**
 ```http
@@ -326,7 +352,7 @@ Content-Type: application/shape
 ```http
 HTTP/1.1 201 Created
 Location: /resources/Kcdi32S
-Content-Type: Multipart/mixed; boundary="Ox6Csz";
+Content-Type: multipart/mixed; boundary="Ox6Csz";
 
 --Ox6Csz
 Content-Disposition: form-data; name="metadata"
@@ -337,7 +363,7 @@ Content-Type: application/vnd.oada.metadata+json
     "_id": "Kcdi32S",
     "_etag": "JzlCjsjaljcaw8723x",
     "changeId": 1,
-    "name": "Frank's Yield"
+    "name": "Frank's Yield",
     "mimeType": "application/shape",
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
@@ -376,20 +402,24 @@ Content-Type: application/shape
 
 ...binary data...
 ```
-Because `_meta` was given in the original POST request the response assumed that the view for `_meta` should implicitly be truthy. If the original POST contained only the native document, then only the native document would have been returned.
+Because `_meta` was given in the original POST request the response assumed that
+the view for `_meta` should implicitly be truthy. If the original POST contained
+only the native document, then only the native document would have been
+returned.
 
 # Resource Update
 
 ![Resource update](resource_update.png "Resource update")
 
-Whenever Frank's tractor is on, his telematics device records the
-number of hours it has been running. Periodically, the telematics device updates
-a tractor status resource in Frank's agcloud.com with the new total runtime.
+Whenever Frank's tractor is on, his telematics device records the number of
+hours it has been running. Periodically, the telematics device updates a tractor
+status resource in Frank's agcloud.com with the new total runtime.
 
 **Assumptions**
 
 - The tractor status resource already exists (Resource ID: kdj83mx).
-- The telematics device already has authorization and a valid token (SlAV32hkKG).
+- The telematics device already has authorization and a valid token
+  (SlAV32hkKG).
 
 **Request**
 ```http
@@ -415,8 +445,9 @@ Etag: "686897696a7c876b7e"
 }
 ```
 
-The telematics device wants to update the `hours` field to `1524`. It will also update the `service_intervals` to `-5` and `46` for `50_hour` and
-`100_hour` respectively.
+The telematics device wants to update the `hours` field to `1524`. It will also
+update the `service_intervals` to `-5` and `46` for `50_hour` and `100_hour`
+respectively.
 
 This can be accomplished several ways.
 
@@ -440,7 +471,8 @@ If-Match: "686897696a7c876b7e"
 }
 ```
 
-Notice the `If-Match` header provides concurrency protection. That is the PUT will fail if the document has changed since the initial GET.
+Notice the `If-Match` header provides concurrency protection. That is the PUT
+will fail if the document has changed since the initial GET.
 
 **Response**
 ```http
@@ -460,7 +492,8 @@ Etag: "893rjdklia9w383984"
 
 ## With two separate puts to update each section of the document independently
 
-*Unless the application carefully considers concurrency issues this method may result in a inconsistent document.*
+*Unless the application carefully considers concurrency issues this method may
+result in a inconsistent document.*
 
 **Request**
 ```http
@@ -475,7 +508,7 @@ Content-Type: plain/text
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: plain/text
 Etag: "asf9cka3a08345rjj4"
 
 1524
@@ -552,10 +585,14 @@ Now Andy can access it directly with his own account.
 
 **Assumptions**
 
-- Frank's Android app already has authorization and a valid token for Frank's agcloud.com user (SlAV32hkKG).
-- Andy's OADA application already has authorization and a valid token for Andy's agcloud.com user (kaJH38da3x).
+- Frank's Android app already has authorization and a valid token for Frank's
+  agcloud.com user (SlAV32hkKG).
+- Andy's OADA application already has authorization and a valid token for Andy's
+  agcloud.com user (kaJH38da3x).
 
-To share `/resources/ixm24ws`, the GeoJSON yield resource created earlier, with Andy as an owner, `userId = jdx83jx`, a new entry to the resource's permission document must be added.
+To share `/resources/ixm24ws`, the GeoJSON yield resource created earlier, with
+Andy as an owner, `userId = jdx83jx`, a new entry to the resource's permission
+document must be added.
 
 **Request**
 ```http
@@ -624,14 +661,15 @@ Etag: "aodskjfoa3j9af7883"
 ![Field discovery](field_discovery.png "Field discovery")
 
 Frank drives his tractor to a field and starts planting. Instead of asking Frank
-what field he is in, the monitor automatically discovers the current
-set of fields using the fields bookmark on Frank's agcloud.com storage.
-However, the resource is in the Shape format but the monitor only understands
-GeoJSON. Therefore, the monitor requests a Shape to GeoJSON transformation.
+what field he is in, the monitor automatically discovers the current set of
+fields using the fields bookmark on Frank's agcloud.com storage.  However, the
+resource is in the Shape format but the monitor only understands GeoJSON.
+Therefore, the monitor requests a Shape to GeoJSON transformation.
 
 **Assumptions**
 
-- Frank's monitor device already has authorization and a valid token (SlAV32hkKG).
+- Frank's monitor device already has authorization and a valid token
+  (SlAV32hkKG).
 
 The fields resource is located via the field bookmark.
 
@@ -655,7 +693,9 @@ Etag: "aodskjfoa3j9af7883"
 }
 ```
 
-Now that the fields resource is known, Frank's monitor must consult the formats metadata document to determine if the fields can be returned in an acceptable format. In this case the desired format is `application/vns.oada.fields+json`.
+Now that the fields resource is known, Frank's monitor must consult the formats
+metadata document to determine if the fields can be returned in an acceptable
+format. In this case the desired format is `application/vns.oada.fields+json`.
 
 **Request**
 ```http
@@ -676,7 +716,7 @@ Etag: "qewriuquicjdkcj832"
   "_etag": "qewriuquicjdkcj832",
   "transforms": {
     "application/vnd.oada.field+json": {
-      “original”: true,
+      "original": true,
       "lossy": false,
       "name": "OADA GeoJSON Field Open Format",
       "openFormat": true
@@ -690,7 +730,9 @@ Etag: "qewriuquicjdkcj832"
 }
 ```
 
-`application/vnd.oada.field+json` is present in the `transforms` key and AgCloud can transform the native file into the desired format via a GET request `Accept` header.
+`application/vnd.oada.field+json` is present in the `transforms` key and AgCloud
+can transform the native file into the desired format via a GET request `Accept`
+header.
 
 **Request**
 ```http
@@ -711,7 +753,7 @@ Etag: "qewriuquicjdkcj832"
   "...": "...",
   "features": [{
     "...": "..."
-  },
+  }],
   "...": "..."
 }
 ```
@@ -720,14 +762,22 @@ Etag: "qewriuquicjdkcj832"
 
 ![Resource syncing](resource_syncing.png "Resource syncing")
 
-Frank uses an OADA compliant Android app to discover his planting prescription resource via the prescription bookmark. He proceeds to edit it and sync it back to agcloud.com. This same prescription resource was previously discovered and downloaded by Frank's monitor.  However, to stay synchronized the monitor periodically checks the agcloud.com for changes to the resource.
+Frank uses an OADA compliant Android app to discover his planting prescription
+resource via the prescription bookmark. He proceeds to edit it and sync it back
+to agcloud.com. This same prescription resource was previously discovered and
+downloaded by Frank's monitor.  However, to stay synchronized the monitor
+periodically checks the agcloud.com for changes to the resource.
 
 **Assumptions**
 
-- Frank's monitor device already has authorization and a valid token (SlAV32hkKG).
-- Both the Android app and monitor have already discovered and downloaded the prescription resource. The discovered resource ID is `ajd82mx` and the original Etag was `k23odjuasidfjasdkf`.
+- Frank's monitor device already has authorization and a valid token
+  (SlAV32hkKG).
+- Both the Android app and monitor have already discovered and downloaded the
+  prescription resource. The discovered resource ID is `ajd82mx` and the
+  original Etag was `k23odjuasidfjasdkf`.
 
-Update polls can be accomplished by issuing GET requests with `If-None-Match` headers periodically.
+Update polls can be accomplished by issuing GET requests with `If-None-Match`
+headers periodically.
 
 **Request**
 ```http
@@ -746,7 +796,7 @@ Typically the response will be one of following two
 **Response**
 ```http
 HTTP/1.1 304 Not Modified
-Content-Type: applcation/json
+Content-Type: application/json
 Etag: "k23odjuasidfjasdkf"
 
 ```
@@ -756,7 +806,7 @@ Etag: "k23odjuasidfjasdkf"
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: applcation/json
+Content-Type: application/json
 Etag: "ajja97823jfaksdhfx"
 
 {
@@ -768,7 +818,8 @@ Etag: "ajja97823jfaksdhfx"
 
 ![Resource auto syncing](resource_auto_syncing.png "Resource auto syncing")
 
-Frank stores the same resource in two different OADA implementations. Frank wants the two copies to stay synchronized with each other automatically.
+Frank stores the same resource in two different OADA implementations. Frank
+wants the two copies to stay synchronized with each other automatically.
 
 **Assumptions**
 
@@ -781,7 +832,8 @@ Frank stores the same resource in two different OADA implementations. Frank want
 * agcloud.com is capable of receiving push notifications at
   https://api.agcloud.com/notifications.
 
-Synchronization of the resources is accomplished by establishing either a push or poll sync between both clouds, in both directions.
+Synchronization of the resources is accomplished by establishing either a push
+or poll sync between both clouds, in both directions.
 
 *"poll" synchronization between both clouds*
 
@@ -802,6 +854,7 @@ Content-Type: application/json
   }
 }
 ```
+
 **Response**
 ```http
 HTTP/1.1 200 OK
@@ -934,21 +987,27 @@ Etag: "kdjvjklasfje498u39"
 
 *One push and one poll*
 
-It is possible to establish the synchronization by conducting polls in one direction and pushes in the other. The documents for each sync type are the same as the above examples.
+It is possible to establish the synchronization by conducting polls in one
+direction and pushes in the other. The documents for each sync type are the same
+as the above examples.
 
 # View Changes
 
-Frank's file syncing application wants to discover all resources that have changed since the last time it checked. The last time Frank's app checked it had processed all changes up to and including the change id  `6`.
+Frank's file syncing application wants to discover all resources that have
+changed since the last time it checked. The last time Frank's app checked it had
+processed all changes up to and including the change id `6`.
 
 *"view" and changeId are still being finalized"*
 
 # View Changes for a Resource and Its Children
 
-Frank's application wants to discover all changes that occurred to either the given resource or any resource in its tree of children. 
+Frank's application wants to discover all changes that occurred to either the
+given resource or any resource in its tree of children.
 
-**Assumptions** 
+**Assumptions**
 
-* Change ID `15` was the last changeId that Frank's app processed for the given resource.
+* Change ID `15` was the last changeId that Frank's app processed for the given
+  resource.
 
 
 *Decoded GET URI: /resources/ixm24ws?view={"view": { "_meta": {"changeId": {"$gt": 15}}}}*
@@ -980,7 +1039,8 @@ Content-Type: application/json
 
 Frank wants to make copy of a GeoJSON OADA yield resource but as a shape file.
 
-This is accomplished by creating a new derivatives entry in the originating resource.
+This is accomplished by creating a new derivatives entry in the originating
+resource.
 
 **Request**
 ```http
@@ -1013,7 +1073,9 @@ Location: /resources/ixm24ws/_meta/derivatives/jed82ar
 
 # Make Existing Resource a Derivative of Another
 
-Frank modified a shape file yield map resource using a non-OADA compliant application. After uploading the result as a new resource he wants to make it a derivative of the original.
+Frank modified a shape file yield map resource using a non-OADA compliant
+application. After uploading the result as a new resource he wants to make it a
+derivative of the original.
 
 This is accomplished by adding a derivatives entry to the originating resource.
 
@@ -1045,3 +1107,4 @@ Etag: "ckjlwj387fcakdfjk3"
   }
 }
 ```
+
