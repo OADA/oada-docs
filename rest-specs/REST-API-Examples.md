@@ -224,8 +224,7 @@ entire GeoJSON file as a new resource to Frank's agcloud.com.
 ```http
 POST /resources HTTP/1.1
 Host: api.agcloud.com
-Authent
-cation: Bearer SlAV32hkKG
+Authentication: Bearer SlAV32hkKG
 Content-Type: application/vnd.oada.yield+json
 
 {

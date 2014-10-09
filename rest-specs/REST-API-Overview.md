@@ -21,14 +21,31 @@ complex. It's responsibilities include:
 - Organizing data in a parent/child structure (think Google Drive).
 - Shearing data with other users.
 
-Most OADA endpoints are actually resources with a valid resource id. There are just given their own endpoint to enable easier and automatic discovery of that information. The same documents can be requested directly using the `/resources/{resourceId}` endpoint as well.
+Most OADA endpoints are actually resources with a valid resource id. There are
+just given their own endpoint to enable easier and automatic discovery of that
+information. The same documents can be requested directly using the
+`/resources/{resourceId}` endpoint as well.
 
 ### Accessing Stored Data
-Stored data can be directly accessed with a GET request on the `/resources/{resourceId}` endpoint. 
-If the data is in a JSON format sub-documents can be directly accessed by appending the JSON keys of interest to the end of  `/resources/{resourceId}`. The mapping follows [RFC 6901 JavaScript Object Notation (JSON) Pointer][rfc6901]. If the data is a binary format then the binary blob is returned directly. If the data is a binary format and the OADA specific `_meta` document is also requested (see below) then the response is of the `Multipart/mixed` media type where one part is the `_meta` JSON document and the other is the binary blob. A `302 Found` may be returned if the resource is available at an alternative location, such as a Content Delivery Network (CDN).
+Stored data can be directly accessed with a GET request on the
+`/resources/{resourceId}` endpoint.  If the data is in a JSON format
+sub-documents can be directly accessed by appending the JSON keys of interest to
+the end of  `/resources/{resourceId}`. The mapping follows [RFC 6901 JavaScript
+Object Notation (JSON) Pointer][rfc6901]. If the data is a binary format then
+the binary blob is returned directly. If the data is a binary format and the
+OADA specific `_meta` document is also requested (see below) then the response
+is of the `Multipart/mixed` media type where one part is the `_meta` JSON
+document and the other is the binary blob. A `302 Found` may be returned if the
+resource is available at an alternative location, such as a Content Delivery
+Network (CDN).
 
 ### The Data's Meta Data
-In order to accomplish tasks like storing user defined metadata, sharing resource with other users, creating a file structure, and synchronizing resources across clouds each resource has a well defined metadata sub-document called `_meta`. `_meta` lives at the root of a resource, that is at `/resources/{resourceId}/_meta` and is a reserved JSON key at the root of the resource's data document.
+In order to accomplish tasks like storing user defined metadata, sharing
+resource with other users, creating a file structure, and synchronizing
+resources across clouds each resource has a well defined metadata sub-document
+called `_meta`. `_meta` lives at the root of a resource, that is at
+`/resources/{resourceId}/_meta` and is a reserved JSON key at the root of the
+resource's data document.
 
 The following endpoints, JSON sub-documents, reside under `_meta`:
 - `/meta`
@@ -41,7 +58,9 @@ The following endpoints, JSON sub-documents, reside under `_meta`:
 
 ### Example `/resource/{resourceId}` document
 
-The following is a example of JSON data with `view` set to also return the `_meta` document. That is both the native data and the OADA specific `_meta` metadata document is returned all together as one JSON ouptut.
+The following is a example of JSON data with `view` set to also return the
+`_meta` document. That is both the native data and the OADA specific `_meta`
+metadata document is returned all together as one JSON ouptut.
 
 *Decoded GET URI: /resource/ixm24ws?view={_meta: true}*
 
@@ -197,11 +216,14 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 # `/bookmarks`
 
 ## `/bookmarks/{key 1}/.../{key N}`
-`/bookmarks` provides a standard way to link to interesting resources in a way that others can automatically discover them.
- They are just plain resources and so they may be shared, synchronized, and managed the same way.
- 
+`/bookmarks` provides a standard way to link to interesting resources in a way
+that others can automatically discover them.  They are just plain resources and
+so they may be shared, synchronized, and managed the same way.
+
 ### Keys
-The number of levels of keys is arbitrary. To improve interoperability between clouds, applications, and devices, OADA will define a standard set of standard bookmark keys. For example,
+The number of levels of keys is arbitrary. To improve interoperability between
+clouds, applications, and devices, OADA will define a standard set of standard
+bookmark keys. For example,
 
 - /bookmarks/fields
 - /bookmarks/seeds
@@ -239,22 +261,32 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 
 ## `/users/{userId}`
 
-`/users` provides details of another user's identity, such as, real name, email address, avatar, etc assuming that user is *known* to the end user. Another user becomes *known* when it is:
+`/users` provides details of another user's identity, such as, real name, email
+address, avatar, etc assuming that user is *known* to the end user. Another user
+becomes *known* when it is:
 
 - Local to the cloud and has a public profile.
 - Has previously shared files with the end user.
 
-Knowledge of personal identity makes sharing a lot easier and less error prone. For example, a user can see a picture and real name of another *before* sharing data.
+Knowledge of personal identity makes sharing a lot easier and less error prone.
+For example, a user can see a picture and real name of another *before* sharing
+data.
 
-Users are just plain resources and so they may be shared, synchronized, and managed in the same way.
+Users are just plain resources and so they may be shared, synchronized, and
+managed in the same way.
 
 ### Federated Identity
+Currently a cloud is not expected to return information for an arbitrary
+federated identity unless that identity has previously logged into the cloud and
+the owner of the identity agreed to share the personal information. Later
+versions of OADA may consider user discovery across the federation.
 
-Currently a cloud is not expected to return information for an arbitrary federated identity unless that identity has previously logged into the cloud and the owner of the identity agreed to share the personal information. Later versions of OADA may consider user discovery across the federation.
-    
 ### `me` userId
-
-The 'me' userId is a special id that refers the currently logged in user. This can be used by an application to "bootstrap" itself. That is, the application can automatically discover the necessary information to show the user a reasonable first screen. For example, locating the root resource or the user's bookmarks resource.
+The 'me' userId is a special id that refers the currently logged in user. This
+can be used by an application to "bootstrap" itself. That is, the application
+can automatically discover the necessary information to show the user a
+reasonable first screen. For example, locating the root resource or the user's
+bookmarks resource.
 
 ### Example `/users/{userId}` document
 
@@ -282,9 +314,13 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 
 # `/groups`
 ## `/groups/{groupId}`
-`/groups` list, creates, and manages groups of users. They can be used to allocate resource permissions more flexibly. For example, at any time a user can be added or removed from a group and all previously shared files are automatically become accessible or inaccessible, respectively.
+`/groups` list, creates, and manages groups of users. They can be used to
+allocate resource permissions more flexibly. For example, at any time a user can
+be added or removed from a group and all previously shared files are
+automatically become accessible or inaccessible, respectively.
 
-Groups are just plain resources and so they may be shared, synchronized, and managed in the same way.
+Groups are just plain resources and so they may be shared, synchronized, and
+managed in the same way.
 
 ### Example `/groups/{groupId}` document
 
@@ -308,7 +344,9 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 # `/authorizations`
 ## `/authorizations/{authorizationId}`
 
-`/authorizations` list, creates, and manages the current user's authorizations for a third party. Currently it is meant to manage OAuth 2.0 tokens, but could hypothetically manage any type of authorization.
+`/authorizations` list, creates, and manages the current user's authorizations
+for a third party. Currently it is meant to manage OAuth 2.0 tokens, but could
+  hypothetically manage any type of authorization.
 
 ### Example `/authorizations/{authorizationId}` document
 
@@ -331,13 +369,22 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 
 # `/.well-known`
 
-`/.well-known` allows an application to automatticly discover the details of an OADA compliant API. For example, it can use it to locate the API's base URI for a particular domain or discover the authencation and client discovery endpoints. It follows [RFC 5785 Defining Well-Known Uniform Resource Identifiers (URIs)][rfc5785].
+`/.well-known` allows an application to automatticly discover the details of an
+OADA compliant API. For example, it can use it to locate the API's base URI for
+a particular domain or discover the authencation and client discovery endpoints.
+It follows
+[RFC 5785 Defining Well-Known Uniform Resource Identifiers (URIs)][rfc5785].
 
-This endpoint MUST exist at the root of a clouds' domain or subdomain. For example, if a cloud wants to be known as agcloud.com then `.well-known` MUST be found at: `agcloud.com/.well-known`. The API MAY be hsoted at another domain or sub-domain as along the well-known documents are correctly configured.
+This endpoint MUST exist at the root of a clouds' domain or subdomain. For
+example, if a cloud wants to be known as agcloud.com then `.well-known` MUST be
+found at: `agcloud.com/.well-known`. The API MAY be hsoted at another domain or
+sub-domain as along the well-known documents are correctly configured.
 
 ## `/.well-known/oada-configuration`
 
-Used to discovery any OADA API global details, such as the OADA API base URI, authorization and token endpoints to gain an OADA token, and if and where the provider hosts OADA client discovery.
+Used to discovery any OADA API global details, such as the OADA API base URI,
+authorization and token endpoints to gain an OADA token, and if and where the
+provider hosts OADA client discovery.
 
 ### Example `/.well-known/oada-configuration` document
 
@@ -355,7 +402,8 @@ Content-Type: application/json
 ```
 ## `/.well-known/openid-configuration`
 
-Standard OpenID Connect discovery document. It is optional for OpenID Connect but required by OADA.
+Standard OpenID Connect discovery document. It is optional for OpenID Connect
+but required by OADA.
 [Open ID Connect Discovery 1.0 Standard][oidc-openid-configuration]
 
 ### Example `/.well-known/openid-configuration` document
