@@ -42,7 +42,7 @@ The following endpoints, JSON sub-documents, reside under `_meta`:
 
 The following is a example of JSON data with `view` set to also return the `_meta` document. That is both the native data and the OADA specific `_meta` metadata document is returned all together as one JSON ouptut.
 
-(URL decoded URI is: /resource/ixm24ws?view={_meta: true}
+*Decoded GET URI: /resource/ixm24ws?view={_meta: true}*
 
 ```http
 GET /resource/ixm24ws?view=%7B_meta%3A%20true%7D HTTP/1.1
