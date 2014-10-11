@@ -96,7 +96,7 @@ If the above document is uploaded to an OADA cloud some keys get added automatic
 > **Answer:** You put the id value after the /resources endpoint.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/123?view={
 >  "_id": true
 > }
@@ -134,7 +134,7 @@ Next let’s look at a JSON file that contains a list of our field resources. It
 > **Answer:** Use the `$expand` keyword. Expanding will follow each "_id" in the array and add it’s corresponding resource in place.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields": {
 >     "$each": {
@@ -173,7 +173,7 @@ Next let’s look at a JSON file that contains a list of our field resources. It
 > **Answer:** `$expand` is not needed in this case. This is because when we mention the "_id", "acres", and "boundary" keys in the request therefore we are implicitly telling the server to expand the resource.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields": {
 >     "$each": {
@@ -208,7 +208,7 @@ Next let’s look at a JSON file that contains a list of our field resources. It
 > **Answer:** Use the "$others" keyword to turn off all the keys except the `name` key. It affects all native keys left unmentioned in the object.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields": {
 >     "$each": {
@@ -274,7 +274,7 @@ GET /resources/9999?view={
 > **Answer:** Add another condition. Conditions are ANDed by default.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields": {
 >     "$each": {
@@ -308,7 +308,7 @@ GET /resources/9999?view={
 > **Answer:** Wrap the conditions in an `$or`, the `$or` conditional can be an array or an object.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields": {
 >     "$each": {
@@ -351,7 +351,7 @@ GET /resources/9999?view={
 > **Answer:** Yes, use the "dot" notation from Javascript, where each set of braces is replaced with a "."
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields.$each.$or": {
 >     "name.$regex": "^S.*",
@@ -389,7 +389,7 @@ GET /resources/9999?view={
 > **Answer:** You can can still turn keys on/off inside conditionals as you would normally.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields.$each.$or": {
 >     "name.$regex": "^S.*",
@@ -423,7 +423,7 @@ GET /resources/9999?view={
 > **Answer:** You have to use the $view keyword.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields.$each.$or": {
 >     "name": { "$view": false, "$regex": "^S.*" }
@@ -459,7 +459,7 @@ GET /resources/9999?view={
 > **Answer:** The array is returned as an object with a `_array` key containing the original array. This is the behavior whenever an OADA key is returned from a native array.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields._id": true
 > }
@@ -487,7 +487,7 @@ GET /resources/9999?view={
 > **Answer:** `$expand` to the rescue again!
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields.$each": {
 >     "$expand": false,
@@ -531,7 +531,7 @@ Suppose each of our field resources have a child array containing alternate name
 > **Answer:** Use the $any condition on the "alt_names" array. It evaluates to true of ANY of the elements in the "alt_names" array meet the conditions.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields.$each.alt_names.$any": { "$eq": "S30" }
 > }
@@ -563,7 +563,7 @@ Suppose each of our field resources have a child array containing alternate name
 > **Answer:** Use the $every condition on the "alt_names" array. It evaluates to true only if EVERY one of the elements in the "alt_names" array meets the conditions.
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields.$each.alt_names.$every": { "$eq": "S30" }
 > }
@@ -585,7 +585,7 @@ Suppose each of our field resources have a child array containing alternate name
 > **Answer:** In the previous question we filtered our outer array (fields) by conditions on a inner array (alt_names). We can change the $any to an $each to leave the outer array unchanged and only filter "alt_names".
 
 > **Request:**
-> ```json
+> ```
 > GET /resources/9999?view={
 >   "fields.$each.alt_names.$each": { "$eq": "S30" }
 > }
