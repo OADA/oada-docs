@@ -241,7 +241,7 @@ Next let’s look at a JSON file that contains a list of our field resources. It
 > **Answer:** Add a regular expression condition on the `name` key. The keyword for a regular expression is $regex.
 
 > **Request:**
-> ```json
+> ```
 GET /resources/9999?view={
   "fields": {
     "$each": {
