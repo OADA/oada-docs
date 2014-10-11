@@ -28,7 +28,7 @@ OADA publications, but just in below is a quick reminder of them.
 * [Automatic Resource Syncing](#automatic-resource-syncing)
 * [View Changes](#view-changes)
 * [View Changes for a Resource and Its Children](#view-changes-for-a-resource-and-its-children)
-* [More View Examples](View-Proposal.md)
+* [More View Examples](View-Proposal.md#examples)
 * [Copy Resource](#copy-resource)
 * [Make Existing Resource a Derivative of Another](#make-existing-resource-a-derivative-of-another)
 
@@ -1035,7 +1035,7 @@ given resource or any resource in its tree of children.
 {
   "name": "Smith30",
   "acres": 30.3,
-  "boundary": { geojson of boundary polygons }
+  "boundary": { <geojson-of-boundary-polygons> }
 }
 ```
 
@@ -1068,7 +1068,7 @@ Content-Type: application/json
 {
   "name": "Smith30",
   "acres": 33.8,
-  "boundary": { geojson of boundary polygons }
+  "boundary": { <geojson-of-boundary-polygons> }
 }
 ```
 

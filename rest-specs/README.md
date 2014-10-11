@@ -27,6 +27,7 @@
 * [Automatic Resource Syncing](REST-API-Examples.md#automatic-resource-syncing)
 * [View Changes](REST-API-Examples.md#view-changes)
 * [View Changes for a Resource and Its Children](REST-API-Examples.md#view-changes-for-a-resource-and-its-children)
+* [More View Examples](View-Proposal.md#examples)
 * [Copy Resource](REST-API-Examples.md#copy-resource)
 * [Make Existing Resource a Derivative of Another](REST-API-Examples.md#make-existing-resource-a-derivative-of-another)
 
