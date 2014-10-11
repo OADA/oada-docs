@@ -28,6 +28,7 @@ OADA publications, but just in below is a quick reminder of them.
 * [Automatic Resource Syncing](#automatic-resource-syncing)
 * [View Changes](#view-changes)
 * [View Changes for a Resource and Its Children](#view-changes-for-a-resource-and-its-children)
+* [More View Examples](View-Proposal.md)
 * [Copy Resource](#copy-resource)
 * [Make Existing Resource a Derivative of Another](#make-existing-resource-a-derivative-of-another)
 
@@ -996,24 +997,11 @@ Frank's file syncing application wants to discover all resources that have
 changed since the last time it checked. The last time Frank's app checked it had
 processed all changes up to and including the change id `6`.
 
-*"view" and changeId are still being finalized"*
-
-# View Changes for a Resource and Its Children
-
-Frank's application wants to discover all changes that occurred to either the
-given resource or any resource in its tree of children.
-
-**Assumptions**
-
-* Change ID `15` was the last changeId that Frank's app processed for the given
-  resource.
-
-
-*Decoded GET URI: /resources/ixm24ws?view={"view": { "_meta": {"changeId": {"$gt": 15}}}}*
+*Decoded GET URI: /resources?view={"$each._meta.changeId":{"$gt":6}}*
 
 **Request**
 ```http
-GET /resources/ixm24ws?view=%7B%22view%22%3A%20%7B%20%22_meta%22%3A%20%7B%22changeId%22%3A%20%7B%22%24gt%22%3A%2015%7D%7D%7D%7D HTTP/1.1
+GET /resources/%7B%22%24each._meta.changeId%22%3A%7B%22%24gt%22%3A6%7D%7D HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 
@@ -1024,14 +1012,64 @@ Authentication: Bearer SlAV32hkKG
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-[
-  {
+{
+  "jc4dcx6": {
     "_id": "jc4dcx6"
   },
-  {
+  "xj3jdc5": {
     "_id": "xj3jdc5"
   }
-]
+}
+```
+
+# View Changes for a Resource and Its Children
+
+Frank's application wants to discover all changes that occurred to either the
+given resource or any resource in its tree of children.
+
+**Assumptions**
+
+* Suppose Frank has a field resource reprented by the JSON below: 
+
+```json
+{
+  "name": "Smith30",
+  "acres": 30.3,
+  "boundary": { geojson of boundary polygons }
+}
+```
+
+* Change ID `15` was the last changeId that Frank's app processed for the given 
+resource but Andy just edited Smith30's field boundary. Franks's app needs to
+poll the resource to see if it has changed.
+
+*Decoded GET URI: /resources/ixm24ws?view={"_meta.changeId":{"$gt":15}}*
+
+**Request**
+```http
+GET /resources/ixm24ws?view=%7B%22_meta.changeId%22%3A%7B%22%24gt%22%3A15%7D%7D HTTP/1.1
+Host: api.agcloud.com
+Authentication: Bearer SlAV32hkKG
+
+```
+
+**Response before changes**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+```
+
+**Response after changes**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "name": "Smith30",
+  "acres": 33.8,
+  "boundary": { geojson of boundary polygons }
+}
 ```
 
 # Copy Resource
