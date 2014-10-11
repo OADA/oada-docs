@@ -62,10 +62,10 @@ The following is a example of JSON data with `view` set to also return the
 `_meta` document. That is both the native data and the OADA specific `_meta`
 metadata document is returned all together as one JSON ouptut.
 
-*Decoded GET URI: /resource/ixm24ws?view={_meta: true}*
+*Decoded GET URI: /resource/ixm24ws?view={"_meta": true}*
 
 ```http
-GET /resource/ixm24ws?view=%7B_meta%3A%20true%7D HTTP/1.1
+GET /resource/ixm24ws?view=%7B%22_meta%22%3A%20true%7D HTTP/1.1
 Host: agcloud.com
 Content-Type: application/json
 Authorization: Bearer ajCX83jfax.arfvFA323df
