@@ -69,9 +69,9 @@ If the above document is uploaded to an OADA cloud some keys get added automatic
 ```
 <br/>
 
-> **Question 1.1:** How do I get back the "Smith" field I uploaded using its "_id" key?
+> **Question 1.1:** How do I get back the "Smith" field I uploaded?
 
-> **Answer:** You put the id value after the /resources endpoint.
+> **Answer:** You put its id (123) after the /resources endpoint.
 
 > **Request:**
 > ```
@@ -91,9 +91,9 @@ If the above document is uploaded to an OADA cloud some keys get added automatic
 
 <br/>
 
-> **Question 1.2:** How do I get back the "Smith" field I uploaded using its "_id" key?
+> **Question 1.2:** How do I get back the "Smith" field I uploaded with it's id included in the response?
 
-> **Answer:** You put the id value after the /resources endpoint.
+> **Answer:** You put its id (123) after the /resources endpoint, and pass a view object that has the _id key turned on.
 
 > **Request:**
 > ```
