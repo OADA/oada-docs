@@ -16,10 +16,10 @@ and a JSON document with the following structure:
 
 Where:
 
-- **code** - HTTP response code
-- **status** - HTTP response name
-- **href** - A link to documentation that might be helpful to resolve the issue
-- **title** - The title, or short description, of the error that occurred.
-- **detail** - A detailed description of the error that occurred.
-- **userMessage** - A simple, polite, and helpful message that an application
+- **code** - *Required*, HTTP response code
+- **status** - *Required*, HTTP response name
+- **href** - *Required*, A link to documentation that might be helpful to resolve the issue
+- **title** - *Required*, The title, or short description, of the error that occurred.
+- **detail** - *Optional*, A detailed description of the error that occurred.
+- **userMessage** - *Required*, A simple, polite, and helpful message that an application
   can show to its user to explain the trouble.
