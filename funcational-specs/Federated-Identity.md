@@ -24,7 +24,7 @@ explicit permission from the end user for each and every share.
 For example, if Andy, known as andy@agidentity.com, is using an application
 hosted on agronomists.com and wants to access data that Frank shared with him
 (via his andy@agidentity.com identity) on agcloud.com, Andy must simply assert
-his andy@agidenitty.com identity to AgCloud. Andy can access the on agcloud.com
+his andy@agidentity.com identity to AgCloud. Andy can access the on agcloud.com
 without have ever creating an account with AgCloud. Just to be clear, Federated
 Identity does not imply creation of new identities for existing users. Just the
 assertion of existing identities to an OADA entity that is not their provider.
