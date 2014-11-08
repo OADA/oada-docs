@@ -24,6 +24,9 @@ overview of the basic components of the OADA ecosystem
 
 [OADA Roles](OADA-Roles.md)
 
+# OAuth2 and OADA Client Discovery
+[OADA Client Discovery](OAuth2-and-Client-Discovery.md)
+
 # Federated Identity
 
 [OADA Federated Identity](Federated-Identity.md)
