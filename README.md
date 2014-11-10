@@ -7,7 +7,7 @@ soon for changes.
 
 | Contributing | Functional Spec | Rest API Spec |
 |--------------|-----------------|---------------|
-|  [Developer Guidelines](contributing/Developer-Guidelines.md) | [Functional Spec](funcational-specs/README.md) | [Rest API Spec](rest-specs/README.md) |
+|  [Developer Guidelines](contributing/Developer-Guidelines.md) | [Functional Spec](functional-specs/README.md) | [Rest API Spec](rest-specs/README.md) |
 | | [Overview Slides][slides] | &nbsp; |
 
 ## Questions
