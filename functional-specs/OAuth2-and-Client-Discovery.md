@@ -446,7 +446,8 @@ so OADA should require support for at least this algorithm for compliance.
 The payload is a JSON Web Token (JWT) [defined here](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-30).
 In the payload, there are several fields, some of whose content is defined here by OADA:
 
-- `ac`: OADA requirement: put the code from the service provider here.
+- `ac`: short for "authorization code".  OADA defined this claim, so we should probably register it through IETF's process for
+   registering JWT claims.  OADA requirement: put the code from the service provider here.
 - `aud`: short for "audience".  OADA requirement: Put the token endpoint URL here.
 - `iss`: short for "issuer".  OADA requirement:  Put the client\_id here.
 - `jti`: JWT id.  Must be a reasonably unique id for this particular JWT.
