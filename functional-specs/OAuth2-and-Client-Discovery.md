@@ -195,7 +195,10 @@ as a client in order to be able to make an OAuth2 request, but you can't pre-reg
 What if you could register at just one place, and then be assured that your client creditials will work at
 any OADA-compliant service providers?  That is precisely the problem that OADA client discovery intends to solve.
 
-
+> To be clear, we are not suggesting that there is only one place to register: i.e. a centralized repository of 
+> client discovery providers.  We are suggesting that there is a "trusted" list of client discovery providers
+> that allows this function to be distributed as necessary.  Anyone can become a trusted client discovery provider
+> by meeting some not-yet-defined criteria maintained by the OADA project.  
 
 ## Agcloud.com Performs OADA Client Discovery for Fieldscout.com's client\_id
 
