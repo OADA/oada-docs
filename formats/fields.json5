@@ -1,0 +1,173 @@
+{
+  "name": "fields", // this is here for consistency: top-level "fields" is same as lower-level fields
+
+  "list": {
+    // Here is a top-level grouping: Growers.  If constructing a list for farmers to choose fields from, start with these
+    // unless you know which one in particular they want to use ahead of time.
+    "4kfj492-Growers": { // Note this is a random unique string.  The word "Growers" is just here for clarity in this example.
+      "_id": "4kfj492-Growers"  // The existence of _id means it's a linked resource that exists independently of this document.
+    },                          // Note that is a standard definition in OADA, not something specific to this format.
+
+    // Some other handy top-level groups a farmer may want to create themselves: landlords, corn fields, bean fields, wet fields, 
+    // cover crop fields, chiseled fields, baled corn stover fields, manure hauling fields.  I could then tell my manure 
+    // hauling employee, "only haul manure on the fields in the 'manure hauling' group.  
+  },
+
+
+  // resources is a special key within the top-level fields group listing all the fields that are reachable within any group
+  // that begins in the top-level list above.  This list is flattened to ensure 
+  // that you have everything you need in a single request in this JSON document.  This way, there is no need
+  // to construct complex "view" queries for the graph of arbitrary complexity.  Every node in the graph
+  // exists here at the top level.  Most of the tree structure for fields resides here.  Note that technically, in order
+  // for these to be expanded in-place in OADA, you would have to send a view parameter request to expand each item
+  // inside resources.list: /bookmarks/fields?view={ "resources.list.$each.$expand": true }.  Otherwise, this
+  // would just be a set of objects containing only _id's.  Still thinking this one through because it's not exactly
+  // how I'd like it to be.  I'd like to hit /bookmarks/fields and get back everything I need without view.  This is 
+  // only a minor problem, however.
+  "resources": {
+    "name": "resources",
+
+    "list": {
+
+      "4kfj492-Growers": {
+        "_id": "4kfj492-Growers",  // The existence of _id means it's a linked resource that exists independently of this document.
+        "name": "Growers",
+        "standard": true, // This means that this particular tree structure is well-defined by the format as grower-farm-field.  It has 
+                          // exactly three levels from here on down, the first level is "Grower, the second is "Farm", and the third is "Field".
+  
+        // All other keys (i.e. not name, not boundary) are other fields this field contains.  
+  
+        // Child fields are always an unordered set of key/value pairs.  The keys need only be locally unique to this list.  However,
+        // if a particular item is a resource itself, it would be a good idea to use the already-unique resourceid as 
+        // the key.  If the item is native to this particular document (i.e. does not exist as it's own resource), then
+        // likely it's name will suffice as unique.  Using it's name makes for very clean URL's.
+ 
+        "list": {
+          "Ault": {  // Native to Grower's resource.  _id is 4kfj492-Growers/list/Ault
+            "name": "Ault",
+    
+            // The "Ault" grower has these things inside of it.  In the case of grower-farm-field-cropzone, this will be a list
+            // of links to each farm.  No need to expand the links in-place because you can get the details of each farm-field-cropzone
+            // tree from the all-fields special group.
+            "kjdf20-Smith": { // This is a farm
+              "_id": "kjdf20-Smith" // Available under this key in this "resources" grouping: i.e. resources["kjdf20-Smith"] gets you the farm.
+            },
+            "9fj32-Denver250": {
+              "_id": "9fj32-Denver250" // This is a farm
+            },
+    
+          },
+        },
+      }, // end of the group named "Growers"
+  
+  
+      // Farm: Smith
+      "kjdf20-Smith": {
+        "_id": "kjdf20-Smith",
+        "name": "Smith",
+        "list": {
+          // The Smith30 field is inside the Smith farm
+          "ifjewk-Smith30": {
+            "_id": "ifjewk-Smith30",
+          },
+        }
+      },
+  
+      // Field: Smith30
+      "ifjewk-Smith30": {
+        "_id": "ifjewk-Smith30",
+        "name": "Smith30",
+        "boundary": "<geojson of boundary>"
+      },
+  
+      // Farm: Denver250
+      "9fj32-Denver250": {
+        "_id": "9fj32-Denver250",
+        "name": "Denver250",
+        "list": {
+          "wfdjiowf-West200": {
+            "_id": "wfdjiowf-West200",
+          },
+          "ghijfdw-Chili50": {
+            "_id": "ghijfdw-Chili50",
+          },
+        },
+      },
+  
+      // Field: West200
+      "wfdjiowf-West200": {
+        "_id": "wfdjiowf-West200",
+        "name": "West200",
+        "boundary": "<geojson of boundary>"
+        "list": {
+          // Here is an example of a crop zone that you'd like to retain from year to year: it's native to the
+          // field "West200".  Could also make it it's own resource: I just did it this way here for illustration  
+          // of how the format can support it.  In this example, some years
+          // I plant the muck to a different crop than the rest of the field.  This is so that I don't have to
+          // redraw the crop zone every year that it's planted this way, and I don't have to care about it
+          // in years that it isn't planted this way.  
+          "West200-Muck": {  // Since it's native, _id is "wfdjiowf-West200/list/West200-Muck"
+            "name": "West200 Muck",
+            "boundary": "<geojson of boundary>"
+          },
+        },
+      },
+  
+      // Field: Chili50
+      "ghijfdw-Chili50": {
+        "_id": "ghijfdw-Chili50",
+        "name": "Chili50",
+        "boundary": "<geojson of boundary>",
+      },
+  
+    },  // end of "list" inside of "resources" group
+  }, // end of "resources" group
+} // end of entire top-level fields object.
+
+  // NOTES ABOUT THE FORMAT:
+  //
+  // A "field" is defined recursively as a "field" or a "group of fields".  
+  //
+  // A single "field" item is comprised of a boundary and a name, but no "list" key (or an empty "list") .
+  //
+  // A field that "contains" other fields has them listed as links under "list".  Therefore a field
+  // is just an object with a name, an optional boundary, and a list of other fields.
+  //
+  // Since fields have no intrinsic sense of "ordering", any list of a group of fields is an unordered set of key/value pairs.
+  //
+  // The basic structure is therefore a directed graph with no cycles.
+  //
+  // The top-level of the fields list is just an unordered set of "groupings".  Think of these like "folders" or "directories"
+  // that can look at the fields in different ways: by landlord, grower-farm-field, wet fields, corn fields, etc.  Whatever
+  // a particular app or farmer chooses.  The fields themselves are not repeated in these groups: they are simply linked.
+  //
+  // The special top-level "resources" key should contain the full flattened set of externally-linked resources referred to in 
+  // this tree.  This is so that a single request can return everything you need for a graph of arbitrary complexity.
+  //
+  // The top-level groups can point into any node in the "resources" tree that makes sense for the particular application.
+  //
+  // To represent "grower-farm-field", I think I'd recommend putting the farm-field part of the hierarchy in the all-fields
+  // such that each farm is it's own resource and each field is it's own resource.
+  //
+  // Note that crop zones look identical to growers: they are a grouping of other fields, some of which may be native and
+  // some of which may be linked externally to other fields or farms.  The "corn" crop may have some additional properties
+  // defined about the nature of "corn", but the field list is the same structure.
+  //
+  // A field or group of fields may contain a boundary.  If a higher-level boundary is defined, it supercedes the boundary for a lower
+  // level.  For example, if I have a "Smith" farm that contains a "Smith30" field, if the "Smith" farm has no boundary, then it's boundary
+  // is just the union of all it's children's boundaries.  If it contains a boundary, then when looking at the "farm", the definitive
+  // boundary is the "Smith" boundary, and when looking at the "field" the "Smith30" boundary is definitive.  Therefore, for a field
+  // to be considered devoid of a boundary at all, there must be no path down the tree which does not terminate in an object with a boundary.
+  //
+  // Note: in the examples above, every string that looks like it starts with gibberish is intended to be a random string.  I have
+  // generally appended a human-readable string to it to help with the example, but that's just for clarity and not a requiremnt.
+  // If you want to do it in practice, just make the id a random string and concatenate the name of the object.
+  //
+  // Important note: in OADA, every level of a JSON document can be an external link or a native object within that
+  // document.  The way to distinguish in most cases is whether the "_id" is present.  In the off chance you requested
+  // the _id for a native object, it's _id will be the same as it's parent "_id" with it's key appended to it.  The 
+  // definition of "_id" in OADA is "the part of the URL after /resources/".
+
+
+
+
