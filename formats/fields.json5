@@ -35,8 +35,6 @@
         "standard": true, // This means that this particular tree structure is well-defined by the format as grower-farm-field.  It has 
                           // exactly three levels from here on down, the first level is "Grower, the second is "Farm", and the third is "Field".
   
-        // All other keys (i.e. not name, not boundary) are other fields this field contains.  
-  
         // Child fields are always an unordered set of key/value pairs.  The keys need only be locally unique to this list.  However,
         // if a particular item is a resource itself, it would be a good idea to use the already-unique resourceid as 
         // the key.  If the item is native to this particular document (i.e. does not exist as it's own resource), then
@@ -46,9 +44,9 @@
           "Ault": {  // Native to Grower's resource.  _id is 4kfj492-Growers/list/Ault
             "name": "Ault",
     
-            // The "Ault" grower has these things inside of it.  In the case of grower-farm-field-cropzone, this will be a list
-            // of links to each farm.  No need to expand the links in-place because you can get the details of each farm-field-cropzone
-            // tree from the all-fields special group.
+            // The "Ault" grower has these things inside of it.  In the case of grower-farm-field, this will be a list
+            // of links to each farm.  No need to expand the links in-place because you can get the details of each farm-field
+            // tree from the other items under resources.
             "kjdf20-Smith": { // This is a farm
               "_id": "kjdf20-Smith" // Available under this key in this "resources" grouping: i.e. resources["kjdf20-Smith"] gets you the farm.
             },
@@ -145,13 +143,6 @@
   // this tree.  This is so that a single request can return everything you need for a graph of arbitrary complexity.
   //
   // The top-level groups can point into any node in the "resources" tree that makes sense for the particular application.
-  //
-  // To represent "grower-farm-field", I think I'd recommend putting the farm-field part of the hierarchy in the all-fields
-  // such that each farm is it's own resource and each field is it's own resource.
-  //
-  // Note that crop zones look identical to growers: they are a grouping of other fields, some of which may be native and
-  // some of which may be linked externally to other fields or farms.  The "corn" crop may have some additional properties
-  // defined about the nature of "corn", but the field list is the same structure.
   //
   // A field or group of fields may contain a boundary.  If a higher-level boundary is defined, it supercedes the boundary for a lower
   // level.  For example, if I have a "Smith" farm that contains a "Smith30" field, if the "Smith" farm has no boundary, then it's boundary
