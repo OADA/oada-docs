@@ -394,10 +394,10 @@ Host: agcloud.com
 Content-Type: application/json
 
 {
-    "authorizationEndpoint": "http://id.openag.io/connect/authorize",
-    "tokenEndpoint": "http://api.agcloud.com/connect/token",
-    "OADABaseUri": "https://api.agcloud.com",
-    "clientDiscovery": "https://api.agcloud.com/clientDiscovery"
+    "authorization_endpoint": "http://id.openag.io/connect/authorize",
+    "token_endpoint": "http://api.agcloud.com/connect/token",
+    "oada_base_uri": "https://api.agcloud.com",
+    "client_discovery": "https://api.agcloud.com/clientDiscovery"
 }
 ```
 ## `/.well-known/openid-configuration`

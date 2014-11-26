@@ -56,15 +56,15 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "authorizationEndpoint": "http://api.agcloud.com/authorize",
-  "tokenEndpoint": "http://api.agcloud.com/token",
-  "OADABaseUri": "https://api.agcloud.com",
-  "clientDiscovery": "https://api.agcloud.com/clientDiscovery"
+  "authorization_endpoint": "http://api.agcloud.com/authorize",
+  "token_endpoint": "http://api.agcloud.com/token",
+  "oada_base_uri": "https://api.agcloud.com",
+  "client_discovery": "https://api.agcloud.com/clientDiscovery"
 }
 ```
 
 The second step is to start the OAuth 2.0 procedure by making an implicit flow
-request to the specified `authorizationEndpoint`. Implicit flow is used because
+request to the specified `authorization\_endpoint`. Implicit flow is used because
 it makes most sense for an Android app. However, other OAuth 2.0 flows may be
 used.
 
