@@ -1,0 +1,130 @@
+// "crops" is an example of a crop list that might reside at /bookmarks/crops.
+// 
+// The purpose of this "crops" format is to hold a list of all the crops that a given
+// farm deals with.  Each crop contains a list of areas in which it is planted.
+// 
+// An "area" is defined as an object that implements the "boundary" interface.  It may
+// either be a link to an external object, or an object native to this document.  Note
+// that in most cases this "area" object will be a field from the fields list.
+//
+// A crop is defined as something that is planted.  A crop turns into a "commodity"
+// when it is harvested.
+//
+// Many of the concepts here were first introduced in the OADA fields format.  If you are
+// not already familiar with that format, please learn that one first.
+//
+
+{
+  // The "crops" document implements the name interface.
+  "name": "crops",
+ 
+  // The list of crops resides under "list"
+  "list": {
+
+    // Each crop has a locally unique ID in this list.  It is recommended to use the 
+    // resource ID as the key to guarantee uniqueness.
+    "kdofwjkd-Corn": { // Note this is a random unique string.  "Corn" is only here for readability in this example.
+
+      // Each crop implements the "name" interface. 
+      "name": "Corn",
+
+      // Any supporting information to identify this crop within any existing standard
+      // list of crops goes under the "standards" interface.  Since multiple standards
+      // exist (each proprietary list of crops is a "standard"), and most of them necessarily
+      // overlap because they are representing mostly the same set of physical crops, this
+      // interface allows you to list all identifiers in all standards which would apply to 
+      // this same crop.
+      "standards": {
+        "name": "crop standards",
+        "list": {
+          "USDA-CVT": {
+            "name": "USDA Crop Validation Tables"
+            "identifier": ""
+          },
+        }
+      },
+
+      // The "list" interface here is a list of objects which implement boundary.  In most
+      // cases, these objects are linked as the same objects which are in the fields hierarchy.
+      // In the case of an area which is a sub-set of a field (i.e. half the field was one 
+      // crop and half the field was another), the boundary of the sub-zone can be linked here
+      // instead.
+      "list": {
+        "ifjewk-Smith30": {
+          "_id": "ifjewk-Smith30" // From the fields list
+        },
+        "11je290-Zone1": {
+          "_id": "11je290-Zone1" // This is a new sub-zone within another field
+        }
+      }
+
+    },
+
+    "02kfdf20-Soybeans": {
+      "name": "Soybeans",
+      "standards": {
+        "source": "USDA Crop Validation Tables"
+      },
+
+      // This farm plants "Soybeans", but there are no areas listed yet for this crop.  Therefore,
+      // the list is empty.  This way an interface wanting to allow a farmer to choose from a list of
+      // crops can still populate itself using this as a hint of what the farmer is looking for,
+      // even if nothing is planted to that crop.
+      "list": {
+      }
+
+    }
+  }
+
+  // resources is a flattened list of all resources that are referred to within this document,
+  // or refered to by any objects linked by this document.  This exists solely to make it easy to
+  // get all the information you need in a single request.  To expand all the objects in-place, you'll
+  // have to send a this view parameter: view={"resources.list.$each.$expand":true}}
+  "resources": {
+    "name": "resources",
+
+    "list": {
+
+      // Same object as the example fields list
+      "ifjewk-Smith30": {
+        "_id": "ifjewk-Smith30",
+        "name": "Smith30",
+        "boundary": "<geojson of boundary>"
+      },
+
+      // A zone within another field.  Implments the new "field" interface
+      // which points back at the field it belongs to.  Note that this 
+      // parent linkage should only be a hint: the actual geospatial overlap
+      // between the boundary of this object and the boundary of any field objects
+      // should definitively determine which fields this zone belongs to.
+      "11je290-Zone1": {
+        "_id": "11je290-Zone1",
+        "name": "Crop Zone 1",
+        "boundary": "<geojson of boundary>",
+        "field": {
+          "_id": "ghijfdw-Chili50" // The field this zone belongs to
+        }
+      },
+
+      // Since the crop zone above references Chili50, then it is linked here
+      // in the resources list, even though it doesn't appear in any of the crop
+      // lists above.
+      "ghijfdw-Chili50": {
+        "_id": "ghijfdw-Chili50",
+        "name": "Chili50",
+        "boundary": "<geojson of boundary>",
+      },
+
+  }
+}
+
+//
+//
+//
+//
+//
+// This may
+// be extended in the future to include other geospatial interfaces, although technically
+// since the "boundary" is only defined as a GeoJSON object, and GeoJSON can already
+// represent all types of geospatial 
+
