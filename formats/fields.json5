@@ -32,8 +32,18 @@
       "4kfj492-Growers": {
         "_id": "4kfj492-Growers",  // The existence of _id means it's a linked resource that exists independently of this document.
         "name": "Growers",
-        "standard": true, // This means that this particular tree structure is well-defined by the format as grower-farm-field.  It has 
-                          // exactly three levels from here on down, the first level is "Grower, the second is "Farm", and the third is "Field".
+        
+        // Here is a list of standard structures to which this object conforms.  A single object may be able to simultaneously 
+        // conform to multiple standards (hence the list), or it may not conform to any standard (in which case this key should
+        // not be present).
+        "standards": {
+          "list": {
+            "Grower-Farm-Field": {          // A standard is defined named "Grower-Farm-Field".  This object's structure is in that standard.
+              "name": "Grower-Farm-Field",
+              "identifier": "TOP"           // Within this standard, this object is identified as "TOP".
+            }
+          }
+        },
   
         // Child fields are always an unordered set of key/value pairs.  The keys need only be locally unique to this list.  However,
         // if a particular item is a resource itself, it would be a good idea to use the already-unique resourceid as 
