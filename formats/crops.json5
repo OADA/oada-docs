@@ -118,13 +118,4 @@
   }
 }
 
-//
-//
-//
-//
-//
-// This may
-// be extended in the future to include other geospatial interfaces, although technically
-// since the "boundary" is only defined as a GeoJSON object, and GeoJSON can already
-// represent all types of geospatial 
 
