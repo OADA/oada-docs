@@ -39,7 +39,7 @@
         "list": {
           "USDA-CVT": {
             "name": "USDA Crop Validation Tables"
-            "identifier": ""
+            "identifier": "1234" // Identitfier for Corn in this standard (I don't know what the actual one is)
           },
         }
       },
@@ -63,7 +63,12 @@
     "02kfdf20-Soybeans": {
       "name": "Soybeans",
       "standards": {
-        "source": "USDA Crop Validation Tables"
+        "list": {
+          "USDA-CVT": {
+            "name": "USDA Crop Validation Tables",
+            "identifier": "1235" // Identifier for Soybeans in this standard (I don't know what the actual one is)
+          }
+        }
       },
 
       // This farm plants "Soybeans", but there are no areas listed yet for this crop.  Therefore,
