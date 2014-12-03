@@ -92,6 +92,16 @@
       "9fj32-Denver250": {
         "_id": "9fj32-Denver250",
         "name": "Denver250",
+        // The "aliases" interface is completely optional.  If it exists on a field, it is an array of alternative names
+        // that the farmer may also call this field.  The definitive name is the one in the name interface, but 
+        // ag professionals sometimes need to keep track of multiple names for a field so that if a farmer calls them
+        // to spread fertilizer and uses one of the alias names for the farm, they can still find the right field.
+        // If a farm's name changes several times over the years, the past names can also be stored here.  It is not
+        // intended that anyone would intentionally fill this up with all the possible aliases they can think of.  It's
+        // here to provide a convenient means of storing some alternative names if the use case ever comes up.
+        "aliases": [
+          "Denver",
+        ],
         "list": {
           "wfdjiowf-West200": {
             "_id": "wfdjiowf-West200",
@@ -125,6 +135,9 @@
       "ghijfdw-Chili50": {
         "_id": "ghijfdw-Chili50",
         "name": "Chili50",
+        "aliases": [
+          "Chili"
+        ],
         "boundary": "<geojson of boundary>",
       },
   
