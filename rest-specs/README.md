@@ -7,14 +7,17 @@
 * An easier to read HTML visualization of the spec lives here:
   [http://openag.io/docs/v0_3.html](http://openag.io/docs/v0_3.html)
 
-# API Endpoint Overview
+# OADA API Endpoints
 
-* [/resources](REST-API-Overview.md#resources)
-* [/bookmarks](REST-API-Overview.md#bookmarks)
-* [/users](REST-API-Overview.md#users)
-* [/groups](REST-API-Overview.md#groups)
-* [/authorizations](REST-API-Overview.md#authorizations)
-* [/.well-known](REST-API-Overview.md#well-known)
+* [/resources](REST-API-Endpoints.md#resources)
+* [/bookmarks](REST-API-Endpoints.md#bookmarks)
+* [/users](REST-API-Endpoints.md#users)
+* [/groups](REST-API-Endpoints.md#groups)
+* [/authorizations](REST-API-Endpoints.md#authorizations)
+
+# OADA Discovery Endpoints
+
+* [/.well-known](REST-Discovery-Endpoints.md#well-known)
 
 # API Examples
 
