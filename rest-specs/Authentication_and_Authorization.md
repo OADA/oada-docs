@@ -56,7 +56,73 @@ More details can be found in the [clientDiscovery endpoint documentation][client
 
 ### Client Secret
 
+During a typical OAuth 2.0 code flow the client is required to trade a code and
+sometimes a client secret (undefined string of characters) for an access token.
+The client secret is supposed to only be known to the client and provider;
+However, in the OADA ecosystem the client and provider often do not know each
+other before their first interaction. Therefore, OADA further stipulates that
+client secrets take the form of a [JSON Web Tokens (JWT)][jwt] encoded as a
+[JSON Web Signature][jws].
 
+#### Requirements on the JWT
+
+Specific details of a JWT and JWS can be found [here][jwt] and [here][jws]
+respectively. However, for OADA there are a few requirements, list before:
+
+- The client secret can only be signed using an algorithm listed in the
+  `client_secret_alg_supported` key of the provider's `oada-configuration`. RSA
+  256 (RS256 in [JSON Web Algorithms][jwa] speak) is required to be supported by
+  all clients and providers.
+- The JWT body must include an `ac` key and it should be set equal to the
+  access code from the OAuth 2.0 code flow. The secret should be considered
+  invalid if either the `ac` key is missing or is not set to be equal to access
+  code.
+
+#### Example Client Secret
+
+A JWT takes the form:
+
+`base64Url(header) + "." + base64Url(payload) + "." + base64Url(hash)`
+
+where `header` is the token header in JSON, `payload` is the token body in JSON,
+and `hash` is the signature of the header appended to payload using the
+algorithm described in the `header` all joined together by a period.
+
+An example of a valid RS256 JWS client secret is show below:
+
+`eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im5jNjNkaGFTZGQ4MnczMnVkeDZ2In0.eyJhYyI6IlBpMmRZLUZCeFpxTHg4MWxUYkRNNFdHbEkiLCJpYXQiOjE0MTg0MjExMDIsImF1ZCI6Imh0dHBzOi8vcHJvdmlkZXIub2FkYS1kZXYuY29tL3Rva2VuIiwiaXNzIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20ifQ.Te_NzrMTfrMaIldbIPRm5E0MnI1SjBf1G_19MslsJVdDSIUj_9YMloa4iTt_ztuJD4G0IP77AfU2x-XHqTjB8LybDlL8nyDERQhO8KNV3jbPKpKNsndZx5LDGX1XKJNH53IE4GB9Le8CE3TZNdVPxxuJcNi4RGYk0RJtdv6h1bo`
+
+Where the `header` decodes to:
+```json
+{
+  "typ": "JWT",
+  "alg": "RS256",
+  "kid": "nc63dhaSdd82w32udx6v"
+}
+```
+ and the `payload` decodes to:
+```json
+{
+  "ac": "Pi2dY-FBxZqLx81lTbDM4WGlI",
+  "iat": 1418421102,
+  "aud": "https://provider.oada-dev.com/token",
+  "iss": "3klaxu838akahf38acucaix73@identity.oada-dev.com"
+}
+```
+
+The corresponding public key from the client's registration that is used to
+validate the JWS is:
+
+```json
+{
+  "kty": "RSA",
+  "use": "sig",
+  "alg": "RS256",
+  "kid": "nc63dhaSdd82w32udx6v",
+  "n": "AKj8uuRIHMaq-EJVf2d1QoB1DSvFvYQ3Xa1gvVxaXgxDiF9-Dh7bO5f0VotrYD05MqvY9X_zxF_ioceCh3_rwjNFVRxNnnIfGx8ooOO-1f4SZkHE-mbhFOe0WFXJqt5PPSL5ZRYbmZKGUrQWvRRy_KwBHZDzD51b0-rCjlqiFh6N",
+  "e": "AQAB"
+}
+```
 
 ### Grant Screen
 
@@ -69,7 +135,7 @@ the client. Providers learn this information during client discovery.
 
 #### Example Grant Screen with Licenses and PUC
 
-![](authorization_grant_screen_with_puc_and_lic.png)
+![Grant screen for a client with published licenses and PUC](authorization_grant_screen_with_puc_and_lic.png)
 
 Note the Privacy and Data Use Principles link and the display of support for the
 "OADA" license (a fictions license). OADA does not require any particular
@@ -78,15 +144,15 @@ displayed.
 
 #### Example Grant Screen without PUC
 
-![](authorization_grant_screen_with_no_puc_and_lic.png)
+![Grant screen for a client with published licenses but no published PUC](authorization_grant_screen_with_no_puc_and_lic.png)
 
 Note the noticeable warning of no published privacy and data use principles.
 OADA does not require any particular styling of this screen other then the
 required information is prominently displayed.
 
-#### Example Grant Scrren without Licenses
+#### Example Grant Screen without Licenses
 
-![](authorization_grant_screen_with_puc_and_no_lic.png)
+![Grant screen for a client without a published licenses but a published PUC](authorization_grant_screen_with_puc_and_no_lic.png)
 
 Note the noticeable warning of no published supported licenses. OADA does not
 require any particular styling of this screen other then the required
@@ -115,7 +181,10 @@ Content-Type: application/json;charset=UTF-8
   "authorization_endpoint": "https://auth.agcloud.com/authorize",
   "token_endpoint": "https://auth.agcloud.com/token",
   "OADABaseUri": "https://api.agcloud.com/",
-  "clientDiscovery": "https://auth.agcloud.com/client"
+  "clientDiscovery": "https://auth.agcloud.com/client",
+  "client_secret_alg_supported": [
+    "RS256"
+  ]
 }
 ```
 
@@ -188,5 +257,8 @@ Pragma: no-cache
 }
 ```
 
-[well-known-endpoint-docs]: https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#well-knownoada-configuration
+[well-known-endpoint-docs]:  https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#well-knownoada-configuration
 [client-discovery-endpoint-docs]:  https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#clientdiscovery
+[jwt]: https://tools.ietf.org/id/draft-ietf-oauth-json-web-token.txt
+[jws]: https://tools.ietf.org/id/draft-ietf-jose-json-web-signature.txt
+[jwa]: https://tools.ietf.org/id/draft-ietf-jose-json-web-algorithms.txt
