@@ -42,18 +42,56 @@ example, a user should only have to enter `agcloud.com` as their provider rather
 then the various endpoints, such as: `agcloud.com/oada/oauth2/auth`,
 `agcloud.com/oada/oauth2/token`, etc.
 
-More details of this endpoint can be found in the [/.well-known endpoint documentation][well-known-endpoint-docs].
+More details can be found in the [/.well-known endpoint
+documentation][well-known-endpoint-docs].
 
 ### Client Discovery
 
-Client discovery is used by providers to automatically discover the details of
-the client. This allows a user to point their favorite client to their favorite
-provider without the client having had to register with the provider beforehand.
+Client discovery is used by providers to automatically discover OAuth 2.0 and
+other details of a given client. This allows a user to point their favorite
+client to their favorite provider without the client having had to register with
+the provider beforehand.
 
-More details of thie endpoint can be found in the [clientDiscovery endpoint
-documentation][client-discovery-endpoint-docs]
+More details can be found in the [clientDiscovery endpoint documentation][client-discovery-endpoint-docs]
 
 ### Client Secret
+
+
+
+### Grant Screen
+
+Providers are **required** to display the list of licenses and a hyper-linkt to
+privacy and use policy (PUC) or similar terms-of-use type document to the user
+for any client making an OAuth 2.0 request on the authorization grant screen
+(the screen in which the users are presented with an "allow" or "deny" option).
+Alternatively a warning should be displayed if the information is provided by
+the client. Providers learn this information during client discovery.
+
+#### Example Grant Screen with Licenses and PUC
+
+![](authorization_grant_screen_with_puc_and_lic.png)
+
+Note the Privacy and Data Use Principles link and the display of support for the
+"OADA" license (a fictions license). OADA does not require any particular
+styling of this screen other then the required information is prominently
+displayed.
+
+#### Example Grant Screen without PUC
+
+![](authorization_grant_screen_with_no_puc_and_lic.png)
+
+Note the noticeable warning of no published privacy and data use principles.
+OADA does not require any particular styling of this screen other then the
+required information is prominently displayed.
+
+#### Example Grant Scrren without Licenses
+
+![](authorization_grant_screen_with_puc_and_no_lic.png)
+
+Note the noticeable warning of no published supported licenses. OADA does not
+require any particular styling of this screen other then the required
+information is prominently displayed.
+
 
 ## Retrieving an OAuth 2.0 Access Token (Implicit Flow)
 
