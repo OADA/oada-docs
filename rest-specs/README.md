@@ -18,6 +18,7 @@
 # OADA Discovery Endpoints
 
 * [/.well-known](REST-Discovery-Endpoints.md#well-known)
+* [/clientDiscovery](REST-Discovery-Endpoints.md#user-content-clientDiscovery)
 
 # API Examples
 
