@@ -34,7 +34,10 @@ Content-Type: application/json
   "authorization_endpoint": "https://provider.oada-dev.com/auth",
   "token_endpoint": "https://provider.oada-dev.com/token",
   "oada_base_uri": "https://provider.oada-dev.com"
-  "client_discovery": "https://provider.oada-dev.com/clientDiscovery"
+  "client_discovery": "https://provider.oada-dev.com/clientDiscovery",
+  "client_secret_alg_supported": [
+    "RS256"
+  ]
 }
 ```
 ## `/.well-known/openid-configuration`
