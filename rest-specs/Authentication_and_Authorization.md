@@ -18,6 +18,9 @@
     - [Retrieving an OAuth 2.0 Access Token (Implicit Flow)](#retrieving-an-oauth-20-access-token-implicit-flow)
     - [Retrieving an OAuth 2.0 Access Token (Code Flow)](#retrieving-an-oauth-20-access-token-code-flow)
     - [Retrieving an OAuth 2.0 Access Token (Refresh Flow)](#retrieving-an-oauth-20-access-token-refresh-flow)
+  - [OpenID Connect Examples (Authentication)](#openid-connect-examples-authentication)
+    - [Retrieving an OpenID Connect ID Token (Implicit Flow)](#retrieving-an-openid-connect-id-token-implicit-flow)
+    - [Retrieving an OpenID Connect ID Token (Code Flow)](#retrieving-an-openid-connect-id-token-code-flow)
   - [Discovering a client from a clientId](#discovering-a-client-from-a-clientid)
 
 # Authentication and Authorization
@@ -326,7 +329,7 @@ Location: https://client.oada-dev.com/redirect.html#access_token=2YotnFZFEjr1zCs
 
 where the fragment parameters are
 
-| Query Parameter | Value | Meaning |
+| Fragment Parameter | Value | Meaning |
 | --------------- | ----- | ------- |
 | access_token    | 2YotnFZFEjr1zCsicMWpAA | The access token to use with OADA API requests |
 | state           | xyz   | The state value from the original request so that the client can recover from the redirect. |
@@ -370,7 +373,7 @@ Content-Type: application/json
   "token_endpoint": "https://provider.oada-dev.com/token",
   "oada_base_uri": "https://provider.oada-dev.com",
   "client_secret_alg_supported": [
-  "RS256"
+    "RS256"
   ]
 }
 ```
@@ -455,6 +458,8 @@ Content-Type: application/x-www-form-urlencoded
 
 grant_type=authorization_code&code=Pi2dY-FBxZqLx81lTbDM4WGlI&redirect_uri=https%3A%2F%2Fclient.oada-dev.com%2Fredirect&client_id=3klaxu838akahf38acucaix73%40identity.oada-dev.com&client_secret=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im5jNjNkaGFTZGQ4MnczMnVkeDZ2In0.eyJhYyI6IlBpMmRZLUZCeFpxTHg4MWxUYkRNNFdHbEkiLCJpYXQiOjE0MTg0MjExMDIsImF1ZCI6Imh0dHBzOi8vcHJvdmlkZXIub2FkYS1kZXYuY29tL3Rva2VuIiwiaXNzIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20ifQ.Te_NzrMTfrMaIldbIPRm5E0MnI1SjBf1G_19MslsJVdDSIUj_9YMloa4iTt_ztuJD4G0IP77AfU2x-XHqTjB8LybDlL8nyDERQhO8KNV3jbPKpKNsndZx5LDGX1XKJNH53IE4GB9Le8CE3TZNdVPxxuJcNi4RGYk0RJtdv6h1bo
 ```
+
+*Hint: jwt.io can be used to view client_secret*
 
 **Response**
 ```http
@@ -613,9 +618,11 @@ HTTP/1.1 302 Found
 Location: https://client.oada-dev.com/redirect.html#access_token=2YotnFZFEjr1zCsicMWpAA&state=xyz&token_type=bearer&expires_in=3600&id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImtqY1NjamMzMmR3SlhYTEpEczNyMTI0c2ExIn0.eyJpYXQiOjE0MTg2NzY0MzAsImV4cCI6MTQxODY4MDAzMCwiYXVkIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20iLCJpc3MiOiJodHRwczovL2lkZW50aXR5Lm9hZGEtZGV2LmNvbSIsInN1YiI6MX0.SZGoDLalL5Kvabuw3EGdeShrHJWghJ8U5cTzqc0fNDt-bCYYG5bhgODkuBel4NLyOtusI9gW2LMYuSWCaNjddxkFP0eIT43Ij_w71eUMGPZNYPj2OpMupq77FsR5XttgIynF-ErtZlp9t0Ff1rnSjZKIQ-DoSCcoyPtiKLuHicg
 ```
 
+*Hint: jwt.io can be used to view the id_token*
+
 where the fragment parameters are
 
-| Query Parameter | Value | Meaning |
+| Fragment Parameter | Value | Meaning |
 | --------------- | ----- | ------- |
 | access_token    | 2YotnFZFEjr1zCsicMWpAA | The access token for the OpenID Connect `/UserInfo` endpoint.  |
 | state           | xyz   | The state value from the original request so that the client can recover from the redirect. |
@@ -649,7 +656,202 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "sub": "`1",
+  "sub": "1",
+  "name": "Andy Smith",
+  "given_name": "Andy",
+  "family_name": "Smith",
+  "preferred_username": "a.smith",
+  "email": "andy@smith.com",
+  "picture": "http://example.com/andysmith/me.jpg"
+}
+```
+### Retrieving an OpenID Connect ID Token (Code Flow)
+
+The code flow is similar to the implicit flow with a few extra steps. The code
+flow delivers the identity assertion (ID Token) to an intermediate server
+between the identity provider and the application. The client is authenticated
+and the ID Token is not exposed to Andy's user-agent during the procedure. See
+the [OpenID Connect Specifications][openid-connect] for complete details.
+
+The example only shows the steps of a successful authorization and
+authentication. See the [OpenID Connect Specifications][openid-connect] for
+complete technical details.
+
+**Step 1**: Andy chooses to log into his application at `client.oada-dev.com`
+with his federated identity `andy@identity.oada-dev.com`.
+
+**Step 2**: The application retrieves the `identity.oada-dev.com`
+`openid-configuration` document to discover the necessary OpenID Connect
+endpoints.
+
+**Request**
+```http
+GET /.well-known/openid-configuration HTTP/1.1
+Host: identity.oada-dev.com
+Accept: application/json
+
+```
+
+**Response**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  issuer: "https://identity.oada-dev.com",
+  authorization_endpoint: "https://identity.oada-dev.com/auth",
+  token_endpoint: "https://identity.oada-dev.com/token",
+  userinfo_endpoint: "https://identity.oada-dev.com/userinfo",
+  jwks_uri: "https://identity.oada-dev.com/certs",
+  response_types_supported: [
+    "code",
+    "token",
+    "id_token",
+    "code token",
+    "code id_token",
+    "token id_token",
+    "code token id_token"
+  ],
+  subject_types_supported: [
+    "public"
+  ],
+  id_token_alg_values_supported: [
+    "RS256"
+  ],
+  token_endpoint_auth_methods_supported: [
+    "client_secret_post"
+  ]
+}
+```
+
+**Step 3**: The application then initiates the OpenID Connect code
+flow by either popping up a pop-up window or redirecting Andy's user-agent.
+The request is a GET on the resource in the `authorization_endpoint` key from `openid-configuration` document above.
+
+**Request**
+```http
+GET /auth?response_type=code&client_id=3klaxu838akahf38acucaix73%40identity.oada-dev.com&state=xyz&redirect_uri=https%3A%2F%2Fclient.oada-dev.com%2Fredirect&scope=openid%40profile HTTP/1.1
+Host: identity.oada-dev.com
+
+```
+*The response pends until step 5*
+
+Where the request parameters are,
+
+| Query Parameter | Value | Meaning |
+| --------------- | ----- | ------- |
+| response_type   | code | Start the code flow for an OpenID Connect id_token. The token is used to access the `UserInfo` endpoint of OpenID Connect to gather Andy's profile information. |
+| client_id       | 3klaxu838akahf38acucaix73@identity.oada-dev.com | The application's registered client id |
+| state           | xyz   | A string for the client to recover its state after the OpenID Connect flow completes. It is also used to prevent cross-site request forgery attacks.  |
+| redirect_uri    | https://client.oada-dev.com/redirect | The URL which Andy's user-agent is redirected to after the OpenID Connect flow is complete. The id_token is delivered to the client via this redirect. Its value must match an entry in the `redirectUrls` key from the client's registration. |
+| scope           |  openid profile | OpenID Connect requires the `openid` scope be present. The `profile` scope represents the application requesting basic identity profile information (username, real name, etc). See the [OpenID Connect Specifications][openid-connect] for more details. |
+
+**Step 4**: `identity.oada-dev.com` discovers the requesting client and verifies
+the OpenID Connect request parameters. In particular the redirect URL must match
+an entry in the `redirectUrls` key from the client's registration.
+
+See [Discovering a client from a clientId][discovering-a-client] for details of
+this process.
+
+**Step 5**: Step 3's request is completed with a response of a page that
+challenges Andy to login with his credentials. Frank successfully logs in.
+
+The login credentials could either be for a local account at
+`identity.oada-dev.com` (in this case 'andy') or for an OADA federated identity.
+At some point it must end at single domain where the user logs in with a local
+account. If Andy does select to login with an OADA federated identity then
+`identity.oada-dev.com` should pause the current OpenID Connect flow and begin a
+new [OpenID Connect Flow][openid-connect-flows] flow as a *client* with Andy's
+second identity provider. If that flow results in a valid ID token then
+`identity.oada-dev.com` should resume the original OpenID Connect flow and
+consider Andy logged into `identity.oada-dev.com` as the identity within the ID
+token.
+
+**Step 6**: `identity.oada-dev.com` returns the authorization grant screen in
+which the requested scopes, client license(s) and PUC, etc. are presented to the
+user with a choice to allow or deny. In this case Andy is allowing (or not) the client to access his identity information. Andy approves the authorization.
+
+**Step 7**: `identity.oada-dev.com` generates a code and redirects
+Andy's user-agent back the `redirect_uri` from the initial request.
+
+**Response**
+```http
+HTTP/1.1 302 Found
+Location: https://client.oada-dev.com/redirect?code=5MZVZOgNV-nh3brHM78UoaJ-w&state=xyz
+```
+
+where the fragment parameters are
+
+| Query Parameter | Value | Meaning |
+| --------------- | ----- | ------- |
+| code            | 5MZVZOgNV-nh3brHM78UoaJ-w | The code for the approved authorization. |
+| state           | xyz   | The state value from the original request so that the client can recover from the redirect. |
+
+**Step 8**: The intermediate server for `client.oada-dev.com` which is hosting
+the application parses the code and state from the GET request query parameters
+and makes an out-of-band POST request to the `identity.oada-dev.com`
+`token_endpoint` from the `openid-configuration` document.
+
+The provider should validate the request as specified by [OpenId
+Connect][openid-connect] with the extra requirements that the client secret JWT
+validates against a public key from client registration document, is valid by
+the JWT standard, and contains an ac key equal to the access code in the body.
+
+**Request**
+```http
+POST /token HTTP/1.1
+Host: identity.oada-dev.com
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&code=5MZVZOgNV-nh3brHM78UoaJ-w&redirect_uri=https%3A%2F%2Fclient.oada-dev.com%2Fredirect&client_id=3klaxu838akahf38acucaix73%40identity.oada-dev.com&client_secret=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im5jNjNkaGFTZGQ4MnczMnVkeDZ2In0.eyJhYyI6IjVNWlZaT2dOVi1uaDNickhNNzhVb2FKLXciLCJpYXQiOjE0MTg2Nzc5NzUsImF1ZCI6Imh0dHBzOi8vaWRlbnRpdHkub2FkYS1kZXYuY29tL3Rva2VuIiwiaXNzIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20ifQ.oDIk3cde6xKfyQMCU3lBL1gmWbEqDcy2rH5pmPPrH7xk9yM7cx-lJC5oVDSVi42SGL1gCR2r6ATjHPVy-y-DBEbvPyBmDHkK3TD6bdqPlL9NgLxgH7UsMt9aFuvIjYkCUTKoF5aURqfUlO5fRpECvoJfchCDYgxP7LQwAZ2ic8M
+```
+
+*Hint: jwt.io can be used to view the client secret*
+
+**Response**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "access_token":"2YotnFZFEjr1zCsicMWpAA",
+  "token_type":"bearer",
+  "expires_in":3600,
+  "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+  "id_token":  "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImtqY1NjamMzMmR3SlhYTEpEczNyMTI0c2ExIn0.eyJpYXQiOjE0MTg2NzY0MzAsImV4cCI6MTQxODY4MDAzMCwiYXVkIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20iLCJpc3MiOiJodHRwczovL2lkZW50aXR5Lm9hZGEtZGV2LmNvbSIsInN1YiI6MX0.SZGoDLalL5Kvabuw3EGdeShrHJWghJ8U5cTzqc0fNDt-bCYYG5bhgODkuBel4NLyOtusI9gW2LMYuSWCaNjddxkFP0eIT43Ij_w71eUMGPZNYPj2OpMupq77FsR5XttgIynF-ErtZlp9t0Ff1rnSjZKIQ-DoSCcoyPtiKLuHicg"
+}
+```
+
+*Hint: jwt.io can be used to view the id_token*
+
+**Step 9**: Verify the ID Token.
+
+The JWT is a standard JWS and should be verified according the [JWT][jwt] and
+[JWS][jws] specifications. The [JWK][jwk] in which the public keys to verify the
+ID Token can be found are located at the HTTP resource linked to by the
+`jwks_uri` key in the `identity.oada-dev.com` `openid-configuration` document.
+
+If the ID Token validates correctly then the key `sub` within the ID Token's
+body is the unique ID for Andy at `identity.oada-dev.com`.
+
+**Step 9**: Access Andy's profile data (if requested and authorized).
+
+```http
+GET /userinfo HTTP/1.1
+Host: identity.oada-dev.com
+Authorization: Bearer 2YotnFZFEjr1zCsicMWpAA
+Accept: application/json
+
+```
+
+**Response**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "sub": "1",
   "name": "Andy Smith",
   "given_name": "Andy",
   "family_name": "Smith",
@@ -713,24 +915,24 @@ Content-Type: application/json
 {
   "clientId": "3klaxu838akahf38acucaix73@identity.oada-dev.com",
   "redirectUrls": [
-  "https://client.oada-dev.com/redirect",
-  "https://client.oada-dev.com/redirect.html"
+    "https://client.oada-dev.com/redirect",
+    "https://client.oada-dev.com/redirect.html"
   ],
   "licenses": [
-  {
-    "id": "oada-1.0",
-    "name": "OADA Fictitious Agreement v1.0"
-  }
+    {
+      "id": "oada-1.0",
+      "name": "OADA Fictitious Agreement v1.0"
+    }
   ],
   "keys": [
-  {
-    "kty": "RSA",
-    "use": "sig",
-    "alg": "RS256"
-    "kid": "nc63dhaSdd82w32udx6v",
-    "n":   "AKj8uuRIHMaq-EJVf2d1QoB1DSvFvYQ3Xa1gvVxaXgxDiF9-Dh7bO5f0VotrYD05MqvY9X_zxF_ioceCh3_rwjNFVRxNnnIfGx8ooOO-1f4SZkHE-mbhFOe0WFXJqt5PPSL5ZRYbmZKGUrQWvRRy_KwBHZDzD51b0-rCjlqiFh6N",
-    "e": "AQAB"
-  }
+    {
+      "kty": "RSA",
+      "use": "sig",
+      "alg": "RS256"
+      "kid": "nc63dhaSdd82w32udx6v",
+      "n":   "AKj8uuRIHMaq-EJVf2d1QoB1DSvFvYQ3Xa1gvVxaXgxDiF9-Dh7bO5f0VotrYD05MqvY9X_zxF_ioceCh3_rwjNFVRxNnnIfGx8ooOO-1f4SZkHE-mbhFOe0WFXJqt5PPSL5ZRYbmZKGUrQWvRRy_KwBHZDzD51b0-rCjlqiFh6N",
+      "e": "AQAB"
+    }
   ],
   "name": "OADA Reference Implementation",
   "contact": "info@openag.io",
