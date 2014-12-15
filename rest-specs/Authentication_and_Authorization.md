@@ -198,15 +198,15 @@ this screen other then the required information is prominently displayed.
 
 A live demonstration of the OADA Authentication and Authorization mechanism can
 be found at: https://client.oada-dev.com. In the example service there are three
-entities: client.oada-dev.com, provider.oada-dev.com, and identity.oada-dev.com.
-It is assumed that Frank (a farmer) and/or Andy (an agronomist) is using
-client.oada-dev.com to access his/his clients data stored at
-provider.oada-dev.com. Frank has a local account (username: frank) at
-provider.oada-dev.com and Andy uses an OADA federated identity hosted at
-identity.oada-dev.com. The client registration for client.oada-dev.com is hosted
-at identity.oada-dev.com. identity.oada-dev.com is assumed to be on the OADA
-list of trusted identity providers and trusted (to assert license agreements)
-list of client discovery providers.
+entities: `client.oada-dev.com`, `provider.oada-dev.com`, and
+`identity.oada-dev.com`. It is assumed that Frank (a farmer) and/or Andy (an
+agronomist) is using `client.oada-dev.com` to access his/his clients data stored
+at `provider.oada-dev.com`. Frank has a local account (username: frank) at
+`provider.oada-dev.com` and Andy uses an OADA federated identity hosted at
+`identity.oada-dev.com`. The client registration for `client.oada-dev.com` is
+hosted at `identity.oada-dev.com`. `identity.oada-dev.com` is assumed to be on
+the OADA list of trusted identity providers and trusted (to assert license
+agreements) list of client discovery providers.
 
 ## OAuth 2.0 Examples (Authorization)
 
@@ -414,7 +414,7 @@ The login credentials could either be for a local account at
 (in this case 'andy' at identity.oada-dev.com). If Frank selects to login with
 his OADA federated identity then `provider.oada-dev.com` should pause the
 current OAuth 2.0 flow and begin a new [OpenID Connect
-Flow][openid-conect-flows] flow as a *client* with Frank's identity provider
+Flow][openid-connect-flows] flow as a *client* with Frank's identity provider
 (identity.oada-dev.com). If that flow results in a valid ID token then
 `provider.oada-dev.com` should resume the original OAuth 2.0 flow and consider
 Frank logged into `provider.oada-dev.com` as the identity within the ID token.
@@ -459,7 +459,7 @@ Content-Type: application/x-www-form-urlencoded
 grant_type=authorization_code&code=Pi2dY-FBxZqLx81lTbDM4WGlI&redirect_uri=https%3A%2F%2Fclient.oada-dev.com%2Fredirect&client_id=3klaxu838akahf38acucaix73%40identity.oada-dev.com&client_secret=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im5jNjNkaGFTZGQ4MnczMnVkeDZ2In0.eyJhYyI6IlBpMmRZLUZCeFpxTHg4MWxUYkRNNFdHbEkiLCJpYXQiOjE0MTg0MjExMDIsImF1ZCI6Imh0dHBzOi8vcHJvdmlkZXIub2FkYS1kZXYuY29tL3Rva2VuIiwiaXNzIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20ifQ.Te_NzrMTfrMaIldbIPRm5E0MnI1SjBf1G_19MslsJVdDSIUj_9YMloa4iTt_ztuJD4G0IP77AfU2x-XHqTjB8LybDlL8nyDERQhO8KNV3jbPKpKNsndZx5LDGX1XKJNH53IE4GB9Le8CE3TZNdVPxxuJcNi4RGYk0RJtdv6h1bo
 ```
 
-*Hint: jwt.io can be used to view client_secret*
+*Hint: http://jwt.io can be used to view client_secret*
 
 **Response**
 ```http
@@ -514,11 +514,11 @@ authentication. See the [OpenID Connect Specifications][openid-connect] for
 complete technical details.
 
 **Step 1**: Andy chooses to log into his application at `client.oada-dev.com`
-with his federated identity `andy@identity.oada-dev.com`.  
+with his federated identity `andy@identity.oada-dev.com`.
 
 **Step 2**: The application retrieves the `identity.oada-dev.com`
 `openid-configuration` document to discover the necessary OpenID Connect
-endpoints.  
+endpoints.
 
 **Request**
 ```http
@@ -618,7 +618,7 @@ HTTP/1.1 302 Found
 Location: https://client.oada-dev.com/redirect.html#access_token=2YotnFZFEjr1zCsicMWpAA&state=xyz&token_type=bearer&expires_in=3600&id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImtqY1NjamMzMmR3SlhYTEpEczNyMTI0c2ExIn0.eyJpYXQiOjE0MTg2NzY0MzAsImV4cCI6MTQxODY4MDAzMCwiYXVkIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20iLCJpc3MiOiJodHRwczovL2lkZW50aXR5Lm9hZGEtZGV2LmNvbSIsInN1YiI6MX0.SZGoDLalL5Kvabuw3EGdeShrHJWghJ8U5cTzqc0fNDt-bCYYG5bhgODkuBel4NLyOtusI9gW2LMYuSWCaNjddxkFP0eIT43Ij_w71eUMGPZNYPj2OpMupq77FsR5XttgIynF-ErtZlp9t0Ff1rnSjZKIQ-DoSCcoyPtiKLuHicg
 ```
 
-*Hint: jwt.io can be used to view the id_token*
+*Hint: http://jwt.io can be used to view the id_token*
 
 where the fragment parameters are
 
@@ -807,7 +807,7 @@ Content-Type: application/x-www-form-urlencoded
 grant_type=authorization_code&code=5MZVZOgNV-nh3brHM78UoaJ-w&redirect_uri=https%3A%2F%2Fclient.oada-dev.com%2Fredirect&client_id=3klaxu838akahf38acucaix73%40identity.oada-dev.com&client_secret=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im5jNjNkaGFTZGQ4MnczMnVkeDZ2In0.eyJhYyI6IjVNWlZaT2dOVi1uaDNickhNNzhVb2FKLXciLCJpYXQiOjE0MTg2Nzc5NzUsImF1ZCI6Imh0dHBzOi8vaWRlbnRpdHkub2FkYS1kZXYuY29tL3Rva2VuIiwiaXNzIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20ifQ.oDIk3cde6xKfyQMCU3lBL1gmWbEqDcy2rH5pmPPrH7xk9yM7cx-lJC5oVDSVi42SGL1gCR2r6ATjHPVy-y-DBEbvPyBmDHkK3TD6bdqPlL9NgLxgH7UsMt9aFuvIjYkCUTKoF5aURqfUlO5fRpECvoJfchCDYgxP7LQwAZ2ic8M
 ```
 
-*Hint: jwt.io can be used to view the client secret*
+*Hint: http://jwt.io can be used to view the client secret*
 
 **Response**
 ```http
@@ -823,7 +823,7 @@ Content-Type: application/json
 }
 ```
 
-*Hint: jwt.io can be used to view the id_token*
+*Hint: http://jwt.io can be used to view the id_token*
 
 **Step 9**: Verify the ID Token.
 
@@ -941,12 +941,12 @@ Content-Type: application/json
 ```
 
 *If the `clientId` domain, in this case `identity.oada-dev.com`, is not on the
-*trusted list of client discovery providers a warning **must** presented to the
-*user on the authorization grant screen. In particular the warning should
-*indicate that client's agreement to the license(s) can not be trusted.*
+trusted list of client discovery providers a warning* **must** *presented to
+the user on the authorization grant screen. In particular the warning should
+indicate that client's agreement to the license(s) can not be trusted.*
 
-[openid-conect-flows]: #openid-connect-examples
-[discovering-a-client]: #discovering-a-client-from-a-clientId
+[openid-connect-flows]: #openid-connect-examples-authentication
+[discovering-a-client]: #discovering-a-client-from-a-clientid
 [oauth2-rfc6749]: https://tools.ietf.org/rfc/rfc6749.txt
 [openid-connect]: http://openid.net/specs/openid-connect-core-1_0.html
 [well-known-endpoint-docs]:  https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#well-knownoada-configuration
