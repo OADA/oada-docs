@@ -1,8 +1,31 @@
+# Table of Contents
+
+- [Authentication and Authorization](#authentication-and-authorization)
+  - [What should I support?](#what-should-i-support)
+- [Distributed Federation Extensions](#distributed-federation-extensions)
+    - [`/.well-known/oada-configuration`](#well-knownoada-configuration)
+    - [Client Discovery](#client-discovery)
+    - [Client Secret](#client-secret)
+      - [Requirements on the JWT](#requirements-on-the-jwt)
+      - [Example Client Secret](#example-client-secret)
+    - [Grant Screen](#grant-screen)
+      - [Example Grant Screen with Licenses and PUC](#example-grant-screen-with-licenses-and-puc)
+      - [Example Grant Screen without PUC](#example-grant-screen-without-puc)
+      - [Example Grant Screen without Licenses](#example-grant-screen-without-licenses)
+- [Examples](#examples)
+  - [Live Demonstration](#live-demonstration)
+  - [OAuth 2.0 Examples (Authorization)](#oauth-20-examples-authorization)
+    - [Retrieving an OAuth 2.0 Access Token (Implicit Flow)](#retrieving-an-oauth-20-access-token-implicit-flow)
+    - [Retrieving an OAuth 2.0 Access Token (Code Flow)](#retrieving-an-oauth-20-access-token-code-flow)
+    - [Retrieving an OAuth 2.0 Access Token (Refresh Flow)](#retrieving-an-oauth-20-access-token-refresh-flow)
+  - [Discovering a client from a clientId](#discovering-a-client-from-a-clientid)
+
 # Authentication and Authorization
 
-OADA uses OAuth 2.0 for API Authentication and Authorization and OpenID Connect
-for federated user identity authentication. There are a few minor extensions
-required by OADA to support the distributed nature of the OADA federation.
+OADA uses [OAuth 2.0][oauth2-rfc6749] for API Authentication and Authorization
+and OpenID Connect for federated user identity authentication. There are a few
+minor extensions required by OADA to support the distributed nature of the OADA
+federation.
 
 ## What should I support?
 
@@ -10,8 +33,8 @@ That depends on your desired role within the OADA ecosystem. In general, there
 are three major role categories: **OADA Client**, **OADA Provider**, **OADA
 Identity Provider**. Any particular OADA implementation may fit into one or more
 of these roles simultaneously. The following table indicates whether or not the
-client or server portions of the OAuth 2.0 and/or OpenId Connect specifications
-(plus distributed federation extensions) are necessary for each role. If a
+client or server portions of the OAuth 2.0 and/or OpenId Connect specifications,
+plus distributed federation extensions, are necessary for each role. If a
 particular implementation fits in more than one role then it should support the
 union of each applicable role.
 
@@ -22,10 +45,10 @@ union of each applicable role.
 | OADA Identity Provider | -          | Server                               |
 
 The above requirements are described in more detail below by using examples of
-typically OADA operations. The OAuth 2.0 and OpenID Connect specifications
+typical OADA operations. The OAuth 2.0 and OpenID Connect specifications
 should be directly consulted for the details of their operation.
 
-## Distributed Federation Extensions
+# Distributed Federation Extensions
 
 The inherent distributed nature of OADA means that client and providers and will
 often meet for the first when a joint customer tries to point them together.
@@ -36,7 +59,7 @@ discover each other. Below is a short description of those features.
 
 `/.well-known/oada-configuration` is an HTTP resource in which clients use to
 automatically discover the necessary endpoints of a new OADA provider. This
-resource is located in a predictable path after the provider's domain and
+resource's path **must** be directly appended the provider's domain and
 therefore the only burden on the joint user is to know the base domain. For
 example, a user should only have to enter `agcloud.com` as their provider rather
 then the various endpoints, such as: `agcloud.com/oada/oauth2/auth`,
@@ -52,7 +75,8 @@ other details of a given client. This allows a user to point their favorite
 client to their favorite provider without the client having had to register with
 the provider beforehand.
 
-More details can be found in the [clientDiscovery endpoint documentation][client-discovery-endpoint-docs]
+More details can be found in the [clientDiscovery endpoint
+documentation][client-discovery-endpoint-docs]
 
 ### Client Secret
 
@@ -62,7 +86,7 @@ The client secret is supposed to only be known to the client and provider;
 However, in the OADA ecosystem the client and provider often do not know each
 other before their first interaction. Therefore, OADA further stipulates that
 client secrets take the form of a [JSON Web Tokens (JWT)][jwt] encoded as a
-[JSON Web Signature][jws].
+[JSON Web Signatures][jws].
 
 #### Requirements on the JWT
 
@@ -73,10 +97,9 @@ respectively. However, for OADA there are a few requirements, list before:
   `client_secret_alg_supported` key of the provider's `oada-configuration`. RSA
   256 (RS256 in [JSON Web Algorithms][jwa] speak) is required to be supported by
   all clients and providers.
-- The JWT body must include an `ac` key and it should be set equal to the
-  access code from the OAuth 2.0 code flow. The secret should be considered
-  invalid if either the `ac` key is missing or is not set to be equal to access
-  code.
+- The JWT body must include the `ac` key and it is equal to the access code from
+  the OAuth 2.0 code flow. The secret should be considered invalid if either the
+  `ac` key is missing or is not equal to that sessions access code.
 
 #### Example Client Secret
 
@@ -86,13 +109,15 @@ A JWT takes the form:
 
 where `header` is the token header in JSON, `payload` is the token body in JSON,
 and `hash` is the signature of the header appended to payload using the
-algorithm described in the `header` all joined together by a period.
+algorithm described in the `header`, all joined together by a period.
 
 An example of a valid RS256 JWS client secret is show below:
 
 `eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im5jNjNkaGFTZGQ4MnczMnVkeDZ2In0.eyJhYyI6IlBpMmRZLUZCeFpxTHg4MWxUYkRNNFdHbEkiLCJpYXQiOjE0MTg0MjExMDIsImF1ZCI6Imh0dHBzOi8vcHJvdmlkZXIub2FkYS1kZXYuY29tL3Rva2VuIiwiaXNzIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20ifQ.Te_NzrMTfrMaIldbIPRm5E0MnI1SjBf1G_19MslsJVdDSIUj_9YMloa4iTt_ztuJD4G0IP77AfU2x-XHqTjB8LybDlL8nyDERQhO8KNV3jbPKpKNsndZx5LDGX1XKJNH53IE4GB9Le8CE3TZNdVPxxuJcNi4RGYk0RJtdv6h1bo`
 
-Where the `header` decodes to:
+Where:
+
+`header` decodes to:
 ```json
 {
   "typ": "JWT",
@@ -100,7 +125,8 @@ Where the `header` decodes to:
   "kid": "nc63dhaSdd82w32udx6v"
 }
 ```
- and the `payload` decodes to:
+
+`payload` decodes to:
 ```json
 {
   "ac": "Pi2dY-FBxZqLx81lTbDM4WGlI",
@@ -110,7 +136,7 @@ Where the `header` decodes to:
 }
 ```
 
-The corresponding public key from the client's registration that is used to
+and the corresponding public key from the client's registration which can
 validate the JWS is:
 
 ```json
@@ -126,139 +152,411 @@ validate the JWS is:
 
 ### Grant Screen
 
-Providers are **required** to display the list of licenses and a hyper-linkt to
-privacy and use policy (PUC) or similar terms-of-use type document to the user
-for any client making an OAuth 2.0 request on the authorization grant screen
-(the screen in which the users are presented with an "allow" or "deny" option).
-Alternatively a warning should be displayed if the information is provided by
-the client. Providers learn this information during client discovery.
+Providers are **required** to display both (a) the license(s) that the client
+has agreed to and (b) a hyper-link to the client's privacy and use policy (PUC)
+or similar terms-of-use type document for all OAuth 2.0 requests on the
+authorization grant screen (the screen in which the users are presented with an
+"allow" or "deny" option). Alternatively a warning should be displayed if the
+information is not provided by the client. Providers learn this information
+themselves during the client discovery phase.
 
 #### Example Grant Screen with Licenses and PUC
 
-![Grant screen for a client with published licenses and PUC](authorization_grant_screen_with_puc_and_lic.png)
+![Grant screen for a client with published licenses and
+PUC](authorization_grant_screen_with_puc_and_lic.png)
 
-Note the Privacy and Data Use Principles link and the display of support for the
-"OADA" license (a fictions license). OADA does not require any particular
-styling of this screen other then the required information is prominently
-displayed.
+Note the "Privacy and Data Use Principles" link and the display that the client
+supports/agreed to the "OADA" license (a fictions example license). OADA does
+not require any particular styling of this screen other then  the required
+information is prominently displayed.
 
 #### Example Grant Screen without PUC
 
-![Grant screen for a client with published licenses but no published PUC](authorization_grant_screen_with_no_puc_and_lic.png)
+![Grant screen for a client with published licenses but no published
+PUC](authorization_grant_screen_with_no_puc_and_lic.png)
 
-Note the noticeable warning of no published privacy and data use principles.
-OADA does not require any particular styling of this screen other then the
-required information is prominently displayed.
+Note the noticeable warning: "No published Privacy and Data Use Principles" and
+the display that the client supports/agreed to the "OADA" license (a fictions
+example license). OADA does not require any particular styling of this screen
+other then the required information is prominently displayed.
 
 #### Example Grant Screen without Licenses
 
-![Grant screen for a client without a published licenses but a published PUC](authorization_grant_screen_with_puc_and_no_lic.png)
+![Grant screen for a client without a published licenses but a published
+PUC](authorization_grant_screen_with_puc_and_no_lic.png)
 
-Note the noticeable warning of no published supported licenses. OADA does not
-require any particular styling of this screen other then the required
-information is prominently displayed.
+Note the "Privacy and Data Use Principles" link and the noticeable warning: "No
+published supported licenses". OADA does not require any particular styling of
+this screen other then the required information is prominently displayed.
 
+# Examples
 
-## Retrieving an OAuth 2.0 Access Token (Implicit Flow)
+## Live Demonstration
 
+A live demonstration of the OADA Authentication and Authorization mechanism can
+be found at: https://client.oada-dev.com. In the example service there are three
+entities: client.oada-dev.com, provider.oada-dev.com, and identity.oada-dev.com.
+It is assumed that Frank (a farmer) and/or Andy (an agronomist) is using
+client.oada-dev.com to access his/his clients data stored at
+provider.oada-dev.com. Frank has a local account (username: frank) at
+provider.oada-dev.com and Andy uses an OADA federated identity hosted at
+identity.oada-dev.com. The client registration for client.oada-dev.com is hosted
+at identity.oada-dev.com. identity.oada-dev.com is assumed to be on the OADA
+list of trusted identity providers and trusted (to assert license agreements)
+list of client discovery providers.
 
-1. The client retrieves the cloud provider's 'oada-configuration' document to
-discover the OAuth 2.0 endpoints.
+## OAuth 2.0 Examples (Authorization)
+
+In the following examples `client.oada-dev.com` is a web based client which
+Frank, a farmer, is using to access his data stored at
+`provider.oada-dev.com`. The client id for the application hosted at
+`client.oada-dev.com` is `3klaxu838akahf38acucaix73@identity.oada-dev.com`.
+
+`client.oada-dev.com` has three options, the implicit, the authorization code,
+and the refresh flow, when requesting an OAuth 2.0 bearer (access) token and
+therefore access to Frank's data. Implicit flow is used for "local"
+applications, e.g., entirely in-browser, where the OADA API requests come
+directly from the application. The authorization code flow is used by
+applications in which intermediate server makes the OADA API requests. Finally,
+the refresh flow is used by a client that has previously obtained a refresh
+token (typically through the authorization code flow) and is attempting to renew
+a soon-to-expire access token.
+
+Please see the [OAuth 2.0 RFC][oauth2-rfc6749] for complete technical details.
+
+### Retrieving an OAuth 2.0 Access Token (Implicit Flow)
+
+The implicit flow is the easiest of the two available flows but typically only
+produces short lived access tokens. Refresh tokens can not usually be obtained
+with this method because the client is not authenticated. The access token is
+exposed to the user's user-agent during the procedure and so there are some
+security implications to consider. See the [OAuth 2.0 RFC][oauth2-rfc6749] for
+complete details. This is the only required flow that an entirely "local"
+applications, such as a completely in-browser application, can use.
+
+The example only shows the steps of a successful authorization and
+authentication. See the [OAuth 2.0 RFC][oauth2-rfc6749] for complete technical
+details.
+
+**Step 1**: Frank instructs the application at `client.oada-dev.com` to access
+his data at `provider.oada-dev.com` by typing in `provider.oada-dev.com` and
+clicking a "fetch data" button/link.
+
+**Step 2**: The application retrieves the `provider.oada-dev.com`
+`oada-configuration` document to discover the necessary OAuth 2.0 endpoints.
 
 **Request**
 ```http
 GET /.well-known/oada-configuration HTTP/1.1
-Host: agcloud.com
+Host: provider.oada-dev.com
 Accept: application/json
+
 ```
 
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
+Content-Type: application/json
 
 {
-  "authorization_endpoint": "https://auth.agcloud.com/authorize",
-  "token_endpoint": "https://auth.agcloud.com/token",
-  "OADABaseUri": "https://api.agcloud.com/",
-  "clientDiscovery": "https://auth.agcloud.com/client",
+  "authorization_endpoint": "https://provider.oada-dev.com/auth",
+  "token_endpoint": "https://provider.oada-dev.com/token",
+  "oada_base_uri": "https://provider.oada-dev.com",
   "client_secret_alg_supported": [
     "RS256"
   ]
 }
 ```
 
-2. The client initiates an OAuth 2.0 token (Implicit flow) or code
-(Authorization flow) request.
-
-* Implicit flow:
-
-**Request**
-```http
-GET /authorize?response_type=token&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
-Host: agcloud.com
-```
-
-* Authorization flow:
+**Step 3**: The application then initiates the OAuth 2.0 implicit
+flow by either popping up a pop-up window or redirecting Frank's user-agent.
+The request is a GET on the resource in the `authorization_endpoint` key from `oada-configuration` document above.
 
 **Request**
 ```http
-GET authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fagcloud%2Ecom%2Fcb HTTP/1.1
-Host: agcloud.com
+GET /auth?response_type=token&client_id=3klaxu838akahf38acucaix73%40identity.oada-dev.com&state=xyz&redirect_uri=https%3A%2F%2Fclient.oada-dev.com%2Fredirect.html&scope=bookmarks.fields HTTP/1.1
+Host: provider.oada-dev.com
+
 ```
+*The response pends until step 5*
 
-3. AgCloud challenges the user to login or uses a current and valid session to
-identify the user. AgCloud may initiate an OpenID Connect flow if the end
-user chooses to login with an OADA federated identity.
+Where the request parameters are,
 
-* Implicit flow - Upon login success, the user agent is redirected to
-'redirect_uri' with the token embedded directly in the URI fragment:
+| Query Parameter | Value | Meaning |
+| --------------- | ----- | ------- |
+| response_type   | token | Start the implicit flow |
+| client_id       | 3klaxu838akahf38acucaix73@identity.oada-dev.com | The application's registered client id |
+| state           | xyz   | A string for the client to recover its state after the OAuth 2.0 flow completes. It is also used to prevent cross-site request forgery attacks.  |
+| redirect_uri    | https://client.oada-dev.com/redirect.html | The URL which Frank's user-agent is redirected to after the OAuth 2.0 flow is complete. The bearer token is delivered to the client via this redirect. Its value must match an entry in the `redirectUrls` key from the client's registration. |
+| scope           |  bookmarks.fields | The scope which the client is asking authorization for. OADA defines some [standard scopes][scopes]. |
+
+**Step 4**: `provider.oada-dev.com` discovers the requesting client and verifies
+the OAuth 2.0 request parameters. In particular the redirect URL must match an
+entry in the `redirectUrls` key from the client's registration.
+
+See [Discovering a client from a clientId][discovering-a-client] for details of this process.
+
+**Step 5**: Step 3's request is completed with a response of a page that
+challenges Frank to login with his credentials. Frank successfully logs in.
+
+The login credentials could either be for a local account at
+`provider.oada-dev.com` (in this case 'frank') or for an OADA federated identity
+(in this case 'andy' at identity.oada-dev.com). If Frank selects to login with
+his OADA federated identity then `provider.oada-dev.com` should pause the
+current OAuth 2.0 flow and begin a new [OpenID Connect
+Flow][openid-connect-flows] flow as a *client* with Frank's identity provider
+(identity.oada-dev.com). If that flow results in a valid ID token then
+`provider.oada-dev.com` should resume the original OAuth 2.0 flow and consider
+Frank logged into `provider.oada-dev.com` as the identity within the ID token.
+
+**Step 6**: `provider.oada-dev.com` returns the authorization grant screen in
+which the requested scopes, client license(s) and PUC, etc. are presented to the
+user with a choice to allow or deny. The user approves the authorization.
+
+**Step 7**: `provider.oada-dev.com` generates an access token for Frank and
+redirects Frank's user-agent to the `redirect_uri` from the initial request with
+the access token and other details in the fragment.
 
 **Response**
 ```http
 HTTP/1.1 302 Found
-Location: http://agcloud.com/cb#access_token=2YotnFZFEjr1zCsicMWpAA&state=xyz&token_type=example&expires_in=3600
+Location: https://client.oada-dev.com/redirect.html#access_token=2YotnFZFEjr1zCsicMWpAA&state=xyz&token_type=Bearer&expires_in=3600
+
 ```
 
-* Authorization flow - Upon login success, the user agent is redirected to
-`redirect_uri` with a authorization code.
+where the fragment parameters are
+
+| Query Parameter | Value | Meaning |
+| --------------- | ----- | ------- |
+| access_token    | 2YotnFZFEjr1zCsicMWpAA | The access token to use with OADA API requests |
+| token_type      | Bearer | The access token is a bearer token. |
+| expires_in      | 3600   | The number of seconds that access token will remain valid |
+
+### Retrieving an OAuth 2.0 Access Token (Code Flow)
+
+The code flow is similar to the implicit flow with a few extra steps. Usually
+the code flow results in a longer term access tokens and sometimes refresh
+tokens. The client is authenticated in the code flow and the access token is
+never exposed to the user's user-agent and so an intermediate server is
+required. Please see the [OAuth 2.0 RFC][oauth2-rfc6749] for complete details.
+
+The example only shows the steps of a successful authorization and
+authentication. See the [OAuth 2.0 RFC][oauth2-rfc6749] for complete technical
+details.
+
+**Step 1**: Frank instructs the application at `client.oada-dev.com` to access
+his data at `provider.oada-dev.com` by typing in `provider.oada-dev.com` and
+clicking a "fetch data" button/link.
+
+**Step 2**: The application retrieves the `provider.oada-dev.com`
+`oada-configuration` document to discover the necessary OAuth 2.0 endpoints.
+
+**Request**
+```http
+GET /.well-known/oada-configuration HTTP/1.1
+Host: provider.oada-dev.com
+Accept: application/json
+
+```
+
+**Response**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "authorization_endpoint": "https://provider.oada-dev.com/auth",
+  "token_endpoint": "https://provider.oada-dev.com/token",
+  "oada_base_uri": "https://provider.oada-dev.com",
+  "client_secret_alg_supported": [
+  "RS256"
+  ]
+}
+```
+
+**Step 3**: The application then initiates the OAuth 2.0 code
+flow by either popping up a pop-up window or redirecting Frank's user-agent.
+The request is a GET on the resource in the `authorization_endpoint` key from `oada-configuration` document above.
+
+**Request**
+```http
+GET /auth?response_type=code&client_id=3klaxu838akahf38acucaix73%40identity.oada-dev.com&state=xyz&redirect_uri=https%3A%2F%2Fclient.oada-dev.com%2Fredirect&scope=bookmarks.fields HTTP/1.1
+Host: provider.oada-dev.com
+
+```
+*The response pends until step 5*
+
+Where the request parameters are,
+
+| Query Parameter | Value | Meaning |
+| --------------- | ----- | ------- |
+| response_type   | code | Start the code flow |
+| client_id       | 3klaxu838akahf38acucaix73@identity.oada-dev.com | The application's registered client id |
+| state           | xyz   | A string for the client to recover its state after the OAuth 2.0 flow completes. It is also used to prevent cross-site request forgery attacks.  |
+| redirect_uri    | https://client.oada-dev.com/redirect | The URL which Frank's user-agent is redirected to after the OAuth 2.0 flow is complete. The code is delivered to the intermediate server via this redirect. Its value must match an entry in the `redirectUrls` key from the client's registration. |
+| scope           |  bookmarks.fields | The scope which the client is asking authorization for. OADA defines some [standard scopes][scopes]. |
+
+**Step 4**: `provider.oada-dev.com` discovers the requesting client and verifies
+the OAuth 2.0 request parameters. In particular the redirect URL must match an
+entry in the `redirectUrls` key from the client's registration.
+
+See [Discovering a client from a clientId][discovering-a-client] for details of this process.
+
+**Step 5**: Step 3's request is completed with a response of a page that
+challenges Frank to login with his credentials. Frank successfully logs in.
+
+The login credentials could either be for a local account at
+`provider.oada-dev.com` (in this case 'frank') or for an OADA federated identity
+(in this case 'andy' at identity.oada-dev.com). If Frank selects to login with
+his OADA federated identity then `provider.oada-dev.com` should pause the
+current OAuth 2.0 flow and begin a new [OpenID Connect
+Flow][openid-conect-flows] flow as a *client* with Frank's identity provider
+(identity.oada-dev.com). If that flow results in a valid ID token then
+`provider.oada-dev.com` should resume the original OAuth 2.0 flow and consider
+Frank logged into `provider.oada-dev.com` as the identity within the ID token.
+
+**Step 6**: `provider.oada-dev.com` returns the authorization grant screen in
+which the requested scopes, client license(s) and PUC, etc. are presented to the
+user with a choice to allow or deny. The user approves the authorization.
+
+**Step 7**: `provider.oada-dev.com` generates a code and redirects Frank's user-agent to the `redirect_uri` from the initial request.
 
 **Response**
 ```http
 HTTP/1.1 302 Found
-Location: https://agcloud.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&state=xyz
+Location: https://client.oada-dev.com/redirect?code=Pi2dY-FBxZqLx81lTbDM4WGlI&state=xyz
+
 ```
 
-4. (*Authorization flow only*) The client trades the authorization code for a
-token at the token endpoint:
+where the query parameters are
+
+| Query Parameter | Value | Meaning |
+| --------------- | ----- | ------- |
+| code            | Pi2dY-FBxZqLx81lTbDM4WGlI | The code for the approved authorization. |
+| state           | xyz   | The state value from the original request so that the client can recover from the redirect. |
+
+**Step 8**: The intermediate server for `client.oada-dev.com` which is hosting
+the application parses the code and state from the GET request query parameters
+and makes an out-of-band POST request to the `provider.oada-dev.com`
+`token_endpoint` from the `oada-configuration` document.
+
+The provider should validate the request as specified by OAuth 2.0 with the
+extra requirements that the client secret JWT validates against a public key
+from client registration document, is valid by the [JWT standard][jwt], and
+contains an `ac` key equal to the access code in the body.
 
 **Request**
 ```http
 POST /token HTTP/1.1
-Host: agcloud.com
-Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Host: provider.oada-dev.com
+Accept: application/json
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=https%3A%2F%2Fagcloud%2Ecom%2Fcb
+grant_type=authorization_code&code=Pi2dY-FBxZqLx81lTbDM4WGlI&redirect_uri=https%3A%2F%2Fclient.oada-dev.com%2Fredirect&client_id=3klaxu838akahf38acucaix73%40identity.oada-dev.com&client_secret=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im5jNjNkaGFTZGQ4MnczMnVkeDZ2In0.eyJhYyI6IlBpMmRZLUZCeFpxTHg4MWxUYkRNNFdHbEkiLCJpYXQiOjE0MTg0MjExMDIsImF1ZCI6Imh0dHBzOi8vcHJvdmlkZXIub2FkYS1kZXYuY29tL3Rva2VuIiwiaXNzIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20ifQ.Te_NzrMTfrMaIldbIPRm5E0MnI1SjBf1G_19MslsJVdDSIUj_9YMloa4iTt_ztuJD4G0IP77AfU2x-XHqTjB8LybDlL8nyDERQhO8KNV3jbPKpKNsndZx5LDGX1XKJNH53IE4GB9Le8CE3TZNdVPxxuJcNi4RGYk0RJtdv6h1bo
 ```
+
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Cache-Control: no-store
-Pragma: no-cache
+Content-Type: application/json
 
 {
   "access_token":"2YotnFZFEjr1zCsicMWpAA",
-  "token_type":"example",
+  "token_type":"bearer",
   "expires_in":3600,
-  "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
-  "example_parameter":"example_value"
+  "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA"
 }
 ```
 
+### Retrieving an OAuth 2.0 Access Token (Refresh Flow)
+
+*Write up to come*
+
+## Discovering a client from a clientId
+
+Discovering a client is a multi-step process. In this example a provider is attempting to discovery the client registration document of the client ID `3klaxu838akahf38acucaix73@identity.oada-dev.com`.
+
+**Step 1** The domain is parsed from the client ID, in this case,
+`identity.oada-dev.com`.
+
+**Step 2** The `oada-configuration` document for that domain is obtained.
+
+**Request**
+```http
+GET /.well-known/oada-configuration HTTP/1.1
+Host: identity.oada-dev.com
+Accept: application/json
+
+```
+
+**Response**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "authorization_endpoint": "https://identity.oada-dev.com/auth",
+  "token_endpoint": "https://identity.oada-dev.com/token",
+  "oada_base_uri": "https://identity.oada-dev.com",
+  "client_discovery": "https://identity.oada-dev.com/client",
+  "client_secret_alg_supported": [
+    "RS256"
+  ]
+}
+```
+
+**Step 3**: The client registration document is fetched via GET request on the domains `client_discovery` endpoint with a `clientId` query parameter.
+
+**Request**
+```http
+GET /client?clientId=3klaxu838akahf38acucaix73%40identity.oada-dev.com HTTP/1.1
+Host: identity.oada-dev.com
+Accept: application/json
+
+```
+
+**Response**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "clientId": "3klaxu838akahf38acucaix73@identity.oada-dev.com",
+  "redirectUrls": [
+  "https://client.oada-dev.com/redirect",
+  "https://client.oada-dev.com/redirect.html"
+  ],
+  "licenses": [
+  {
+    "id": "oada-1.0",
+    "name": "OADA Fictitious Agreement v1.0"
+  }
+  ],
+  "keys": [
+  {
+    "kty": "RSA",
+    "use": "sig",
+    "alg": "RS256"
+    "kid": "nc63dhaSdd82w32udx6v",
+    "n":   "AKj8uuRIHMaq-EJVf2d1QoB1DSvFvYQ3Xa1gvVxaXgxDiF9-Dh7bO5f0VotrYD05MqvY9X_zxF_ioceCh3_rwjNFVRxNnnIfGx8ooOO-1f4SZkHE-mbhFOe0WFXJqt5PPSL5ZRYbmZKGUrQWvRRy_KwBHZDzD51b0-rCjlqiFh6N",
+    "e": "AQAB"
+  }
+  ],
+  "name": "OADA Reference Implementation",
+  "contact": "info@openag.io",
+  "puc": "https://identity.oada-dev.com/puc.html"
+}
+```
+
+*If the `clientId` domain, in this case `identity.oada-dev.com`, is not
+on the trusted list of client discovery providers a warning **must** presented to the user on the authorization grant screen. In particular the warning should indicate that client's agreement to the license(s) can not be trusted.*
+
+[openid-conect-flows]: #???
+[discovering-a-client]: #discovering-a-client-from-a-clientId
+[oauth2-rfc6749]: https://tools.ietf.org/rfc/rfc6749.txt
 [well-known-endpoint-docs]:  https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#well-knownoada-configuration
 [client-discovery-endpoint-docs]:  https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#clientdiscovery
 [jwt]: https://tools.ietf.org/id/draft-ietf-oauth-json-web-token.txt
 [jws]: https://tools.ietf.org/id/draft-ietf-jose-json-web-signature.txt
 [jwa]: https://tools.ietf.org/id/draft-ietf-jose-json-web-algorithms.txt
+[scopes]: https://github.com/OADA/oada-docs/blob/master/rest-specs/Standard-Scopes.md

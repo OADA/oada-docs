@@ -123,7 +123,7 @@ Accept: application/json
   "licenses": [
   {
     "id": "oada-1.0",
-    "name": "OADA Standard Agreement v1.0"
+    "name": "OADA Fictitious Agreement v1.0"
   }
   ],
   "keys": [
