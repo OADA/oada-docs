@@ -1,7 +1,21 @@
+# Table of Contents
+
+- [OADA Discovery Endpoints](#oada-discovery-endpoints)
+- [`/.well-known`](#well-known)
+  - [`/.well-known/oada-configuration`](#well-knownoada-configuration)
+    - [Example `/.well-known/oada-configuration` document](#example-well-knownoada-configuration-document)
+  - [`/.well-known/oada-client-discovery`](#well-knownoada-client-discovery)
+    - [Example `/.well-known/oada-client-discovery` document](#example-well-knownoada-client-discovery-document)
+  - [`/.well-known/openid-configuration`](#well-knownopenid-configuration)
+    - [Example `/.well-known/openid-configuration` document](#example-well-knownopenid-configuration-document)
+- [`/clientDiscovery`](#clientdiscovery)
+  - [Request Parameters](#request-parameters)
+  - [Response](#response)
+  - [Example](#example)
+
 # OADA Discovery Endpoints
 
-* [`/.well-known`](#user-content-well-known)
-* [`/clientDiscovery`](#user-content-clientDiscovery)
+OADA has several discovery endpoints that enable the its distributed nature.
 
 # `/.well-known`
 
@@ -27,19 +41,36 @@ provider hosts OADA client discovery.
 
 ```http
 GET /.well-known/oada-configuration HTTP/1.1
-Host: agcloud.com
+Host: provider.oada-dev.com
 Content-Type: application/json
 
 {
   "authorization_endpoint": "https://provider.oada-dev.com/auth",
   "token_endpoint": "https://provider.oada-dev.com/token",
   "oada_base_uri": "https://provider.oada-dev.com"
-  "client_discovery": "https://provider.oada-dev.com/clientDiscovery",
   "client_secret_alg_supported": [
     "RS256"
   ]
 }
 ```
+## `/.well-known/oada-client-discovery`
+
+Used to discovery the client discovery endpoint within a client discovery
+provider's domain. It is used by providers when trying to lookup a client
+registration.
+
+### Example `/.well-known/oada-client-discovery` document
+
+```http
+GET /.well-known/oada-client-discovery HTTP/1.1
+Host: identity.oada-dev.com
+Content-Type: application/json
+
+{
+  "client_discovery": "https://identity.oada-dev.com/clientDiscovery"
+}
+```
+
 ## `/.well-known/openid-configuration`
 
 Standard OpenID Connect discovery document. It is optional for OpenID Connect

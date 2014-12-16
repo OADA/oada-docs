@@ -3,7 +3,9 @@
 - [Authentication and Authorization](#authentication-and-authorization)
   - [What should I support?](#what-should-i-support)
 - [Distributed Federation Extensions](#distributed-federation-extensions)
-    - [`/.well-known/oada-configuration`](#well-knownoada-configuration)
+    - [Well-Known Documents](#well-known-documents)
+      - [`/.well-known/oada-configuration`](#well-knownoada-configuration)
+      - [`/.well-known/oada-client-discovery`](#well-knownoada-client-discovery)
     - [Client Discovery](#client-discovery)
     - [Client Secret](#client-secret)
       - [Requirements on the JWT](#requirements-on-the-jwt)
@@ -58,7 +60,9 @@ often meet for the first when a joint customer tries to point them together.
 Therefore, OADA has methods for both clients and providers to automatically
 discover each other. Below is a short description of those features.
 
-### `/.well-known/oada-configuration`
+### Well-Known Documents
+
+#### `/.well-known/oada-configuration`
 
 `/.well-known/oada-configuration` is an HTTP resource in which clients use to
 automatically discover the necessary endpoints of a new OADA provider. This
@@ -67,6 +71,16 @@ therefore the only burden on the joint user is to know the base domain. For
 example, a user should only have to enter `agcloud.com` as their provider rather
 then the various endpoints, such as: `agcloud.com/oada/oauth2/auth`,
 `agcloud.com/oada/oauth2/token`, etc.
+
+More details can be found in the [/.well-known endpoint
+documentation][well-known-endpoint-docs].
+
+#### `/.well-known/oada-client-discovery`
+
+`/.well-known/oada-client-discovery` is an HTTP resource in which providers use
+to automatically discover the client discovery endpoint with the client's client
+discovery provider domain.This resource's path **must** be directly appended the
+client discovery provider's domain.
 
 More details can be found in the [/.well-known endpoint
 documentation][well-known-endpoint-docs].
@@ -874,7 +888,7 @@ attempting to discovery the client registration document of the client ID
 
 **Request**
 ```http
-GET /.well-known/oada-configuration HTTP/1.1
+GET /.well-known/oada-client-discovery HTTP/1.1
 Host: identity.oada-dev.com
 Accept: application/json
 
@@ -886,13 +900,7 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "authorization_endpoint": "https://identity.oada-dev.com/auth",
-  "token_endpoint": "https://identity.oada-dev.com/token",
-  "oada_base_uri": "https://identity.oada-dev.com",
-  "client_discovery": "https://identity.oada-dev.com/client",
-  "client_secret_alg_supported": [
-    "RS256"
-  ]
+  "client_discovery": "https://identity.oada-dev.com/client"
 }
 ```
 
