@@ -20,6 +20,14 @@
 * [/.well-known](REST-Discovery-Endpoints.md#well-known)
 * [/clientDiscovery](REST-Discovery-Endpoints.md#clientdiscovery)
 
+# Authorization and Authentication
+
+* [Authentication and
+  Authorization](Authentication_and_Authorization.md#authentication-and-authorization)
+* [Distributed Federation
+  Extensions](Authentication_and_Authorization.md#distributed-federation-extensions)
+* [Examples](Authentication_and_Authorization.md#examples)
+
 # API Examples
 
 * [Federated Login](REST-API-Examples.md#federated-login)
@@ -43,10 +51,6 @@
 # Errors
 
 * [Standard Error Response](Standard-Error.md)
-
-# OAuth 2.0 and OpenID Conect Flows
-
-* [OAuth 2.0](OAuth2.md)
 
 # Standard Names
 
