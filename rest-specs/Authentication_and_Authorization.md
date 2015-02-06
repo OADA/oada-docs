@@ -548,12 +548,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  issuer: "https://identity.oada-dev.com",
-  authorization_endpoint: "https://identity.oada-dev.com/auth",
-  token_endpoint: "https://identity.oada-dev.com/token",
-  userinfo_endpoint: "https://identity.oada-dev.com/userinfo",
-  jwks_uri: "https://identity.oada-dev.com/certs",
-  response_types_supported: [
+  "issuer": "https://identity.oada-dev.com",
+  "authorization_endpoint": "https://identity.oada-dev.com/auth",
+  "token_endpoint": "https://identity.oada-dev.com/token",
+  "userinfo_endpoint": "https://identity.oada-dev.com/userinfo",
+  "jwks_uri": "https://identity.oada-dev.com/certs",
+  "response_types_supported": [
     "code",
     "token",
     "id_token",
@@ -562,13 +562,13 @@ Content-Type: application/json
     "token id_token",
     "code token id_token"
   ],
-  subject_types_supported: [
+  "subject_types_supported": [
     "public"
   ],
-  id_token_alg_values_supported: [
+  "id_token_alg_values_supported": [
     "RS256"
   ],
-  token_endpoint_auth_methods_supported: [
+  "token_endpoint_auth_methods_supported": [
     "client_secret_post"
   ]
 }
@@ -712,12 +712,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  issuer: "https://identity.oada-dev.com",
-  authorization_endpoint: "https://identity.oada-dev.com/auth",
-  token_endpoint: "https://identity.oada-dev.com/token",
-  userinfo_endpoint: "https://identity.oada-dev.com/userinfo",
-  jwks_uri: "https://identity.oada-dev.com/certs",
-  response_types_supported: [
+  "issuer": "https://identity.oada-dev.com",
+  "authorization_endpoint": "https://identity.oada-dev.com/auth",
+  "token_endpoint": "https://identity.oada-dev.com/token",
+  "userinfo_endpoint": "https://identity.oada-dev.com/userinfo",
+  "jwks_uri": "https://identity.oada-dev.com/certs",
+  "response_types_supported": [
     "code",
     "token",
     "id_token",
@@ -726,13 +726,13 @@ Content-Type: application/json
     "token id_token",
     "code token id_token"
   ],
-  subject_types_supported: [
+  "subject_types_supported": [
     "public"
   ],
-  id_token_alg_values_supported: [
+  "id_token_alg_values_supported": [
     "RS256"
   ],
-  token_endpoint_auth_methods_supported: [
+  "token_endpoint_auth_methods_supported": [
     "client_secret_post"
   ]
 }
