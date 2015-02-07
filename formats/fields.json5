@@ -57,13 +57,14 @@
             // The "Ault" grower has these things inside of it.  In the case of grower-farm-field, this will be a list
             // of links to each farm.  No need to expand the links in-place because you can get the details of each farm-field
             // tree from the other items under resources.
-            "kjdf20-Smith": { // This is a farm
-              "_id": "kjdf20-Smith" // Available under this key in this "resources" grouping: i.e. resources["kjdf20-Smith"] gets you the farm.
+            "list": {
+              "kjdf20-Smith": { // This is a farm
+                "_id": "kjdf20-Smith" // Available under this key in this "resources" grouping: i.e. resources["kjdf20-Smith"] gets you the farm.
+              },
+              "9fj32-Denver250": {
+                "_id": "9fj32-Denver250" // This is a farm
+              },
             },
-            "9fj32-Denver250": {
-              "_id": "9fj32-Denver250" // This is a farm
-            },
-    
           },
         },
       }, // end of the group named "Growers"
