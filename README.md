@@ -5,9 +5,9 @@ Documentation will be built over time as the project progresses.  We're in the
 early stages now, so please help build out some documentation, or check back
 soon for changes.
 
-| Contributing | Functional Spec | Rest API Spec |
-|--------------|-----------------|---------------|
-|  [Developer Guidelines](contributing/Developer-Guidelines.md) | [Functional Spec](functional-specs/README.md) | [Rest API Spec](rest-specs/README.md) |
+| Contributing | Functional Spec | Rest API Spec | Demonstrations |
+|--------------|-----------------|---------------|----------------|
+|  [Developer Guidelines](contributing/Developer-Guidelines.md) | [Functional Spec](functional-specs/README.md) | [Rest API Spec](rest-specs/README.md) |  [Demonstrations](demo-specs/README.md) |
 | | [Overview Slides][slides] | &nbsp; |
 
 ## Questions
