@@ -47,7 +47,7 @@ Content-Type: application/json
 {
   "authorization_endpoint": "https://provider.oada-dev.com/auth",
   "token_endpoint": "https://provider.oada-dev.com/token",
-  "oada_base_uri": "https://provider.oada-dev.com"
+  "oada_base_uri": "https://provider.oada-dev.com",
   "client_secret_alg_supported": [
     "RS256"
   ]
