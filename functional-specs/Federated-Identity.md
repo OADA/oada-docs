@@ -84,8 +84,8 @@ API.
 application etc.
 * Identity Provider
   * An OADA entity that can verify an end-user’s identity. This is typically an
-entity with which an end user has an account. In SAML, the term is still
-Identity Provider (IdP). In OpenID Connect, the term is OpenID Provider (OP)
+entity with which an end user has an account. In OpenID Connect, this is the
+OpenID Provider (OP)
 * Client
   * Generic term for software acting as a service provider, device, or an
 application.
@@ -188,20 +188,12 @@ token to access Frank’s data.
 
 This section provides a brief description of the key concepts and the
 components defined in the standard, as they relate to OADA federated identity.
-OADA Identity Providers support federated identity using:
-
-  * Open ID Connect (ODIC) [[1][oidc]]. OpenID Connect 1.0 is a simple identity
-layer on top of the OAuth 2.0 protocol. It allows Clients to verify the
-identity of the End-User based on the authentication performed by an
-Authorization Server, as well as to obtain basic profile information about the
-End-User in an interoperable and REST-like manner.
-  * *{Support Planned}* Security Access Markup Language (SAML) V2.0
-[[2][saml]]. SAML 2.0 is a version of the SAML standard for exchanging
-authentication and authorization data between security domains. SAML 2.0 is an
-XML-based protocol that uses security tokens containing assertions to pass
-information about a principal (usually an end user) between a SAML authority,
-that is, an identity provider, and a SAML consumer, that is, a service
-provider.
+OADA Identity Providers support federated identity using Open ID Connect 
+(ODIC) [[1][oidc]]. OpenID Connect 1.0 is a simple identity layer on top of 
+the OAuth 2.0 protocol. It allows Clients to verify the identity of the End-User
+based on the authentication performed by an Authorization Server, as well as to
+obtain basic profile information about the End-User in an interoperable and
+REST-like manner.
 
 The OADA ecosystem will contain multiple identity providers for the community
 to rely on. Those providers that are OADA-Federated-Identity-Compliant and
@@ -229,12 +221,7 @@ policies, to grant John Doe access to various resources.
 
 ## Federated Identity Workflow
 
-OADA Federated Identity can be implemented either using:
-  a. Security Assertion Markup Language (SAML)
-  b. Open ID Connect (ODIC)
-
-Although the protocol details might differ (XML vs JSON), conceptual workflow
-between these two implementations is identical.
+OADA Federated Identity is implemented using Open ID Connect (ODIC).
 
 1. An end user (via an application / browser, henceforth called user agent)
 takes some action which prompts the need for an identity verification and/or
@@ -258,10 +245,10 @@ agcloud.com).
 
 ![OADA Federated Identity](oada_federated_identity.jpg "OADA Federated Identity")
 
-| OADA Entity | SAML Entity | ODIC Entity |
-| ----------- | ----------- | ----------- |
-| OADA Service Provider | Service Provider, SAML Relying Party, SAML Requester | Relying Party |
-| OADA Identity Provider | Identity Provider, SAML Asserting Party, SAML Responder | OpenID Provider |
+| OADA Entity | ODIC Entity |
+| ----------- | ----------- |
+| OADA Service Provider | Relying Party |
+| OADA Identity Provider | OpenID Provider |
 
 ## Establishing and Managing Federated Identities
 
@@ -306,14 +293,12 @@ information should be encrypted?
 may not be adequate to ensure a secure system. How does the service provider
 trust what is being asserted to it? In addition, what prevents a
 “man-in-the-middle” attack that might grab assertions to be illicitly
-“replayed” at a later date?  SAML and OIDC defines a number of security
-mechanisms to detect and protect against such attacks. SAML and OIDC recommends
+“replayed” at a later date?  OIDC defines a number of security
+mechanisms to detect and protect against such attacks. OIDC recommends
 HTTP over SSL 3.0 or TLS 1.0 to assure message integrity and confidentiality.
 
 # References
 
 1. [OpenID Connect (OIDC)][oidc]
-2. [Security Access Markup Language (SAML)][saml]
-
+ 
 [oidc]: http://openid.net/connect/
-[saml]: http://en.wikipedia.org/wiki/SAML_2.0
