@@ -83,8 +83,8 @@ API.
   * An OADA compliant application like a prescription map generator, agronomy
 application etc.
 * Identity Provider
-  * An OADA entity that can verify an end-user’s identity. This is typically an 
-entity with which an end user has an account. In OpenID Connect, this is the 
+  * An OADA entity that can verify an end-user’s identity. This is typically an
+entity with which an end user has an account. In OpenID Connect, this is the
 OpenID Provider (OP)
 * Client
   * Generic term for software acting as a service provider, device, or an
