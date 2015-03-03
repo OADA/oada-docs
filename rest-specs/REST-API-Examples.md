@@ -264,39 +264,39 @@ Etag: "9083423jkadfu9382x"
       "....": "...."
   }],
   "_meta": {
-    "_id": "ixm24ws",
+    "_id": "ixm24ws/_meta",
     "etag": "alsjfadksja9388x7d",
     "changeId": 1,
     "mimeType": "application/vnd.oada.yield+json",
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
-      "_id": "kdufe3f"
+      "_id": "ixm24ws/_meta/createdBy"
     },
     "modified": "1985-04-12T23:20:50.52Z",
     "modifiedBy": {
-      "_id": "kdufe3f"
+      "_id": "ixm24ws/_meta/modifiedBy"
     },
     "meta": {
-      "_id": "ixm24ws/meta",
+      "_id": "ixm24ws/_meta/meta",
       "name": "Frank's Yield"
     },
     "formats": {
-      "_id": "ixm24ws/formats"
+      "_id": "ixm24ws/_meta/formats"
     },
     "parents": {
-      "_id": "ixm24ws/parents"
+      "_id": "ixm24ws/_meta/parents"
     },
     "children": {
-      "_id": "ixm24ws/children"
+      "_id": "ixm24ws/_meta/children"
     },
     "derivatives": {
-      "_id": "ixm24ws/derivatives"
+      "_id": "ixm24ws/_meta/derivatives"
     },
     "permissions": {
-      "_id": "ixm24ws/permissions"
+      "_id": "ixm24ws/_meta/permissions"
     },
     "derivatives": {
-      "_id": "ixm24ws/derivatives"
+      "_id": "ixm24ws/_meta/derivatives"
     }
   }
 }
@@ -364,39 +364,39 @@ Content-Type: application/vnd.oada.metadata+json
 
 {
   "_meta": {
-    "_id": "Kcdi32S",
+    "_id": "Kcdi32S/_meta",
     "etag": "JzlCjsjaljcaw8723x",
     "changeId": 1,
     "mimeType": "application/shape",
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
-      "_id": "kdufe3f"
+      "_id": "Kcdi32S/_meta/createdBy"
     },
     "modified": "1985-04-12T23:20:50.52Z",
     "modifiedBy": {
-      "_id": "kdufe3f"
+      "_id": "Kcdi32S/_meta/modifiedBy"
     },
     "meta": {
-      "_id": "Kcdi32S/meta",
+      "_id": "Kcdi32S/_meta/meta",
       "name": "Frank's Yield"
     },
     "formats": {
-      "_id": "Kcdi32S/formats"
+      "_id": "Kcdi32S/_meta/formats"
     },
     "parents": {
-      "_id": "Kcdi32S/parents"
+      "_id": "Kcdi32S/_meta/parents"
     },
     "children": {
-      "_id": "Kcdi32S/children"
+      "_id": "Kcdi32S/_meta/children"
     },
     "derivatives": {
-      "_id": "Kcdi32S/derivatives"
+      "_id": "Kcdi32S/_meta/derivatives"
     },
     "permissions": {
-      "_id": "Kcdi32S/permissions"
+      "_id": "Kcdi32S/_meta/permissions"
     },
     "derivatives": {
-      "_id": "Kcdi32S/derivatives"
+      "_id": "Kcdi32S/_meta/derivatives"
     }
   }
 }
