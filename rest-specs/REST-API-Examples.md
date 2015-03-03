@@ -397,6 +397,7 @@ Content-Type: application/vnd.oada.metadata+json
     },
     "derivatives": {
       "_id": "Kcdi32S/derivatives"
+    }
   }
 }
 
