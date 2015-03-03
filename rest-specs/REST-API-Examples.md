@@ -64,7 +64,7 @@ Content-Type: application/json
 ```
 
 The second step is to start the OAuth 2.0 procedure by making an implicit flow
-request to the specified `authorization\_endpoint`. Implicit flow is used because
+request to the specified `authorization_endpoint`. Implicit flow is used because
 it makes most sense for an Android app. However, other OAuth 2.0 flows may be
 used.
 
@@ -239,7 +239,9 @@ Content-Type: application/vnd.oada.yield+json
       "....": "...."
   }],
   "_meta": {
-    "name": "Frank's Yield"
+    "meta": {
+      "name": "Frank's Yield"
+    }
   }
 }
 ```
@@ -263,9 +265,8 @@ Etag: "9083423jkadfu9382x"
   }],
   "_meta": {
     "_id": "ixm24ws",
-    "_etag": "alsjfadksja9388x7d",
+    "etag": "alsjfadksja9388x7d",
     "changeId": 1,
-    "name": "Frank's Yield",
     "mimeType": "application/vnd.oada.yield+json",
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
@@ -276,7 +277,8 @@ Etag: "9083423jkadfu9382x"
       "_id": "kdufe3f"
     },
     "meta": {
-      "_id": "ixm24ws/meta"
+      "_id": "ixm24ws/meta",
+      "name": "Frank's Yield"
     },
     "formats": {
       "_id": "ixm24ws/formats"
@@ -337,7 +339,9 @@ Content-Type: application/json
 
 {
   "_meta": {
-    "name": "Frank's Yield"
+    "meta": {
+      "name": "Frank's Yield"
+    }
   }
 }
 
@@ -361,9 +365,8 @@ Content-Type: application/vnd.oada.metadata+json
 {
   "_meta": {
     "_id": "Kcdi32S",
-    "_etag": "JzlCjsjaljcaw8723x",
+    "etag": "JzlCjsjaljcaw8723x",
     "changeId": 1,
-    "name": "Frank's Yield",
     "mimeType": "application/shape",
     "created": "1985-04-12T23:20:50.52Z",
     "createdBy": {
@@ -374,7 +377,8 @@ Content-Type: application/vnd.oada.metadata+json
       "_id": "kdufe3f"
     },
     "meta": {
-      "_id": "Kcdi32S/meta"
+      "_id": "Kcdi32S/meta",
+      "name": "Frank's Yield"
     },
     "formats": {
       "_id": "Kcdi32S/formats"
@@ -391,7 +395,7 @@ Content-Type: application/vnd.oada.metadata+json
     "permissions": {
       "_id": "Kcdi32S/permissions"
     },
-    "derivatives" {
+    "derivatives": {
       "_id": "Kcdi32S/derivatives"
   }
 }
@@ -713,7 +717,7 @@ Etag: "qewriuquicjdkcj832"
 
 {
   "_id": "fd8as8c/_meta/formats",
-  "_etag": "qewriuquicjdkcj832",
+  "etag": "qewriuquicjdkcj832",
   "transforms": {
     "application/vnd.oada.field+json": {
       "original": true,
