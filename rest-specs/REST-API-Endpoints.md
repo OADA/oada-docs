@@ -81,7 +81,7 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
   }],
   "_meta": {
     "_id": "ixm24ws/_meta",
-    "_etag": "lajscfa938f23fuj8x",
+    "etag": "lajscfa938f23fuj8x",
     "changeId": 1,
     "name": "Frank's Yield",
     "mimeType": "application/vnd.oada.yield+json",
