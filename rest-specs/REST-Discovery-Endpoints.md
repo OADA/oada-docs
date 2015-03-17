@@ -33,7 +33,7 @@ sub-domain as along the well-known documents are correctly configured.
 
 ## `/.well-known/oada-configuration`
 
-Used to discovery any OADA API global details, such as the OADA API base URI,
+Used to discover any OADA API global details, such as the OADA API base URI,
 authorization and token endpoints to gain an OADA token, and if and where the
 provider hosts OADA client discovery.
 
@@ -55,7 +55,7 @@ Content-Type: application/json
 ```
 ## `/.well-known/oada-client-discovery`
 
-Used to discovery the client discovery endpoint within a client discovery
+Used to discover the client discovery endpoint within a client discovery
 provider's domain. It is used by providers when trying to lookup a client
 registration.
 
