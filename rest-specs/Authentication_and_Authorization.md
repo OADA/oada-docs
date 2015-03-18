@@ -5,7 +5,7 @@
 - [Distributed Federation Extensions](#distributed-federation-extensions)
     - [Well-Known Documents](#well-known-documents)
       - [`/.well-known/oada-configuration`](#well-knownoada-configuration)
-      - [`/.well-known/oada-client-discovery`](#well-knownoada-client-discovery)
+      - [`/.well-known/openid-configuration`](#well-knownopenid-configuration)
     - [Client Discovery](#client-discovery)
     - [Client Secret](#client-secret)
       - [Requirements on the JWT](#requirements-on-the-jwt)
@@ -64,26 +64,21 @@ discover each other. Below is a short description of those features.
 
 #### `/.well-known/oada-configuration`
 
-`/.well-known/oada-configuration` is an HTTP resource in which clients use to
-automatically discover the necessary endpoints of a new OADA provider. This
-resource's path **must** be directly appended the provider's domain and
-therefore the only burden on the joint user is to know the base domain. For
-example, a user should only have to enter `agcloud.com` as their provider rather
-then the various endpoints, such as: `agcloud.com/oada/oauth2/auth`,
-`agcloud.com/oada/oauth2/token`, etc.
+The `oada-configuration` well-known document is utilized in authorization
+requests. It describes the location and supported features of the associated
+OADA API.
 
-More details can be found in the [/.well-known endpoint
-documentation][well-known-endpoint-docs].
+More details can be found in the [/.well-known/oada-configuration endpoint
+documentation][well-known-oada-configuration-docs]
 
-#### `/.well-known/oada-client-discovery`
+#### `/.well-known/openid-configuration`
 
-`/.well-known/oada-client-discovery` is an HTTP resource in which providers use
-to automatically discover the client discovery endpoint with the client's client
-discovery provider domain.This resource's path **must** be directly appended the
-client discovery provider's domain.
+The `openid-configuration` well-known document is utilized in authentication
+requests. It describes the location and supported features of an OpenID Connect
+server. 
 
-More details can be found in the [/.well-known endpoint
-documentation][well-known-endpoint-docs].
+More details can be found in the [/.well-known/openid-configuration endpoint
+documentation][well-known-openid-configuration-docs].
 
 ### Client Discovery
 
@@ -957,10 +952,10 @@ indicate that client's agreement to the license(s) can not be trusted.*
 [discovering-a-client]: #discovering-a-client-from-a-clientid
 [oauth2-rfc6749]: https://tools.ietf.org/rfc/rfc6749.txt
 [openid-connect]: http://openid.net/specs/openid-connect-core-1_0.html
-[well-known-endpoint-docs]:  https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#well-knownoada-configuration
+[well-known-oada-configuration-docs]:  https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#well-knownoada-configuration
+[well-known-openid-configuration-docs]:  https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#well-knownopenid-configuration
 [client-discovery-endpoint-docs]:  https://github.com/OADA/oada-docs/blob/master/rest-specs/REST-Discovery-Endpoints.md#clientdiscovery
 [jwt]: https://tools.ietf.org/id/draft-ietf-oauth-json-web-token.txt
 [jws]: https://tools.ietf.org/id/draft-ietf-jose-json-web-signature.txt
 [jwa]: https://tools.ietf.org/id/draft-ietf-jose-json-web-algorithms.txt
 [jwk]: https://tools.ietf.org/id/draft-ietf-jose-json-web-key.txt
-[scopes]: https://github.com/OADA/oada-docs/blob/master/rest-specs/Standard-Scopes.md
