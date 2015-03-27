@@ -2,12 +2,6 @@
 
 ## Current - v0.3
 
-The current API spec is written in RAML and is hosted in
-[oada-api-spec](http://github.com/OADA/oada-api-spec).
-
-An easier to read HTML version is hosted at
-[http://oada.github.io/docs/v0_3.html](http://oada.github.io/docs/v0_3.html)
-
 # OADA API
 
 ## Base Endpoints
