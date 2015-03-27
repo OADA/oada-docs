@@ -2,12 +2,9 @@
 
 ## Current - v0.3
 
-* The current API spec lives here:
-  [http://github.com/OADA/oada-api-spec](http://github.com/OADA/oada-api-spec).
-* An easier to read HTML visualization of the spec lives here:
-  [http://oada.github.io/docs/v0_3.html](http://oada.github.io/docs/v0_3.html)
+# OADA API
 
-# OADA API Endpoints
+## Base Endpoints
 
 * [/resources](REST-API-Endpoints.md#resources)
 * [/bookmarks](REST-API-Endpoints.md#bookmarks)
@@ -15,12 +12,27 @@
 * [/groups](REST-API-Endpoints.md#groups)
 * [/authorizations](REST-API-Endpoints.md#authorizations)
 
-# OADA Discovery Endpoints
+## Discovery Endpoints
 
-* [/.well-known](REST-Discovery-Endpoints.md#well-known)
-* [/clientDiscovery](REST-Discovery-Endpoints.md#clientdiscovery)
+* [/.well-known/oada-configuration](REST-Discovery-Endpoints.md#well-knownoada-configuration)
+* [/.well-known/openid-configuration](REST-Discovery-Endpoints.md#well-knownopenid-configuration)
 
-# Authorization and Authentication
+# Supported HTTP
+
+* [HTTP Headers](HTTP-Headers-for-REST-API.md)
+* [HTTP Response Codes](HTTP-Status-Codes-for-REST-API.md)
+
+# Standard Terms and Formats
+
+* [Error Response](Standard-Error.md)
+* [OAuth 2.0 Scopes](Standard-Scopes.md)
+* [Bookmarks](Standard-Bookmarks.md)
+* [Media Types](Standard-Media-Types.md)
+* [Resource Formats](Standard-Resource-Formats.md)
+
+# Documentation
+
+## Authorization and Authentication
 
 * [Authentication and
   Authorization](Authentication_and_Authorization.md#authentication-and-authorization)
@@ -28,7 +40,7 @@
   Extensions](Authentication_and_Authorization.md#distributed-federation-extensions)
 * [Examples](Authentication_and_Authorization.md#examples)
 
-# API Examples
+## Example API Use Cases
 
 * [Federated Login](REST-API-Examples.md#federated-login)
 * [JSON Resource Upload](REST-API-Examples.md#json-resource-upload)
@@ -42,19 +54,3 @@
 * [View Changes for a Resource and Its Children](REST-API-Examples.md#view-changes-for-a-resource-and-its-children)
 * [Copy Resource](REST-API-Examples.md#copy-resource)
 * [Make Existing Resource a Derivative of Another](REST-API-Examples.md#make-existing-resource-a-derivative-of-another)
-
-# Supported HTTP
-
-* [HTTP Headers](HTTP-Headers-for-REST-API.md)
-* [HTTP Response Codes](HTTP-Status-Codes-for-REST-API.md)
-
-# Errors
-
-* [Standard Error Response](Standard-Error.md)
-
-# Standard Names
-
-* [OAuth 2.0 Scopes](Standard-Scopes.md)
-* [Bookmarks](Standard-Bookmarks.md)
-* [Media Types](Standard-Media-Types.md)
-* [Resource Formats](Standard-Resource-Formats.md)
