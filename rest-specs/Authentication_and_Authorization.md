@@ -212,6 +212,7 @@ aforementioned specification):
   `token_endpoint_auth_signing_alg_values_supported` key of the provider's
   `oada-configuration`. RSA 256 (RS256 in [JSON Web Algorithms][jwa] speak) is
   required to be supported by all clients and providers.
+- The `iss` claim MUST be set to the client's OAuth 2.0 clientId.
 - The JWT body must include the `jti` key and MUST be equal to the access code
   from the OAuth 2.0 code flow. The secret should be considered invalid if
   either the `jti` key is missing or is not equal to that sessions access code.
@@ -247,7 +248,8 @@ Where
   "jti": "Pi2dY-FBxZqLx81lTbDM4WGlI",
   "iat": 1418421102,
   "aud": "https://provider.example.org/token",
-  "iss": "3klaxu838akahf38acucaix73"
+  "iss": "3klaxu838akahf38acucaix73",
+  "sub": "3klaxu838akahf38acucaix73",
 }
 ```
 
