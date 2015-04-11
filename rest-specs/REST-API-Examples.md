@@ -1,5 +1,8 @@
 # OADA REST API Examples
 
+Note: this document needs to be updated for dynamic client registration
+and the new format changes for v0.4.
+
 ## Characters
 To better convey what each example is accomplishing we describe them with
 several fictitious characters. You have probably seen them scattered throughout
@@ -238,11 +241,7 @@ Content-Type: application/vnd.oada.yield+json
   "features": [{
       "....": "...."
   }],
-  "_meta": {
-    "meta": {
-      "name": "Frank's Yield"
-    }
-  }
+  "name": "Frank's Yield"
 }
 ```
 

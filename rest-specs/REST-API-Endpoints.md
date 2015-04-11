@@ -47,13 +47,16 @@ called `_meta`. `_meta` lives at the root of a resource, that is at
 resource's data document.
 
 The following endpoints, JSON sub-documents, reside under `_meta`:
-- `/meta`
-- `/formats`
-- `/parents`
-- `/children`
-- `/permissions`
-- `/syncs`
-- `/derivatives`
+- `/_formats`
+- `/_parents`
+- `/_children`
+- `/_permissions`
+- `/_syncs`
+- `/_derivatives`
+
+Note that any other custom endpoints can be added under _meta for any given 
+document, however they must not conflict with the standard keys defined here.
+For future-proof protection, avoid using keys that begin with "_".
 
 ### Example `/resource/{resourceId}` document
 
@@ -66,10 +69,13 @@ metadata document is returned all together as one JSON ouptut.
 ```http
 GET /resource/ixm24ws?view=%7B%22_meta%22%3A%20true%7D HTTP/1.1
 Host: agcloud.com
-Content-Type: application/json
+Content-Type: application/vnd.dummy.yield.format+json
 Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
+  "_id": "ixm24ws",
+  "_rev": "1-dkjf02jkd",
+  "name": "Frank's Yield",
   "totalYield": {
     "value": 5.6,
     "unit": "bushel"
@@ -80,47 +86,21 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
     "....": "...."
   }],
   "_meta": {
-    "_id": "ixm24ws/_meta",
-    "etag": "lajscfa938f23fuj8x",
-    "changeId": 1,
-    "name": "Frank's Yield",
-    "mimeType": "application/vnd.oada.yield+json",
-    "created": "1985-04-12T23:20:50.52Z",
-    "createdBy": {
-      "_id": "kdufe3f",
-      "account": "frank@agidentity.com",
-      "name": "Frank Fellow",
-      "picture": {
-     	 "href": "http://www.gravatar.com/avatar/c7e1ee573f"
+    "_mediaType": "application/vnd.dummy.yield.format+json",
+    "_stats": {
+      // Note: this endpoint is not considered stable and may change
+      "created": "1985-04-12T23:20:50.52Z",
+      "createdBy": { "_id": "kdufe3f", "_rev": "5-jkdjfo2" },
+      "modified": "1985-04-12T23:20:50.52Z",
+      "modifiedBy": { "_id": "kdufe3f", "_rev": "2-kdjf02d" },
+    },
+    "_formats": {
+      // Note: this endpoint is not considered stable and may change
+      "original":  {
+        "name": "application/vnd.dummy.yield.format+json",
+        "src": { "_href": "https://github.com/oada/oada-docs/formats" },
       },
-      "email": "frank@agcloud.com"
-    },
-    "modified": "1985-04-12T23:20:50.52Z",
-    "modifiedBy": {
-      "_id": "kdufe3f",
-      "account": "frank@agidentity.com",
-      "name": "Frank Fellow",
-      "picture": {
-     	 "href": "http://www.gravatar.com/avatar/c7e1ee573f"
-      },
- 	  "email": "frank@agcloud.com"
-    },
-    "meta": {
-      "_id": "/resources/ixm24ws/_meta/meta",
-   	  "totalYield": {
-   	    "value": 5.6,
-   	    "unit": "bushel"
-      }
-    },
-    "formats": {
-      "_id": "ixm24ws/_meta/formats",
       "transforms": {
-        "application/vnd.oada.yield+json": {
-          "original": true,
-          "lossy": false,
-          "name": "OADA GeoJSON Yield Open Format",
-          "openFormat": true
-        },
         "application/json": {
           "lossy": false,
           "name": "JavaScript Object Notation",
@@ -138,44 +118,25 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
         }
       }
     },
-    "parents": {
-      "_id": "ixm24ws/_meta/parents",
-      "items": [{
-        "_id": "me30fzp"
-      },
-      {
-        "_id": "me30fzp"
-      }]
+    "_parents": {
+      // Note: this endpoint is not considered stable and may change
+      "me30fzp": { "_id": "me30fzp", _rev: "1-kdf20d" },
+      "1jfk322": { "_id": "me30fzp", _rev: "3-02kflw" }
     },
-    "children": {
-      "_id": "ixm24ws/_meta/children",
-      "items": [{
-        "_id": "kl3j93s"
-      },
-      {
-        "_id": "op302xa"
-      }]
+    "_children": {
+      // Note: this endpoint is not considered stable and may change
+      "kl3j93s": { "_id": "kl3j93s", _rev: "6-kdkjdf" },
+      "op302xa": { "_id": "op302xa", _rev: "2-kjdf02" }
     },
-    "permissions": {
-      "_id": "ixm24ws/_meta/permissions",
-      "items": [{
-        "_id": "ixm24ws/_meta/permissions/kdufe3f",
-        "user": {
-          "_id": "kdufe3f",
-          "account": "frank@agidentity.com",
-          "name": "Frank Fellow",
-          "picture": {
-       	    "href": "http://www.gravatar.com/avatar/c7e1ee573f"
-          },
-          "email": "frank@agcloud.com"
-        },
-        "type": "user",
-        "level": "owner"
-      }]
+    "_permissions": {
+      // Note: this endpoint is not considered stable and may change
+      "user": { "_id": "kdufe3f", _rev: "4-jkdf02f" },
+      "type": "user",
+      "level": "owner"
     },
-    "syncs": {
-      "_id": "ixm24ws/_meta/syncs",
-      "items": [{
+    "_syncs": {
+      // Note: this endpoint is not considered stable and may change
+      "kdj02f": { 
         "type": "poll",
         "url": "https://api.agcloud.com/resources/jdkx82d",
         "headers": {
@@ -187,26 +148,20 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
           "_id": "8ackam3"
         }
       },
-      {
+      "02djlkf": {
         "type": "push",
         "url": "https://api.agcloud.com/resources/jdkx82d",
         "headers": {
           "X-Custom": "Custom Value"
         },
         "events": ["change"],
-        "authorization": {
-          "_id": "8ackam3"
-        }
-      }]
+        "authorization": { "_id": "8ackam3", _rev: "5-kjdf02" }
+      }
     },
-    "derivatives": {
-      "_id": "ixm24ws/_meta/derivatives",
-      "items": [{
-        "_id": "kl3j93s"
-      },
-      {
-        "_id": "op302xa"
-      }]
+    "_derivatives": {
+      // Note: this endpoint is not considered stable and may change
+      "kl3j93s": { "_id": "kl3j93s", "_rev": "3-kjdf02jkd" },
+      "op302xa": { "_id": "op302xa", "_rev": "4-290fjikdf" }
     }
   }
 }
@@ -225,9 +180,9 @@ clouds, applications, and devices, OADA will define a standard set of standard
 bookmark keys. For example,
 
 - /bookmarks/fields
-- /bookmarks/seeds
-- /bookmarks/prescriptions/planting
-- /bookmakrs/prescriptions/fertilizing
+- /bookmarks/planting/as-applied
+- /bookmarks/planting/prescriptions
+- /bookmarks/harvest/as-harvested
 - etc.
 
 ### Example `/bookmarks` document
@@ -240,17 +195,17 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
   "fields": {
-    "_id": "XcHd76xz"
+    "_id": "XcHd76xz", "_rev": "2-kjdofd"
   },
   "seeds": {
-    "_id": "Mf98adfs"
+    "_id": "Mf98adfs", "_rev": "2-kjdofd"
   },
   "prescriptions": {
     "planting": {
-      "_id": "ETYGcaf4"
+      "_id": "ETYGcaf4", "_rev": "2-kjdofd"
     },
     "fertilizing": {
-      "_id": "jaefy7Sx"
+      "_id": "jaefy7Sx", "_rev": "2-kjdofd"
     }
   }
 }
@@ -296,6 +251,8 @@ Content-Type: application/json
 Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
+  "_id": "kdufe3f",
+  "_rev": "2-kdjf02",
   "account": "frank@agidentity.com",
   "name": "Frank Fellow",
   "picture": {
@@ -303,10 +260,10 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
   },
   "email": "frank@agcloud.com",
   "rootResource": {
-    "_id": "jx9j3x8"
+    "_id": "jx9j3x8", "_rev": "2-kdjf2d"
   },
   "currentUser": {
-    "_id": "kdufe3f"
+    "_id": "kdufe3f", "_rev": "2-kdjf2d"
   }
 }
 ```
@@ -330,12 +287,14 @@ Content-Type: application/json
 Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
+  "_id": "jf72jsd",
+  "_rev": "3-dkjfowwf",
   "name": "Employees",
   "members": [{
-    "_id": "kdufe3f"
+    "_id": "kdufe3f", "_rev": "3-kdjf02fdd",
   },
   {
-    "_id": "3jkxi82"
+    "_id": "3jkxi82", "_rev": "3-kdjf02fdd",
   }]
 }
 ```
@@ -356,8 +315,10 @@ Content-Type: application/json
 Authorization: Bearer ajCX83jfax.arfvFA323df
 
 {
+  "_id": "jf72jsd",
+  "_rev": "4-jkf2olkdf",
   "user": {
-    "_id": "fjf23cd"
+    "_id": "fjf23cd", "_rev": "8-kjdf02j"
   },
   "scope": "resources groups",
   "created": "1985-04-12T23:20:50.52Z",
