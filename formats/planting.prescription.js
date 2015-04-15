@@ -43,13 +43,13 @@
   // it is enough to check for the existence of the "oada.types.planting.prescriptions.population" key
   // to know if it adheres to that standard: i.e.:
   // var is_population_map = (typeof types["oada.types.planting.prescriptions.population"] !== 'undefined');
-  types: {
-    "oada.types.planting.prescriptions.population": { // This prescription map contains planting populations
-      definition: "https://github.com/OADA/....."  // the URL of where this "type" is defined.
+  namespace: {
+    "oada.types.planting.prescriptions": { // This prescription map contains planting populations
+      src: "https://github.com/oada/oada-docs/blob/master/formats/planting.prescription.js", // the URL of where this "type" is defined.
       // any specific parameter to a standard can go here as well.  For the case of planting,
-      // a crop tag might be useful:
-      crop: { _id: "02kdlfj9" }, // link to a "crop" resource on this user's OADA cloud,
-                                 // or could also be a "crop" object in-place
+      population: {
+        units: "ksds/ac"
+      }
     },
   },
 
@@ -59,31 +59,29 @@
   // which applies to that particular polygon.  If the zone indexed by "abc123" 
   // has population 34,000, and 3 polygons in the GeoJSON have properties of "zone"
   // equal to "abc123", then those polygons should be planted at 34,000 seeds/acre.
+  //
+  // It is important to note that a "zone" may be comprised of many geojson polygons/features
+  // given below.
   zones: {
-    "jdkfji2": {
+    // This is a special, reserved key for the prescriptions object.  It is optional,
+    // and it gives the zone configuration to use when the planter is outside the
+    // any of the polygons given in the geojson below.  i.e. it is the "default" rates.
+    "default": {
       // Everything inside this object is defined by the standards listed in the "types" field 
       // for this resource.
-      population: {
-        value: 32.0,
-        units: "ksds/ac"  // the valid units are defined in the standard
-      },
-      /*******************************************************
-      // Other possible examples for future consideration:
-      nitrogen: {
-        value: 195,
-        units: "units/ac"
-      },
-      variety: {
-        value: { _id: "jdf0j2ikd" }, // Link to a variety resource on this OADA cloud
-      },
-      ********************************************************/
+      population: { value: 32.0 }, // units defined in namespace above
+      crop: { name: "CORN" }       // valid list linked to by namespace document
+      // other options may be variety, product, nitrogen, etc.
+    },
+    "jdkfji2": {
+      population: { value: 32.0 },
+      crop: { name: "CORN" }, // The valid list of crops would be linked to from
+                              // the standard format's namespace document
     },
     "8f2jjokd": { 
-      population: {
-        value: 34.0,
-        units: "ksds/ac"
-      }
-    } 
+      population: { value: 34.0, },
+      crop: { name: "CORN" }
+    },
   },
 
   // The prescription map itself is a GeoJSON FeatureCollection, as specified in 
@@ -98,7 +96,7 @@
   // In general, anything that "changes" in the map (i.e. a product type, variety, rate, etc.) should
   // go inside the properties below.  Anything that is constant throughout the entire map (i.e.
   // like "crop" above), shoud be listed as a parameter on the standard doc type that it goes with.
-  prescription: {
+  geojson: {
     type: "FeatureCollection",
     features: [
       {

@@ -1,4 +1,7 @@
 {
+  _id: "klsdjf02",
+  _rev: "39-dklsfjwef",
+
   // The inclusion of _meta._mediaType is not part of the format, it
   // is simply informational for people browsing the format.
   _meta: { _mediaType: "application/vnd.oada.planting.as-applied.timeseries.1" },

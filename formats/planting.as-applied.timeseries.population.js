@@ -31,7 +31,9 @@
         }
       },
       data: [
-        { t: 129039812 }, // These will always be unix timstamps
+        { t: 129039812.457, population: [32.987, 32.523, 53.342... ] }, // These will always be unix timstamps
+        { t: 129039812.457, population: [32.987, 32.523, 53.342... ] }, // These will always be unix timstamps
+        { t: 129039812.457, population: [32.987, 32.523, 53.342... ] }, // These will always be unix timstamps
         {},
       ],
 
