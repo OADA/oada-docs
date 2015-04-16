@@ -33,8 +33,12 @@
     },
   },
 
-  // The "types" key specifies what "type" of document this is.  In this example case, the
-  // document adheres to the "oada.types.planting.prescriptions.population" standard.
+  // The value at the "name" key is what should be shown to a user when referring to this
+  // particular prescription.  It can be any valid string.
+  name: "Smith30 Prescription #2",
+
+  // The "namespace" key specifies what "type" of document this is.  In this example case, the
+  // document adheres to the "oada.types.planting.prescriptions" standard.
   // This sets the particular schema for this prescription file, in particular it defines what sort of 
   // properties to expect under the "zones" key (seeds, fertilizer, etc.).  This is an array in order to
   // support having a single prescription map that contains multiple types of information:
@@ -45,7 +49,7 @@
   // var is_population_map = (typeof types["oada.types.planting.prescriptions.population"] !== 'undefined');
   namespace: {
     "oada.types.planting.prescriptions": { // This prescription map contains planting populations
-      src: "https://github.com/oada/oada-docs/blob/master/formats/planting.prescription.js", // the URL of where this "type" is defined.
+      src: "https://github.com/oada/oada-docs/blob/master/formats/planting.prescription.js", // the URL of where this "namespace" is defined.
       // any specific parameter to a standard can go here as well.  For the case of planting,
       population: {
         units: "ksds/ac"
