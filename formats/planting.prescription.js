@@ -8,6 +8,10 @@
   // They will be filled in as status reports by the OEM cloud as various functions
   // are completed on the prescription like field reconciliation and transfer to machines.
   _meta: {
+    // _meta is a special document whose id's reside at /meta
+    _metaid: "kdf2j0dfdfww",
+    _rev: "2-dklfj2oi"
+
     // A 3rd party can monitor this key to see which fields a prescription is assigned to.
     // They will put up the prescription, and a field reconciler will look at the geospatial
     // content of the prescription, intersect it with known field boundaries, and fill
@@ -23,12 +27,12 @@
     // have a token approved with read:oada.machines scope.
     transfer_status: { 
       "jfj0234u": { 
-        machine: { _id: "jfj0234u" }, // link to a machine resource
-        status: "ON MACHINE"  // prescription is physically present on this machine
+        machine: { _id: "jfj0234u", _rev: "3-kldfjo2ijwe" }, // link to a machine resource
+        status: "COMPLETE"  // prescription is physically present on this machine
       },
       "0f22f239": { 
-        machine: { _id: "48jf49j0" }, // link to a machine resource
-        status: "TRANSFER PENDING" // prescription is marked for transfer to this machine
+        machine: { _id: "48jf49j0", _rev: "6-df92fu02j" }, // link to a machine resource
+        status: "PENDING" // prescription is marked for transfer to this machine
       },
     },
   },
@@ -48,7 +52,7 @@
   // to know if it adheres to that standard: i.e.:
   // var is_population_map = (typeof types["oada.types.planting.prescriptions.population"] !== 'undefined');
   namespace: {
-    "oada.types.planting.prescriptions": { // This prescription map contains planting populations
+    "oada.planting.prescriptions": { // This prescription map contains planting populations
       src: "https://github.com/oada/oada-docs/blob/master/formats/planting.prescription.js", // the URL of where this "namespace" is defined.
       // any specific parameter to a standard can go here as well.  For the case of planting,
       population: {
@@ -127,5 +131,5 @@
         },
       }
     ] // end of "features" key
-  } // end of "prescription" key
-}
+  } // end of "geojson" key
+}.
