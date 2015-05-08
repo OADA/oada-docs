@@ -52,7 +52,7 @@
   // to know if it adheres to that standard: i.e.:
   // var is_population_map = (typeof types["oada.types.planting.prescriptions.population"] !== 'undefined');
   namespace: {
-    "oada.planting.prescriptions": { // This prescription map contains planting populations
+    "oada.planting.prescription": { // This prescription map contains planting populations
       src: "https://github.com/oada/oada-docs/blob/master/formats/planting.prescription.js", // the URL of where this "namespace" is defined.
       // any specific parameter to a standard can go here as well.  For the case of planting,
       population: {
