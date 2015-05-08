@@ -188,7 +188,6 @@ The above `software_statement` example breaks down into:
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -435,7 +434,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -598,7 +596,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -833,7 +830,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -889,7 +885,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -1110,7 +1105,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
