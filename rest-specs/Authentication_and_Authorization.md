@@ -117,6 +117,10 @@ specification)
    provider list or the JWT can not be verified by the associated key then a
    warning MUST be shown indicating the client identifier cannot be fully
    verified.
+1. The `software_statement` MUST contain a `jwks` or `jwks_uri` claim that 
+   provides the public keys which the provider can use to verify the 
+   client assertion in during the code flow. If the registration only supports
+   the implicit flow this field is not required.
 1. [OAuth 2.0 Dynamic Client Registration Protocol][dyn-client-reg] is to be
    extended to [OpenID Connect Dynamic Client Registration
    1.0][openid-dyn-client-reg]. This effectively amounts to requiring the
