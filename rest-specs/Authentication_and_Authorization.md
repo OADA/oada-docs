@@ -117,8 +117,6 @@ specification)
    provider list or the JWT can not be verified by the associated key then a
    warning MUST be shown indicating the client identifier cannot be fully
    verified.
-1. `aud` claim MUST be the provider's token endpoint, in particular, the
-   provider MUST accept the value from the `oada-configuration` document.
 1. [OAuth 2.0 Dynamic Client Registration Protocol][dyn-client-reg] is to be
    extended to [OpenID Connect Dynamic Client Registration
    1.0][openid-dyn-client-reg]. This effectively amounts to requiring the
@@ -188,7 +186,6 @@ The above `software_statement` example breaks down into:
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -435,7 +432,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -598,7 +594,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -833,7 +828,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -889,7 +883,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
@@ -1110,7 +1103,6 @@ Content-Type: application/json
   ],
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
-  "jwks_uri": "https://example.com/jwks",
   "software_id": "djxkjau3n937xz7jakl3",
   "registration_provider": "registration.example.com"
 }
