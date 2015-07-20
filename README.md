@@ -8,7 +8,6 @@ soon for changes.
 | Contributing | Functional Spec | Rest API Spec | Demonstrations |
 |--------------|-----------------|---------------|----------------|
 |  [Developer Guidelines](contributing/Developer-Guidelines.md) | [Functional Spec](functional-specs/README.md) | [Rest API Spec](rest-specs/README.md) |  [Demonstrations](demo-specs/README.md) |
-| | [Overview Slides][slides] | &nbsp; |
 
 ## Questions
 For contributors to the OADA project, the best method for contact is the
