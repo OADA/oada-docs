@@ -12,8 +12,8 @@
 ## `/resources/{resourceId}`
 
 OADA's `/resources` are the meat and potatoes of the OADA API (in fact
-`/bookmarks`, `/meta`,  etc are just special cases of `/resources`) and as a
-result is the most complex. That said, the OADA team has tried to keep the
+`/bookmarks`, `/meta`,  etc are just special cases of `/resources`) and, as a
+result, are the most complex. That said, the OADA team has tried to keep the
 required functionally as simple as possible. The responsibilities of
 `/resources` include:
 
@@ -27,8 +27,8 @@ required functionally as simple as possible. The responsibilities of
 - Transforming and representing data in multiple formats.
 - Sharing data with other users.
 
-Many of the OADA endpoints are actually just resources with a valid resource
-ids. That is they can be directly accessed with a `/resources/{resourceId}` URI.
+Many of the OADA endpoints are actually just resources with valid resource
+ids. That is, they can be directly accessed with a `/resources/{resourceId}` URI.
 They are only given special names within the API to make it easier and allow
 automatic discovery of the available data.
 
@@ -53,7 +53,7 @@ either be accessed directly , i.e., `/resources/{resourceId}/_id`,
 
 #### `_id`
 
-All resources must be assigned an id that is unique within that cloud (referred
+All resources must be assigned an id that is unique within a specifc cloud (referred
 to as `{resourceId}`) and it must be the same id used to access the resource
 under the `/resources` endpoint.  A cloud can choose to let a user create a
 resource with an id of his or her choosing (via a PUT to
@@ -61,14 +61,14 @@ resource with an id of his or her choosing (via a PUT to
 
 #### `_rev`
 
-All resources must be assigned a revision number (`_rev`) that is used by other
-remote clouds and applications to track changes on a resources. That is, a cloud
+Each resource must be assigned a revision number (`_rev`) that is used by other
+remote clouds and applications to track changes on that resources. That is, a cloud
 or application may GET the `_rev` value on a resource, or parent resource, and
-compare to the last known value to detect changes.
+compare it to the last known value to detect changes.
 
 The format of a `_rev` is an incrementing number, a dash, and a random string,
 e.g., “34-kdfj02kjlskdf”.  Whenever `_rev` is updated, the front number must
-increment, and a new random string generated. The string may be the document's hash or just any sufficiently random string.
+increment, and a new random string must be generated. The random string may be the document's hash or just any sufficiently random string.
 
 Rules for updating `_rev`:
 
@@ -80,19 +80,19 @@ Rules for updating `_rev`:
       change in link's `_rev` represents a change the parent resource.
   1. Continue the above steps until their are no more parent changes.
 
-As one can see, links and `_rev` form a graph of resource all of which are
+As one can see, links and `_rev` form a graph of resources, all of which are
 capable of detecting changes below them. An implementation should be careful to
 avoid an infinite loop of `_rev` updating.
 
-It is also worth nothing that even though the above steps must happen in the
+It is also worth noting that even though the above steps must happen in the
 defined sequence, each "loop" can happen eventually. That is, there may be a
-delay between a resource changing the links in parent documents updating.
+delay between a resource changing and the links in parent documents updating.
 However, there may not be a delay between a resource changing and its *own*
 `_rev` updating.
 
 ### `_meta`
 
-All resource have a meta-data document that helps accomplish tasks like storing
+All resources have a meta-data document that helps accomplish tasks like storing
 user defined meta-data, resource sharing, and resource synchronization between
 clouds and applications. The definitive URI for meta documents is
 `/meta/{resourceId}`.
@@ -109,9 +109,9 @@ The following endpoints, or JSON sub-documents, reside under `_meta`:
 - `/_syncs`
 - `/_derivatives`
 
-Note that an application maybe add any custom keys to the `_meta` document,
+Note that an application may add any custom keys to the `_meta` document,
 however they must not conflict with the standard keys defined here or in the
-future. To avoid future conflicts applications should, avoid using custom keys
+future. To avoid future conflicts, applications should avoid using custom keys
 that begin with "_".
 
 ### Links and Versioned Links
@@ -121,8 +121,8 @@ You can "link" resources together within OADA using an object containing an
 
 #### Non-Versioned 
 
-A non-version link will **not** change when the resource it links to does. For
-more information on how links are updated see the below section on versioned
+A non-versioned link **will not** change when the resource it links to does. For
+more information on how links are updated, see the below section on versioned
 links and the section `_rev`.
 
 An example of a non-versioned link is:
@@ -135,7 +135,7 @@ An example of a non-versioned link is:
 }
 ```
 
-Which should be interpreted as the `some_nonversioned_link` key is actually a
+Which should be interpreted as the `some_nonversioned_link` key actually being a
 reference to resource 456. Any client that sees this in a document then knows to
 follow the link by doing a follow-up GET on `/resources/456`.
 
@@ -155,25 +155,25 @@ An example of a versioned link is:
 }
 ```
 
-Which should be interpreted as the `some_versioned_link` key is actually a
-reference to the resource 456 and that the last_known `_rev` of that resource is
+Which should be interpreted as the `some_versioned_link` key actually being a
+reference to the resource 456 with its last known `_rev` of that resource being
 "34-kjdf02jkld". A client wanting to only download the content of links when
-they change and can use the current value of `_rev` to determine if it should or
+they change can use the current value of `_rev` to determine if it should or
 should not follow the link by doing a follow-up GET request on `/resources/456`.
-Note, that the parent resource's `_rev` must also update when a link's `_rev`
+Note that the parent resource's `_rev` must also update when a link's `_rev`
 updates and so a client may monitor just the parent `_rev` value to detect
 changes to children.
 
 The `_rev` within a link is automatically set to the last known `_rev` for the
 resource given by the `_id` key regardless of the value sent by the client. It
-is expected clients will typically set `_rev` to '0-0' when creating a link,
+is expected that clients will typically set `_rev` to '0-0' when creating a link,
 however, this is not required.
 
 ***A special note on meta document links***
 
 It is possible to define links to meta documents. To distinguish between links
-to meta documents versus resources, the `_metaid` is used in place of the `_id`
-key. The `_rev` key can still be used and functions the same.
+to meta documents versus links to resources, the `_metaid` is used in place of the `_id`
+key. The `_rev` key can still be used, and functions the same.
 
 # NEED TO EDIT STILL
 
