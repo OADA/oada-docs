@@ -32,7 +32,7 @@ That is, they can be directly accessed with a `/resources/{resourceId}` URI.
 They are only given special names within the API to make it easier and allow
 automatic discovery of the available data.
 
-### Reserved Keys
+### Reserved and Required Keys
 
 All OADA resources have three reserved and required JSON keys, `_id`, `_rev`,
 and `_meta`. These keys are present even if the resource is binary, and may
@@ -93,30 +93,9 @@ However, there may not be a delay between a resource changing and its *own*
 
 ### `_meta`
 
-All resources have a meta-data document that helps accomplish tasks like storing
-user defined meta-data, resource sharing, and resource synchronization between
-clouds and applications. The definitive URI for meta documents is
-`/meta/{resourceId}`.
+A link to the resource's meta-document. See the section on `/meta` for more
+information.
 
-The following endpoints, or JSON sub-documents, reside under `_meta`:
-
-*Version: 1.0.0*
-- `/_mediaType`
-- `/_stats`
-
-*Version: 1.0.0+*
-- `/_formats`
-- `/_permissions`
-- `/_syncs`
-- `/_derivatives`
-
-Note that an application may add any custom keys to the `_meta` document,
-however they must not conflict with the standard keys defined here or in the
-future. To avoid future conflicts, applications should avoid using custom keys
-that start with an _ character.
-
-The media type stored in `_mediaType` must be the same value that is return in 
-the HTTP Content-Type header.
 
 ### Links and Versioned Links
 
@@ -308,9 +287,9 @@ sufficient information for a client to successful interpret the data.
 
 For example, the media type `application/json` tells a client that it should be
 able to parse it as valid JSON, but it does not tell it what keys to expect.
-Where, the media type `application/vnd.observant.sensor.1+json` tells the client
+Where, the media type `application/vnd.example.sensor.1+json` tells the client
 that the response is not only JSON but that it should also expect to see the
-keys defined by version 1 of the application/vnd.observant.sensor model. 
+keys defined by version 1 of the application/vnd.example.sensor model. 
 
 OADA maintains open media types for data that lack existing options.  While the
 project prefers to use existing and popular open formats, it is open to defining
@@ -368,7 +347,103 @@ The following is a example of JSON type crop resource.
 }
 ```
 
+# `/meta`
+
+## `/meta/{resourceId}`
+
+`/meta` is the base URI for all meta-data documents. Each resource has exactly
+one meta-data document and it is used to help accomplish tasks such as:
+
+  - Storing user defined meta-data
+  - Resource sharing
+  - Resource synchronization between clouds and applications
+  
+`/meta` documents share the id of the associated resource and have an
+authoritative URI of `/meta/{resourceId}`. However, the `/meta` document can
+also be accessed via the top-level `_meta` key of a resource.
+
+### Meta Documents Are Basically Resources
+
+`/meta` documents are basically resources. They behave identically with the 
+single exception that `/meta` documents do not have `/meta` documents themselves
+and therefore also do not have the requirement of a top level `_meta` key. 
+
+## Reserved and Required Keys
+
+The following endpoints, or JSON sub-documents, must be present in a `/meta`
+document.
+
+*Version: 1.0.0*
+- `/_mediaType`
+- `/_stats`
+
+*Version: 1.0.0+*
+- `/_formats`
+- `/_permissions`
+- `/_syncs`
+- `/_derivatives`
+
+Note that an application may add custom keys to a `/meta` document, however they
+must not conflict with the standard keys defined here or in the future. To avoid
+conflicts with the OADA spec, applications should avoid using custom keys that
+start with the underscore character.
+
+### `_mediaType`
+
+The media type stored in `_mediaType` must be the same value that is return in 
+the HTTP Content-Type header.
+
+### `_stats`
+
+The `_stats` is a JSON document that contains the standard "file" statistics
+from a UNIX type file system. The required keys are:
+
+#### `created`
+
+The timestamp in which the resource was created.
+
+#### `createdBy`
+
+A link the user which created the resource (*Note: User's are not currently
+defiend*)
+
+#### `modified`
+
+The timestamp in which the resource was last modified.
+
+#### `modifiedBy`
+
+A link the user which last modified the resource (*Note: User's are not
+currently defiend*)
+
+
+### Example `/meta/{resourceId}` Document
+
+The following is an example `/meta` document:
+
+```json
+{
+  "_id": "3lkxfu38c",
+  "_rev": "1-kdsjfx8e",
+  "_mediaType": "application/vnd.example.sensor.1+json",
+  "_stats": {
+    "created": "1985-04-12T23:20:50.52Z",
+    "createdBy": {
+      "_id": "kdufe3f",
+      "_rev": "5-jkdjfo2"
+    },
+    "modified": "1985-04-12T23:20:50.52Z",
+    "modifiedBy": {
+      "_id": "kdufe3f",
+      "_rev": "2-kdjf02d"
+    }
+  }
+}
+```
+
 # `/bookmarks`
+
+`/bookmarks`
 
 ## `/bookmarks/{key 1}/.../{key N}`
 `/bookmarks` provides a standard way to link to interesting resources in a way
