@@ -1,8 +1,5 @@
 # OADA REST API Examples
 
-Note: this document needs to be updated for dynamic client registration
-and the new format changes for v0.4.
-
 ## Characters
 To better convey what each example is accomplishing we describe them with
 several fictitious characters. You have probably seen them scattered throughout
@@ -16,7 +13,7 @@ OADA publications, but just in below is a quick reminder of them.
     * Has OADA compliant apps on his Android tablet.
 * **Andy**
     * Is a agronomist.
-    * Wants to access Frank's data at agcloud.com.
+    * Wants to access Frank's data at agcloud.com in order to advise Frank.
     * Uses a federated identity from agronomistidentity.com
 
 # Examples
@@ -304,40 +301,48 @@ fields using the fields bookmark on Frank's agcloud.com storage.
 - Frank's monitor device already has authorization and a valid token
   (SlAV32hkKG).
 
-The fields resource is located via the field bookmark.
+The fields resource is located via the `fields` bookmark.  For the sake of an 
+expressive example, we will assume that the monitor would first like to discover
+if Frank's cloud contains his field boundaries at all, and if they are in a format
+that the monitor can consume.
+
+The first step is to request /bookmarks to see if there is a fields key in it:
 
 **Request**
 ```http
-GET /bookmarks/fields HTTP/1.1
+GET /bookmarks HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
-Accept: application/json
 
 ```
 
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/vnd.oada.bookmarks.1+json
 Etag: "aodskjfoa3j9af7883"
 
 {
   "_id": "fd8as8c",
-  "_rev": "34-kjxfdu73"
+  "_rev": "34-kjxfdu73",
+  "_meta": {
+    "_metaid": "fd8as8c",
+    "_rev": "54-kdf20is",
+  },
+  "fields": { "_id": "9ekj2", "_rev": "3-kdjf02i" }
 }
 ```
 
-Now that the fields resource is known, Frank's monitor decides to consult the 
-resources `/meta` document to determine if the field is in an acceptable
-format (an HTTP HEAD would also do the trick). In this case the desired format 
-is `application/vnd.oada.fields+json`.
+Whew, there's a fields resource there.  Now let's go check it's mediaType.  
+This could be done many ways: via an HTTP HEAD request, just getting the resource
+and looking at the content-type header, or via it's _meta/_mediaType key.  For
+this example, we'll use the _meta/_mediaType method:
 
 **Request**
 ```http
 GET /resources/fd8as8c/_meta/_mediaType HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
-Accept: application/json
 ```
 
 **Response**
@@ -346,15 +351,16 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 Etag: "qewriuquicjdkcj832"
 
-"application/vnd.oada.fields+json"
+"application/vnd.oada.fields.1+json"
 ```
 
-Now that Frank's monitor is sure that it can processing the file format, it
-returns the resource.
+Hooray!  The monitor knows how to read `application/vnd.oada.fields.1+json` resources.
+So, let's go get it (note we can use the link-following properties of OADA URL's to
+request it directly from /bookmarks):
 
 **Request**
 ```http
-GET /resources/fd8as8c HTTP/1.1
+GET /bookmarks/fields HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Accept: application/vnd.oada.field+json
@@ -363,7 +369,7 @@ Accept: application/vnd.oada.field+json
 **Response**
 ```http
 HTTP/1.1 200 Ok
-Content-Type: application/vnd.oada.field+json
+Content-Type: application/vnd.oada.fields.1+json
 Etag: "qewriuquicjdkcj832"
 
 {
@@ -372,12 +378,15 @@ Etag: "qewriuquicjdkcj832"
   "_meta": {
     "_metaid": "fd8as8c",
     "_rev": "3-xkjadfjx", 
-  "type": "GeometeryCollection",
-  "...": "...",
-  "features": [{
-    "...": "..."
-  }],
-  "...": "..."
+  }
+  "list": {
+    "grower-farm-field": {
+      "name": "grower-farm-field",
+      "growers": {
+        "02kjdf": { "_id": "0kdfj2", "_rev": "4-kfhj02" }
+      },
+    }
+  }
 }
 ```
 
@@ -385,7 +394,7 @@ Etag: "qewriuquicjdkcj832"
 
 ![Resource syncing](resource_syncing.png "Resource syncing")
 
-Frank uses an OADA compliant Android app to discover his planting prescription
+Frank uses an OADA conformant Android app to discover his planting prescription
 resource via the prescription bookmark. He proceeds to edit it and sync it back
 to agcloud.com. This same prescription resource was previously discovered and
 downloaded by Frank's monitor.  However, to stay synchronized the monitor
@@ -404,10 +413,9 @@ following efficient HTTP request:
 
 **Request**
 ```http
-GET /bookmarks/planting/prescriptions/list/machine_1/_rev HTTP/1.1
+GET /bookmarks/planting/prescriptions/_rev HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
-Accept: application/vnd.oada.prescription.planting+json
 
 ```
 
@@ -422,9 +430,9 @@ Etag: "ajja97823jfaksdhfx"
 ```
 
 And because the `_rev` for the resource (`ajd92mx`) has changed, the monitor
-should make a follow up request to update the resource. *Note: The monitor can
+should make a follow up request to get the changed resource. *Note: The monitor can
 issue a GET on /resources/ajd92mx or a GET to
-/bookmarks/planting/prescriptions/list/machine_1*
+/bookmarks/planting/prescriptions*
 
 *Draft: Version 1.0.0+*
 

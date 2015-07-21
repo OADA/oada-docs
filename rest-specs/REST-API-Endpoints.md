@@ -107,8 +107,8 @@ resource with an id of his or her choosing (via a PUT to
 #### `_rev`
 
 Each resource must be assigned a revision number (`_rev`) that is used by other
-remote clouds and applications to track changes on that resources. That is, a cloud
-or application may GET the `_rev` value on a resource, or parent resource, and
+remote clouds and applications to track changes on that resources. A cloud
+or application may GET the `_rev` value on a resource and
 compare it to the last known value to detect changes.
 
 The format of a `_rev` is an incrementing number, a dash, and a random string,
@@ -119,7 +119,7 @@ the document's hash or just any sufficiently random string.
 Rules for updating `_rev`:
 
   1. The front number is incremented by one and the string updated whenever a
-  change, or set of changes, to a resource becomes available via the API.
+  change or set of changes to a resource becomes available via the API.
   1. The links in parent resources to the modified resource must be updated to
   the new `_rev` value.
 - As a result, the parent resource's `_rev` must also be updated because the
@@ -128,13 +128,13 @@ change in link's `_rev` represents a change the parent resource.
 
 As one can see, links and `_rev` form a graph of resources, all of which are
 capable of detecting changes below them. An implementation should be careful to
-avoid an infinite loop of `_rev` updating.
+avoid an infinite loop of `_rev` updating.  If a resource has a versioned
+link to itself, the _rev is not defined and may be set to `0-0`.
 
 It is also worth noting that even though the above steps must happen in the
-defined sequence, each "loop" can happen eventually. That is, there may be a
-delay between a resource changing and the links in parent documents updating.
-However, there may not be a delay between a resource changing and its *own*
-`_rev` updating.
+defined sequence, updates to `_rev` can happen eventually.  This means there may be a
+delay between a resource changing it's `_rev` changing, and similarly for 
+the links in parent documents.
 
 ### `_meta`
 
@@ -169,8 +169,8 @@ follow the link by doing a follow-up GET on `/resources/456`.
 
 #### Versioned
 
-A versioned link **will** change when the resource it links to does, and
-therefore, the linking resource also changes.
+A versioned link **will** eventually change when the resource it links to does, and
+therefore, the resource containing the link also changes.
 
 An example of a versioned link is:
 
@@ -183,19 +183,20 @@ An example of a versioned link is:
 }
 ```
 
-Which should be interpreted as the `some_versioned_link` key actually being a
-reference to the resource 456 with its last known `_rev` of that resource being
+which should be interpreted as the `some_versioned_link` key actually being a
+reference to the resource 456, and the last known `_rev` of resource 456 is  
 "34-kjdf02jkld". A client wanting to only download the content of links when
-they change can use the current value of `_rev` to determine if it should or
-should not follow the link by doing a follow-up GET request on `/resources/456`.
+they change can use the current value of `_rev` to determine if it should 
+follow the link by doing a follow-up GET request on `/resources/456`.
 Note that the parent resource's `_rev` must also update when a link's `_rev`
-updates and so a client may monitor just the parent `_rev` value to detect
+updates and so a client may monitor just the parent's `_rev` to detect
 changes to children.
 
 The `_rev` within a link is automatically set to the last known `_rev` for the
 resource given by the `_id` key regardless of the value sent by the client. It
 is expected that clients will typically set `_rev` to '0-0' when creating a link,
-however, this is not required.
+to indicate to the cloud that they would like it to be a versioned link, however 
+this particular value is not required.
 
 ***A special note on meta document links***
 
@@ -207,7 +208,7 @@ key. The `_rev` key can still be used, and functions the same.
 A resource can be directly downloaded with an HTTP GET request on its
 `/resources/{resourceId}` endpoint. There are two main format options:
 
-#### Binary blob
+#### Binary (non-JSON) blob
 
 Binary blobs are stored directly at the `/resources/{resourceId}` URI. Only the
 reserved and required JSON resource keys, e.g., `_id`, `_rev`, `_meta`, exist
@@ -346,8 +347,8 @@ The only *officially* supported query parameter is `view`, however it is **not**
 required for OADA v1.0.0 conformance. More details can be found in the 
 [View Proposal][view].
 
-Clouds may support other query parameters but they should not expect that clients
-can make use of them.
+Clouds may support other query parameters but they should not expect that any
+particular OADA-conformant clients can make use of them since they are non-standard.
 
 ### The Usage of Arrays
 
@@ -359,6 +360,11 @@ recommends that clouds and clients use object's with random key strings over
 arrays whenever possible in new formats. Therefore, ordering is no longer an
 issue, and the client can arbitrarily append new data and choose to order the
 resource however they want after retrieving it.
+
+Within OADA, it is very easy to create these un-ordered sets of data in any object.
+A POST to any level of a JSON document will create a random string at that
+level and store the POSTed value there.  This is the recommended way to
+incrementally add data in a scalable way.
 
 ### Partitioning of Data Using Versioned Links
 
@@ -375,7 +381,7 @@ geohash example.
 
 ### Example `/resource/{resourceId}` document
 
-The following is a example of a JSON type crop resource.
+The following is a example of a possible JSON prescription planting resource:
 
 ```json
 {
@@ -383,35 +389,37 @@ The following is a example of a JSON type crop resource.
   "_rev": "1-dkjf02jkd",
   "_meta": {
     "_metaid": "ixm24ws",
-    "_rev": "3-xjakck73d",
+    "_rev": "3-xjakck73d"
   },
-  "name": "crops",
-  "list": {
-    "kdofwjkd-Corn": {
-      "name": "Corn",
-      "standards": {
-        "name": "crop standards",
-        "list": {
-          "USDA-CVT": {
-            "name": "USDA Crop Validation Tables",
-            "identifier": "1234",
-          },
-        }
-      },
-    },
-    "02kfdf20-Soybeans": {
-      "name": "Soybeans",
-      "standards": {
-        "list": {
-          "USDA-CVT": {
-            "name": "USDA Crop Validation Tables",
-            "identifier": "1235"
-          }
-        }
-      },
-      "list": {
+  "name": "Smith30 Prescription #2",
+  "namespace": {
+    "oada.planting.prescription": {
+      "src": "https://github.com/oada/oada-docs/blob/master/formats/planting.prescription.js",
+      "population": {
+        "units": "ksds/ac"
       }
+    },
+  },
+  "zones": {
+    "default": {
+      "population": { "value": "32.0" },
+      "crop": { "name": "CORN" }
+    },
+    "jdkfji2": {
+      "population": { "value": "32.0" },
     }
+  },
+  "geojson": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": { type: "Polygon", "coordinates": [ [ ] ] },
+        "properties": {
+          zone: "jdkfji2"
+        }
+      },
+    ]
   }
 }
 ```
@@ -423,19 +431,21 @@ The following is a example of a JSON type crop resource.
 `/meta` is the base URI for all meta-data documents. Each resource has exactly
 one meta-data document and it is used to help accomplish tasks such as:
 
-  - Storing user defined meta-data
+  - Storing user defined meta-data about a resource
   - Resource sharing
   - Resource synchronization between clouds and applications
   
 `/meta` documents share the id of the associated resource and have an
 authoritative URI of `/meta/{resourceId}`. However, the `/meta` document can
-also be accessed via the top-level `_meta` key of a resource.
+also be accessed via the top-level `_meta` key of a resource since all resources
+contain a versioned link to their meta documents..
 
 ### Meta Documents Are Basically Resources
 
 `/meta` documents are basically resources. They behave identically to resources, with the 
 single exception that `/meta` documents do not have `/meta` documents themselves
-and therefore also do not have the requirement of a top level `_meta` key. 
+and therefore also do not have the requirement of a top level `_meta` key.  For this reason,
+they do not have an _id property, but rather _metaid which is functionally equivalent.
 
 ## Reserved and Required Keys
 
@@ -473,8 +483,8 @@ The timestamp at which the resource was created.
 
 #### `createdBy`
 
-A link to the user who created the resource (*Note: Users are not currently
-defined*)
+A link to the user who created the resource (*Note: Users are currently
+defined only in v1.0.0+*)
 
 #### `modified`
 
@@ -482,19 +492,20 @@ The timestamp at which the resource was last modified.
 
 #### `modifiedBy`
 
-A link to the user which last modified the resource (*Note: Users are not
-currently defiend*)
+A link to the user which last modified the resource (*Note: Users are 
+currently defined only in v1.0.0+*)
 
-### Storing data in meta
+### Storing data in /meta
 
 OADA expects clouds and clients to store data in the `/meta` document only when
-that information can not be stored within the resource itself. For example, the
-resource type is not JSON and so not be easily extended, or the formats schema
-is violated if an extra key is present.
+that information can not be stored within the resource itself. For example, you might
+choose to store information in /meta if the resource type is not JSON-based and therefore
+not be easily extended, or the format's schema is violated if an extra key is present.
 
 ### Example `/meta/{resourceId}` Document
 
-The following is an example `/meta` document:
+The following is an example `/meta` document ("the_meaning_of_everything" is a custom
+key stored in the meta document):
 
 ```json
 {
@@ -511,8 +522,9 @@ The following is an example `/meta` document:
     "modifiedBy": {
       "_id": "kdufe3f",
       "_rev": "2-kdjf02d"
-    }
-  }
+    },
+  },
+  "the_meaning_of_everything": "42"
 }
 ```
 
@@ -523,8 +535,8 @@ The following is an example `/meta` document:
 `/bookmarks` provides a standard way to link to and discover interesting
 resources. OADA has defined a JSON bookmark media type,
 `application/vnd.oada.bookmarks.1+json`, and we strongly encourage everyone to
-use it. In doing so, clients will be able to discovery various available
-resources with easy and allow sign focally more useful and productive
+use it. In doing so, clients will be able to easily discover various available
+resources and support significantly more useful and productive
 applications.
 
 The content of the document should be sets of key/value pairs that terminate in
@@ -533,7 +545,7 @@ a versioned link to a resource.
 ### `/bookmarks` Are Resources
 
 `/bookmarks` are plain resources and therefore can be shared, synchronized, and
-managed in the same way. Additionally they must function identical to and meet
+managed in the same way. Additionally they must function identically to and meet
 the same requirements as resources. In fact, we recommend that clouds just use
 their resource implementation for bookmarks and view the `/bookmark` URI as
 merely a convenient way for a client to access the specific user's bookmark
@@ -541,16 +553,16 @@ resource.
 
 ### `application/vnd.oada.bookmarks.1+json` Media Type
 
-OADA has standardized a recommend bookmark media type,
+OADA has standardized a recommend bookmarks media type,
 `application/vnd.oada.bookmarks.1+json`, that should help interoperability
 between clouds and clients. The media type is a [duck-typed][duck-typed] format
 in the sense that as long as standard-defined keys are not used to mean
 something other than their definition, then keys can be used to mean anything.
 
-We encourage clients and clouds to share their usage of bookmark keys with the
+We encourage clients and clouds to share their usage of bookmarks keys with the
 OADA community so that the standard list can be appropriately extended.
 
-Examples of some currently standardize keys are:
+Examples of some currently standardized keys are:
 
 - /bookmarks/irrigation
 - /bookmarks/planting
@@ -576,10 +588,8 @@ Examples of some currently standardize keys are:
     "_rev": "5-iemxma"
   },
   "machines": {
-    "harvesters": {
-      "_id": "ETYGcaf4", 
-      "_rev": "2-kjdofd"
-    }
+    "_id": "ETYGcaf4", 
+    "_rev": "2-kjdofd"
   }
 }
 ```
@@ -590,9 +600,9 @@ Examples of some currently standardize keys are:
 
 ## `/users/{userId}`
 
-`/users` provide details of another user's identity, such as, real name, email
-address, avatar, etc assuming that user is *known* to the end user. Another user
-becomes *known* when it is:
+`/users` provide details of a user's identity, such as, real name, email
+address, avatar, etc assuming that user is *known* to the currently-logged-in user. 
+Another user becomes *known* when it is:
 
 - Local to the cloud and has a public profile.
 - Has previously shared files with the end user.
@@ -614,7 +624,7 @@ versions of OADA may consider user discovery across the federation.
 
 ### `me` {userId}
 The 'me' {userId} is a special id that refers the currently logged in user. This
-can be used by an application to "bootstrap" itself. That is, the application
+can be used by an application to "bootstrap" itself. The application
 can automatically discover the necessary information to show the user a
 reasonable first screen. For example, locating the root resource or the user's
 bookmarks resource.
@@ -635,7 +645,7 @@ bookmarks resource.
     "_id": "jx9j3x8",
     "_rev": "2-kdjf2d"
   },
-  "currentUser": {
+  "bookmarks": {
     "_id": "kdufe3f",
     "_rev": "2-kdjf2d"
   }
@@ -646,7 +656,7 @@ bookmarks resource.
 
 ## `/groups/{groupId}`
 
-`/groups` list, creates, and manages groups of users. They can be used to
+`/groups` lists, creates, and manages groups of users. They can be used to
 allocate resource permissions more flexibly. For example, at any time a user can
 be added or removed from a group and all previously shared files are
 automatically become accessible or inaccessible, respectively.
