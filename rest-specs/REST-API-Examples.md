@@ -21,16 +21,20 @@ OADA publications, but just in below is a quick reminder of them.
 
 # Examples
 
+*Version 1.0.0*
+
 * [JSON Resource Upload](#json-resource-upload)
 * [Binary Resource Upload](#binary-resource-upload)
 * [Resource Update](#resource-update)
-* [Resource Sharing](#resource-sharing)
 * [Field Discovery](#field-discovery)
 * [Manual Resource Syncing](#manual-resource-syncing)
+
+*Version 1.0.0+*
 * [Automatic Resource Syncing](#automatic-resource-syncing)
+* [Resource Sharing](#resource-sharing)
 * [View Changes](#view-changes)
 * [View Changes for a Resource and Its Children](#view-changes-for-a-resource-and-its-children)
-* [More View Examples](View-Proposal.md#examples)
+* [More View Examples](#move-view-examples)
 * [Copy Resource](#copy-resource)
 * [Make Existing Resource a Derivative of Another](#make-existing-resource-a-derivative-of-another)
 
@@ -254,7 +258,8 @@ Content-Type: application/json
 Etag: "893rjdklia9w383984"
 
 ```
-Now the final document state is:
+
+In either case, assuming no lost data, the end result is:
 
 **Request**
 ```http
@@ -278,94 +283,15 @@ Etag: "686897696a7c876b7e"
     "_metaid": "kdj83mx",
     "_rev": "1-xkaj8fd"
   },
-  "hours": 1523,
+  "hours": 1524,
   "fuel_level": "80%",
   "service_intervals": {
-    "50_hour": -4,
-    "100_hour": 46
+    "50_hour": -5,
+    "100_hour": 44
   }
 }
 ```
 
-# Resource Sharing
-
-![Resource sharing](resource_sharing.png "Resource sharing")
-
-Frank instructs his OADA complaint Android app to share a resource with Andy.
-Now Andy can access it directly with his own account.
-
-**Assumptions**
-
-- Frank's Android app already has authorization and a valid token for Frank's
-  agcloud.com user (SlAV32hkKG).
-- Andy's OADA application already has authorization and a valid token for Andy's
-  agcloud.com user (kaJH38da3x).
-
-To share `/resources/ixm24ws`, the GeoJSON yield resource created earlier, with
-Andy as an owner, `userId = jdx83jx`, a new entry to the resource's permission
-document must be added.
-
-**Request**
-```http
-POST /resources/ixm24ws/_meta/permissions HTTP/1.1
-Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
-Content-Type: application/json
-
-{
-  "user": {
-    "_id": "jdx83jx"
-  },
-  "type": "user",
-  "level": "owner"
-}
-```
-
-**Response**
-```http
-HTTP/1.1 201 Created
-Content-Type: application/json
-Location: /resources/ixm24ws/_meta/permissions/9mxjs7c
-Etag: "xJDS9fd8f2838fxay4"
-
-{
-  "user": {
-    "_id": "jdx83jx"
-  },
-  "type": "user",
-  "level": "owner"
-}
-```
-
-Now Andy can access the resource with his identity.
-
-**Request**
-```http
-GET /resources/ixm24ws HTTP/1.1
-Host: api.agcloud.com
-Authentication: Bearer kaJH38da3x
-Accept: application/json
-
-```
-
-**Response**
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-Etag: "aodskjfoa3j9af7883"
-
-{
-  "totalYield": {
-    "value": 5.6,
-    "unit": "bushel"
-  },
-  "type": "FeatureCollection",
-  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
-  "features": [{
-      "....": "...."
-  }]
-}
-```
 
 # Field Discovery
 
@@ -733,6 +659,86 @@ Content-Type: application/json
 }
 ```
 
+# Resource Sharing
+
+![Resource sharing](resource_sharing.png "Resource sharing")
+
+Frank instructs his OADA complaint Android app to share a resource with Andy.
+Now Andy can access it directly with his own account.
+
+**Assumptions**
+
+- Frank's Android app already has authorization and a valid token for Frank's
+  agcloud.com user (SlAV32hkKG).
+- Andy's OADA application already has authorization and a valid token for Andy's
+  agcloud.com user (kaJH38da3x).
+
+To share `/resources/ixm24ws`, the GeoJSON yield resource created earlier, with
+Andy as an owner, `userId = jdx83jx`, a new entry to the resource's permission
+document must be added.
+
+**Request**
+```http
+POST /resources/ixm24ws/_meta/permissions HTTP/1.1
+Host: api.agcloud.com
+Authentication: Bearer SlAV32hkKG
+Content-Type: application/json
+
+{
+  "user": {
+    "_id": "jdx83jx"
+  },
+  "type": "user",
+  "level": "owner"
+}
+```
+
+**Response**
+```http
+HTTP/1.1 201 Created
+Content-Type: application/json
+Location: /resources/ixm24ws/_meta/permissions/9mxjs7c
+Etag: "xJDS9fd8f2838fxay4"
+
+{
+  "user": {
+    "_id": "jdx83jx"
+  },
+  "type": "user",
+  "level": "owner"
+}
+```
+
+Now Andy can access the resource with his identity.
+
+**Request**
+```http
+GET /resources/ixm24ws HTTP/1.1
+Host: api.agcloud.com
+Authentication: Bearer kaJH38da3x
+Accept: application/json
+
+```
+
+**Response**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Etag: "aodskjfoa3j9af7883"
+
+{
+  "totalYield": {
+    "value": 5.6,
+    "unit": "bushel"
+  },
+  "type": "FeatureCollection",
+  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
+  "features": [{
+      "....": "...."
+  }]
+}
+```
+
 # View Changes for a Resource and Its Children
 
 Frank's application wants to discover all changes that occurred to either the
@@ -782,6 +788,11 @@ Content-Type: application/json
   "boundary": { <geojson-of-boundary-polygons> }
 }
 ```
+
+# More View Examples
+
+More examples of the view parameter can be found in the 
+[View Proposal](View-Proposal.md#examples).
 
 # Copy Resource
 
