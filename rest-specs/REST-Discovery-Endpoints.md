@@ -39,6 +39,20 @@ particular instance of the OADA API.
 
 ### Parameters
 
+- `version`: (**String** *1.0.0*)
+  *REQUIRED*. The version string of the oada-configuration schema.
+
+- `scopes_supported` (**Array[Scope Object]**)
+  *OPTIONAL*. An array of scope objects that the cloud supports. Used by clients
+  and the OADA conformance tests to auto discovery the expected functionality.
+  The objects should take the form:
+  ```json
+  {
+    "name": "oada.all.1",
+    "read+write": true
+  }
+  ```
+
 - `oada_base_uri` (**String** *Valid absolute https URI*)  
   *REQUIRED*. The provider's associated OADA API base URI. All required OADA
   endpoints must reside under this root.
@@ -60,7 +74,7 @@ particular instance of the OADA API.
   Registration][oauth-dyn-reg] endpoint for the associated OADA API.  *Note:
   This key is inspired from [OpenId Connect Discovery][oidc-discovery]*
 
-- `token_endpoint_auth_signing_alg_values_supported` (**Array[String]**)  
+- `client_assertion_signing_alg_values_supported` (**Array[String]**)  
   *REQUIRED*. List of JWT signing algorithms that a client may use to sign an
   OAuth 2.0 client assertion ([JSON Web Token (JWT) Profile for OAuth
   2.0 Client Authentication and Authorization Grants][jwt-bearer]). The
