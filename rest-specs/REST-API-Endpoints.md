@@ -414,9 +414,12 @@ The following is a example of a possible JSON prescription planting resource:
     "features": [
       {
         "type": "Feature",
-        "geometry": { type: "Polygon", "coordinates": [ [ ] ] },
+        "geometry": { 
+          "type": "Polygon",
+          "coordinates": [ [ ] ]
+        },
         "properties": {
-          zone: "jdkfji2"
+          "zone": "jdkfji2"
         }
       },
     ]

@@ -368,7 +368,7 @@ Content-Type: application/vnd.oada.fields.1+json
   "_meta": {
     "_metaid": "fd8as8c",
     "_rev": "3-xkjadfjx", 
-  }
+  },
   "list": {
     "grower-farm-field": {
       "name": "grower-farm-field",
@@ -585,11 +585,11 @@ Content-Type: application/json
 {
   "jc4dcx6": {
     "_id": "jc4dcx6",
-    "_rev": "4-elirjkj",
+    "_rev": "4-elirjkj"
   },
   "xj3jdc5": {
-    "_id": "xj3jdc5"
-    "_rev": "2-pojakdu",
+    "_id": "xj3jdc5",
+    "_rev": "2-pojakdu"
   }
 }
 ```
@@ -654,7 +654,7 @@ Content-Type: application/json
 
 {
   "_id": "xklajfe",
-  "_rev": '59-nczjicuds",
+  "_rev": "59-nczjicuds",
   "_meta": {
     "_metaid": "xklajfe",
     "_rev": "1-eiqknxxz",
