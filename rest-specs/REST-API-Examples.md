@@ -56,7 +56,7 @@ Accept: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/vnd.oada.oada-configuration.1+json
 
 {
   "authorization_endpoint": "http://api.agcloud.com/authorize",

@@ -376,6 +376,7 @@ HTTP/1.1 200 OK
 Content-Type: application/vnd.oada.oada-configuration.1+json
 
 {
+  "well_known_version": "1.0.0",
   "oada_base_uri": "https://provider.example.org",
   "authorization_endpoint": "https://provider.example.org/auth",
   "token_endpoint": "https://provider.example.org/token",
@@ -538,6 +539,7 @@ HTTP/1.1 200 OK
 Content-Type: application/vnd.oada.oada-configuration.1+json
 
 {
+  "well_known_version": "1.0.0",
   "oada_base_uri": "https://provider.example.org",
   "authorization_endpoint": "https://provider.example.org/auth",
   "token_endpoint": "https://provider.example.org/token",
