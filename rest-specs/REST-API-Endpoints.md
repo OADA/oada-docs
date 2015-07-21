@@ -27,8 +27,8 @@ required functionally as simple as possible. The responsibilities of
 - Transforming and representing data in multiple formats.
 - Sharing data with other users.
 
-Many of the OADA endpoints are actually just resources with valid resource
-ids. That is, they can be directly accessed with a `/resources/{resourceId}` URI.
+Many of the OADA endpoints are actually just resources with valid resource ids.
+That is, they can be directly accessed with a `/resources/{resourceId}` URI.
 They are only given special names within the API to make it easier and allow
 automatic discovery of the available data.
 
@@ -57,7 +57,7 @@ All resources must be assigned an id that is unique within a specifc cloud (refe
 to as `{resourceId}`) and it must be the same id used to access the resource
 under the `/resources` endpoint.  A cloud can choose to let a user create a
 resource with an id of his or her choosing (via a PUT to
-`/resource/{resourceId}`), however, it is not required by OADA. 
+`/resource/{resourceId}`), however, it is not required by OADA.
 
 #### `_rev`
 
@@ -68,7 +68,8 @@ compare it to the last known value to detect changes.
 
 The format of a `_rev` is an incrementing number, a dash, and a random string,
 e.g., “34-kdfj02kjlskdf”.  Whenever `_rev` is updated, the front number must
-increment, and a new random string must be generated. The random string may be the document's hash or just any sufficiently random string.
+increment, and a new random string must be generated. The random string may be
+the document's hash or just any sufficiently random string.
 
 Rules for updating `_rev`:
 
@@ -112,14 +113,17 @@ The following endpoints, or JSON sub-documents, reside under `_meta`:
 Note that an application may add any custom keys to the `_meta` document,
 however they must not conflict with the standard keys defined here or in the
 future. To avoid future conflicts, applications should avoid using custom keys
-that begin with "_".
+that start with an _ character.
+
+The media type stored in `_mediaType` must be the same value that is return in 
+the HTTP Content-Type header.
 
 ### Links and Versioned Links
 
 You can "link" resources together within OADA using an object containing an
 `_id` and an optional `_rev` key(s). There are two fundamental types of links:
 
-#### Non-Versioned 
+#### Non-Versioned
 
 A non-versioned link **will not** change when the resource it links to does. For
 more information on how links are updated, see the below section on versioned
@@ -129,7 +133,7 @@ An example of a non-versioned link is:
 
 ```json
 {
-  "some_nonversioned_link": { 
+  "some_nonversioned_link": {
     "_id": "456"
   }
 }
@@ -175,230 +179,194 @@ It is possible to define links to meta documents. To distinguish between links
 to meta documents versus links to resources, the `_metaid` is used in place of the `_id`
 key. The `_rev` key can still be used, and functions the same.
 
-# NEED TO EDIT STILL
-
 ### Accessing Resources
 Resources can be directly downloaded with an HTTP GET request on it's
-`/resources/{resourceId}` endpoint. If the data is in a JSON format, then
-sub-documents can be directly accessed by appending the JSON keys of interest to
-the end of  `/resources/{resourceId}`. The mapping follows [RFC 6901 JavaScript
-Object Notation (JSON) Pointer][rfc6901] (*Developers should be sure to take
-note of JSON Pointer's tilde escaping*). If the resource is of binary format
-then the blob is returned directly. If the OADA specific `_meta` document is
-also requested (see below) then the response is will be `Multipart/mixed` where
-one part is the `_meta` JSON document and the other is the binary blob. A `302
-Found` may be returned if the resource is available at an alternative location,
-such as a Content Delivery Network (CDN).
-### GET any level of a document and follow links in URLs
-The OADA API defines that a URL to any level of a resource should succeed.  For
-example, if I get resource 123 and it looks like this:
-GET /resources/123
+`/resources/{resourceId}` endpoint. There are two main format options:
+
+#### Binary blob
+
+Binary blobs are stored directly at the `/resources/{resourceId}` URI. Only the
+reserved and required JSON resource keys, e.g., `_id`, `_rev`, `_meta`, exist
+beyond that. They can be access directly by adding their name as a suffix to the
+of the resource URI or by using the `view` parameter to expand them and
+therefore resulting in a `Multipart/mixed` response.
+
+#### JSON Document
+
+JSON documents can be accessed in full at the `/resources/{resourceId}` URI. The
+reserved and required JSON resource keys, e.g., `_id`, `_rev`, `_meta`, are
+automatically merged at the top level of the document in their native format.
+
+A `302 Found` may be returned if the resource is available at an alternative
+location, such as a Content Delivery Network (CDN).
+
+##### Accessing sub-documents
+
+Any sub-document of a resource can directly accessed by appending a path of JSON
+keys to the end of it's `/resources/{resourceId}` URI.  The mapping follows [RFC
+6901 JavaScript Object Notation (JSON) Pointer][rfc6901] (*Developers should be
+sure to take note of JSON Pointer's tilde escaping*).
+
+For example, if the document stored at `/resources/123` is:
+
+```json
 {
-    _id: “123”,
-      _rev: “9-jk2f30j2323”,
-        _meta: { _metaid: “123”, _rev: “3-fdkj20fj2f” },
-          a: {
-                b: “pink flamingo”
-                  }
+  "_id": "123",
+  "_rev": "9-jk2f30j2323",
+  "_meta": {
+    "_metaid": "123",
+    "_rev": "3-fdkj20fj2f"
+  },
+  "a": {
+    "b": "pink flamingo"
+  }
 }
+```
 
-then if I make a request for GET /resources/123/a, I should get in response:
-GET /resources/123/a
+Then a GET request to `/resources/123/a` returns:
+
+```json
 {
-    b: “pink flamingo”
+  "b": "pink flamingo"
 }
+```
 
-and similarly if I make a request for GET  /resources/123/a/b, I should get:
-GET /resources/123/a
-“pink flamingo”
+And a GET request to `/resources/123/a/b` returns:
 
-What will likely happen at minimum is a client will GET /resources/123/_rev to
-see if the _rev changed.
+```json
+"pink flamingo"
+```
 
-In addition, any links that appear in document should be implicitly follow-able
-in URLs.  Consider this example:
+This can be particularly useful to a client checking if a resource changed. One
+can make an very efficient request to `/resources/{resourceId}/_rev` to get the
+current revision number of the resource.
 
-GET /resources/234
+##### Sub-documents follow links
+
+If a link is present in a given sub-path the cloud will attempt to automatically
+follow and link and continue applying the path on the new resource.
+
+For example, if the document stored at `/resources/234` is:
+
+```json
 {
-    _id: “234”,
-      _rev: “9-jk2f30j2323”,
-        _meta: { _metaid: “234”, _rev: “3-fdkj20fj2f” },
-          a: { _id: “345” }
+  "_id": "234",
+  "_rev": "9-jk2f30j2323",
+  "_meta": {
+    "_metaid": "234", 
+    "_rev": "3-fdkj20fj2f"
+  },
+  "a": { 
+    "_id": "345" 
+  }
 }
+```
 
-then I will achieve the same result by GET /resources/345 as I would by GET
-/resources/234/a because /resources/234/a is a link to resource 345:
-GET /resources/234/a
+and the document stored at `/resources/345` is:
+
+```json
 {
-    _id: “345”,
-      _rev: “7-2903j23fo”,
-        _meta: { _metaid: “345”, _rev: “6-kdjf023jkef” },
-          c: “The Knights Who Say Ni”
+  "_id": "345",
+  "_rev": "2-ia73mkjfxy2",
+  "_meta": {
+    "_metaid": "345", 
+    "_rev": "8-xk73dhafd7"
+  },
+  "c": "The Knights Who Say Ni"
 }
+```
 
-And putting those two together, if I want to get “The Knights Who Say Ni”, then
-I can do:
-GET /resources/234/a/c
-“The Knights Who Say Ni”
+Then a GET request to `/resources/234/a` evaluates to exactly the 345 resource:
+```json
+{
+  "_id": "345",
+  "_rev": "2-ia73mkjfxy2",
+  "_meta": {
+    "_metaid": "345", 
+    "_rev": "8-xk73dhafd7"
+  },
+  "c": "The Knights Who Say Ni"
+}
+```
 
-This is because /resources/234/a becomes /resources/345 due to the link, and
-/resources/345/c is the string “The Knights Who Say Ni”.
+And a GET request to `/resoruces/234/a/c` is the same as `/resources/345/c`: 
 
-The rules for turning a URL path into a part of a JSON document are the same as
-those defined by JSON Pointer (https://tools.ietf.org/html/rfc6901) for which
-there are many libraries.  Basically it just lets you escape ‘/’ in a path with
-“~1”, and since ‘~’ is the special escape character, then you have to escape a
-‘~’ in a URL with “~0”.  If you are working in javascript, I’ve found the
-json-pointer library’s parse() and compile() functions handy:
-(https://www.npmjs.com/package/json-pointer) 
+```json
+"The Knights Who Say Ni"
+```
 
+This feature is particularly useful to a client when dealing with `/bookmarks`,
+where it can directly access the data it is interested in rather then first
+looking up the resource id from the bookmark.
 
+### Media Types (or Content-Types)
 
-Query parameters
-There is currently only one existing query parameter defined in the OADA API
-currently, and it is named “view”.  Supporting it will not be part of v1.0.0
-conformant, and may change some in the future as we flush it out more.  It is
-intended to allow a client to turn on and off parts of a document in a response,
-and to allow it to request links to be expanded in-place in a response.  If
-you’re interested, we’ve defined it here:
-https://github.com/OADA/oada-docs/blob/master/rest-specs/View-Proposal.md.  It’s
-more complex than the rest of the API, and therefore are awaiting a partner who
-has need of it before we flush out its details more for part of OADA 2.0.
+OADA makes use of HTTP Content-Types to help inform the client what kind of
+data it is receiving. There are no restrictions to the media types names, other
+then what is imposed by HTTP itself. However, it is recommended that it contains
+sufficient information for a client to successful interpret the data.
 
-Your API has a “portfolioId” parameter to do some filtering.  While I don’t
-think it will be considered OADA non-compliant to add extra optional query
-parameters, I’d like to find a way to structure your data model so this isn’t
-required, or work with you to achieve the same goal with the view parameter
-which is intended for this purpose.  I’ve suggested some ideas in the second
-section of this document.
+For example, the media type `application/json` tells a client that it should be
+able to parse it as valid JSON, but it does not tell it what keys to expect.
+Where, the media type `application/vnd.observant.sensor.1+json` tells the client
+that the response is not only JSON but that it should also expect to see the
+keys defined by version 1 of the application/vnd.observant.sensor model. 
 
-media types (or content-types)
-All documents served from an OADA-compliant API must have an associated media
-type to tell the client which kind of thing it’s getting back from the cloud.
-The media type can be anything you want, but should represent enough information
-to know how to interpret what’s coming back.  For example, the media type
-“application/json” tells the developer they should be able to pass it to
-JSON.parse, but it doesn’t tell it what keys to expect.  However, the media type
-“application/vnd.observant.sensor.1+json” would tell the client that the
-response is JSON, and you should expect to see the keys/schema defined by
-version 1 of the application/vnd.observant.sensor model.  We have been defining
-open OADA media types as needed thus far, and would be open to doing the same
-with you if you’d prefer to have an open standard type over an
-observant-specific type.
+OADA maintains open media types for data that lack existing options.  While the
+project prefers to use existing and popular open formats, it is open to defining
+new formats as needed moving forward.
 
-The media type must be stored in /meta/{resourceid}/_mediaType, and must be
-returned in the content-type header in any response.
+### Query Parameters
 
+The only *officially* supported query parameter is `view`, however it is **not**
+required for OADA v1.0.0 conformance. More details can be found in the 
+[View Proposal][view].
+
+Clouds may support other query parameters but it should not expect that clients
+can make use of them.
 
 ### Example `/resource/{resourceId}` document
 
-The following is a example of JSON data with `view` set to also return the
-`_meta` document. That is both the native data and the OADA specific `_meta`
-metadata document is returned all together as one JSON ouptut.
+The following is a example of JSON type crop resource.
 
-*Decoded GET URI: /resource/ixm24ws?view={"_meta": true}*
-
-```http
-GET /resource/ixm24ws?view=%7B%22_meta%22%3A%20true%7D HTTP/1.1
-Host: agcloud.com
-Content-Type: application/vnd.dummy.yield.format+json
-Authorization: Bearer ajCX83jfax.arfvFA323df
-
+```json
 {
   "_id": "ixm24ws",
   "_rev": "1-dkjf02jkd",
-  "name": "Frank's Yield",
-  "totalYield": {
-    "value": 5.6,
-    "unit": "bushel"
-  },
-  "type": "FeatureCollection",
-  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
-  "features": [{
-    "....": "...."
-  }],
   "_meta": {
-    "_mediaType": "application/vnd.dummy.yield.format+json",
-    "_stats": {
-      // Note: this endpoint is not considered stable and may change
-      "created": "1985-04-12T23:20:50.52Z",
-      "createdBy": { "_id": "kdufe3f", "_rev": "5-jkdjfo2" },
-      "modified": "1985-04-12T23:20:50.52Z",
-      "modifiedBy": { "_id": "kdufe3f", "_rev": "2-kdjf02d" },
-    },
-    "_formats": {
-      // Note: this endpoint is not considered stable and may change
-      "original":  {
-        "name": "application/vnd.dummy.yield.format+json",
-        "src": { "_href": "https://github.com/oada/oada-docs/formats" },
-      },
-      "transforms": {
-        "application/json": {
-          "lossy": false,
-          "name": "JavaScript Object Notation",
-          "openFormat": false
-        },
-        "application/netcdf": {
-          "lossy": false,
-          "name": "Network Common Data Form",
-          "openFormat": true
-        },
-        "application/shape": {
-          "lossy": false,
-          "name": "Esri Shapefile",
-          "openFromat": false
-        }
-      }
-    },
-    "_parents": {
-      // Note: this endpoint is not considered stable and may change
-      "me30fzp": { "_id": "me30fzp", _rev: "1-kdf20d" },
-      "1jfk322": { "_id": "me30fzp", _rev: "3-02kflw" }
-    },
-    "_children": {
-      // Note: this endpoint is not considered stable and may change
-      "kl3j93s": { "_id": "kl3j93s", _rev: "6-kdkjdf" },
-      "op302xa": { "_id": "op302xa", _rev: "2-kjdf02" }
-    },
-    "_permissions": {
-      // Note: this endpoint is not considered stable and may change
-      "user": { "_id": "kdufe3f", _rev: "4-jkdf02f" },
-      "type": "user",
-      "level": "owner"
-    },
-    "_syncs": {
-      // Note: this endpoint is not considered stable and may change
-      "kdj02f": {
-        "type": "poll",
-        "url": "https://api.agcloud.com/resources/jdkx82d",
-        "headers": {
-          "X-Custom": "Custom Value"
-        },
-        "latest_etag": "d3fc9278c677bdb7af3781a1ebc2ec090c14f5f3",
-        "interval": 3600,
-        "authorization": {
-          "_id": "8ackam3"
+    "_metaid": "ixm24ws",
+    "_rev": "3-xjakck73d",
+  },
+  "name": "crops",
+  "list": {
+    "kdofwjkd-Corn": {
+      "name": "Corn",
+      "standards": {
+        "name": "crop standards",
+        "list": {
+          "USDA-CVT": {
+            "name": "USDA Crop Validation Tables",
+            "identifier": "1234",
+          },
         }
       },
-      "02djlkf": {
-        "type": "push",
-        "url": "https://api.agcloud.com/resources/jdkx82d",
-        "headers": {
-          "X-Custom": "Custom Value"
-        },
-        "events": ["change"],
-        "authorization": { "_id": "8ackam3", _rev: "5-kjdf02" }
-      }
     },
-    "_derivatives": {
-      // Note: this endpoint is not considered stable and may change
-      "kl3j93s": { "_id": "kl3j93s", "_rev": "3-kjdf02jkd" },
-      "op302xa": { "_id": "op302xa", "_rev": "4-290fjikdf" }
+    "02kfdf20-Soybeans": {
+      "name": "Soybeans",
+      "standards": {
+        "list": {
+          "USDA-CVT": {
+            "name": "USDA Crop Validation Tables",
+            "identifier": "1235"
+          }
+        }
+      },
+      "list": {
+      }
     }
   }
 }
 ```
-# NEED TO EDIT STILL
 
 # `/bookmarks`
 
@@ -561,3 +529,4 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 ```
 
 [rfc6901]: http://www.ietf.org/rfc/rfc6901.txt
+[view]: https://github.com/OADA/oada-docs/blob/master/rest-specs/View-Proposal.md
