@@ -34,9 +34,12 @@ OADA publications, but just in below is a quick reminder of them.
 * [Resource Sharing](#resource-sharing)
 * [View Changes](#view-changes)
 * [View Changes for a Resource and Its Children](#view-changes-for-a-resource-and-its-children)
-* [More View Examples](#move-view-examples)
+* [More View Examples](#more-view-examples)
 * [Copy Resource](#copy-resource)
 * [Make Existing Resource a Derivative of Another](#make-existing-resource-a-derivative-of-another)
+
+
+*Version 1.0.0*
 
 # JSON Resource Upload
 
@@ -299,9 +302,7 @@ Etag: "686897696a7c876b7e"
 
 Frank drives his tractor to a field and starts planting. Instead of asking Frank
 what field he is in, the monitor automatically discovers the current set of
-fields using the fields bookmark on Frank's agcloud.com storage.  However, the
-resource is in the Shape format but the monitor only understands GeoJSON.
-Therefore, the monitor requests a Shape to GeoJSON transformation.
+fields using the fields bookmark on Frank's agcloud.com storage.
 
 **Assumptions**
 
@@ -326,17 +327,19 @@ Content-Type: application/json
 Etag: "aodskjfoa3j9af7883"
 
 {
-  "_id": "fd8as8c"
+  "_id": "fd8as8c",
+  "_rev": "34-kjxfdu73"
 }
 ```
 
-Now that the fields resource is known, Frank's monitor must consult the formats
-metadata document to determine if the fields can be returned in an acceptable
-format. In this case the desired format is `application/vns.oada.fields+json`.
+Now that the fields resource is known, Frank's monitor decides to consult the 
+resources `/meta` document to determine if the field is in an acceptable
+format (an HTTP HEAD would also do the trick). In this case the desired format 
+is `application/vnd.oada.fields+json`.
 
 **Request**
 ```http
-GET /resources/fd8as8c/_meta/formats HTTP/1.1
+GET /resources/fd8as8c/_meta/_mediaType HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Accept: application/json
@@ -348,28 +351,11 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 Etag: "qewriuquicjdkcj832"
 
-{
-  "_id": "fd8as8c/_meta/formats",
-  "etag": "qewriuquicjdkcj832",
-  "transforms": {
-    "application/vnd.oada.field+json": {
-      "original": true,
-      "lossy": false,
-      "name": "OADA GeoJSON Field Open Format",
-      "openFormat": true
-    },
-    "application/shape": {
-      "lossy": false,
-      "name": "Esri Shapefile",
-      "openFromat": false
-    }
-  }
-}
+"application/vnd.oada.fields+json"
 ```
 
-`application/vnd.oada.field+json` is present in the `transforms` key and AgCloud
-can transform the native file into the desired format via a GET request `Accept`
-header.
+Now that Frank's monitor is sure that it can processing the file format, it
+returns the resource.
 
 **Request**
 ```http
@@ -386,6 +372,8 @@ Content-Type: application/vnd.oada.field+json
 Etag: "qewriuquicjdkcj832"
 
 {
+  "_id": "fd8as8c",
+  "_rev": "34-kjxfdu73"
   "type": "GeometeryCollection",
   "...": "...",
   "features": [{
@@ -403,53 +391,42 @@ Frank uses an OADA compliant Android app to discover his planting prescription
 resource via the prescription bookmark. He proceeds to edit it and sync it back
 to agcloud.com. This same prescription resource was previously discovered and
 downloaded by Frank's monitor.  However, to stay synchronized the monitor
-periodically checks the agcloud.com for changes to the resource.
+periodically checks the agcloud.com for changes to the resource by polling the 
+resource's `_rev` value.
 
 **Assumptions**
 
 - Frank's monitor device already has authorization and a valid token
   (SlAV32hkKG).
-- Both the Android app and monitor have already discovered and downloaded the
-  prescription resource. The discovered resource ID is `ajd82mx` and the
-  original Etag was `k23odjuasidfjasdkf`.
+- The monitor has previously downloaded the resource `ajd82ms` with a `_rev` of
+  `4-k23odkf`.
 
-Update polls can be accomplished by issuing GET requests with `If-None-Match`
-headers periodically.
+The monitor periodically checks the resource's `_rev` value by issuing the
+following efficient HTTP request:
 
 **Request**
 ```http
-GET /resources/fd8as8c HTTP/1.1
+GET /bookmarks/planting/prescriptions/list/machine_1/_rev HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Accept: application/vnd.oada.prescription.planting+json
-If-None-Match: "k23odjuasidfjasdkf"
 
 ```
-
-Typically the response will be one of following two
-
-*No changes*
-
-**Response**
-```http
-HTTP/1.1 304 Not Modified
-Content-Type: application/json
-Etag: "k23odjuasidfjasdkf"
-
-```
-
-*Changes Available*
 
 **Response**
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
+Content-Location: /resources/ajd82mx
 Etag: "ajja97823jfaksdhfx"
 
-{
-  "...": "..."
-}
+6-jkxjaxf
 ```
+
+And because the `_rev` for the resource (`ajd92mx`) has changed, the monitor
+should make a follow up request to update the resource.
+
+*Version 1.0.0+*
 
 # Automatic Resource Syncing
 
