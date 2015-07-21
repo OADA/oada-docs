@@ -1,6 +1,7 @@
 # OADA API Endpoint Overview
 
 * [`/resources`](#user-content-resources)
+* [`/meta`](#user-content-meta)
 * [`/bookmarks`](#user-content-bookmarks)
 * [`/about`](#user-content-about)
 * [`/users`](#user-content-users)
@@ -93,8 +94,8 @@ However, there may not be a delay between a resource changing and its *own*
 
 ### `_meta`
 
-A link to the resource's meta-document. See the section on `/meta` for more
-information.
+A link to the resource's meta-document. See the [section on
+`/meta`](#user-ccontent-meta) for more information.
 
 
 ### Links and Versioned Links
@@ -443,45 +444,67 @@ The following is an example `/meta` document:
 
 # `/bookmarks`
 
-`/bookmarks`
-
 ## `/bookmarks/{key 1}/.../{key N}`
-`/bookmarks` provides a standard way to link to interesting resources in a way
-that others can automatically discover them.  They are just plain resources and
-so they may be shared, synchronized, and managed the same way.
 
-### Keys
-The number of levels of keys is arbitrary. To improve interoperability between
-clouds, applications, and devices, OADA will define a standard set of standard
-bookmark keys. For example,
+`/bookmarks` provides a standard way to link to and discover interesting
+resources. OADA has defined a JSON bookmark media type,
+`application/vnd.oada.bookmarks.1+json`, and we strongly encourage everyone to
+use it. In doing so, clients will be able to discovery various available
+resources with easy and allow sign focally more useful and productive
+applications.
 
-- /bookmarks/fields
-- /bookmarks/planting/as-applied
-- /bookmarks/planting/prescriptions
-- /bookmarks/harvest/as-harvested
+The content of the document should be sets of key/value pairs that terminate in
+a versioned link to a resource. 
+
+### `/bookmarks` Are Resources
+
+`/bookmarks` are plain resources and therefore can be shared, synchronized, and
+managed in the same way. Additionally they must function identical to and meet
+the same requirements as resources. In fact, we recommend that clouds just use
+their resource implementation for bookmarks and view the `/bookmark` URI as
+merely a convenient way for a client to access the specific user's bookmark
+resource.
+
+### `application/vnd.oada.bookmarks.1+json` Media Type
+
+OADA has standardized a recommend bookmark media type,
+`application/vnd.oada.bookmarks.1+json`, that should help interoperability
+between clouds and clients. The media type is a [duck-typed][duck-typed] format
+in the sense that as long as standard-defined keys are not used to mean
+something other than their definition, then keys can be used to mean anything.
+
+We encourage clients and clouds to share their usage of bookmark keys with the
+OADA community so that the standard list can be appropriately extended.
+
+Examples of some currently standardize keys are:
+
+- /bookmarks/irrigation
+- /bookmarks/planting
+- /bookmarks/harvest
+- /bookmarks/machines
+- /bookmarks/machines/harvesters
 - etc.
 
 ### Example `/bookmarks` document
 
-```http
-GET /bookmarks HTTP/1.1
-Host: agcloud.com
-Content-Type: application/json
-Authorization: Bearer ajCX83jfax.arfvFA323df
-
+```json
 {
-  "fields": {
-    "_id": "XcHd76xz", "_rev": "2-kjdofd"
+  "irrigation": {
+    "_id": "XcHd76xz",
+    "_rev": "10-jfi3fu"
   },
-  "seeds": {
-    "_id": "Mf98adfs", "_rev": "2-kjdofd"
+  "planting": {
+    "_id": "Mf98adfs",
+    "_rev": "1-3ioxjz"
   },
-  "prescriptions": {
-    "planting": {
-      "_id": "ETYGcaf4", "_rev": "2-kjdofd"
-    },
-    "fertilizing": {
-      "_id": "jaefy7Sx", "_rev": "2-kjdofd"
+  "harvest": {
+    "_id": "XJKfkald",
+    "_rev": "5-iemxma"
+  },
+  "machines": {
+    "harvesters": {
+      "_id": "ETYGcaf4", 
+      "_rev": "2-kjdofd"
     }
   }
 }
@@ -605,3 +628,4 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 
 [rfc6901]: http://www.ietf.org/rfc/rfc6901.txt
 [view]: https://github.com/OADA/oada-docs/blob/master/rest-specs/View-Proposal.md
+[duck-typed]: https://en.wikipedia.org/wiki/Duck_typing
