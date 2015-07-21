@@ -635,6 +635,10 @@ bookmarks resource.
 {
   "_id": "kdufe3f",
   "_rev": "2-kdjf02",
+  "_meta": {
+    "_metaid": "kdufe3f",
+    "_rev": "1-kxjcklhd",
+  },
   "account": "frank@agidentity.com",
   "name": "Frank Fellow",
   "picture": {
@@ -672,6 +676,10 @@ managed in the same way.
 {
   "_id": "jf72jsd",
   "_rev": "3-dkjfowwf",
+  "_meta": {
+    "_metaid": "jf72jsd",
+    "_rev": "3-jxkljalskdj",
+  },
   "name": "Employees",
   "members": {
     "jaio3j": {
@@ -705,6 +713,10 @@ and managed in the same way.
 {
   "_id": "jf72jsd",
   "_rev": "4-jkf2olkdf",
+  "_meta": {
+    "_metaid": "jf72jsd",
+    "_rev": "2-xkljfaasdfj",
+  },
   "tokens": {
     "kaljf": {
       "user": {
