@@ -1,7 +1,6 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 # Contents
 
+*Version 1.0.0*
 - [`/resources`](#resources)
   - [`/resources/{resourceId}`](#resourcesresourceid)
     - [Reserved and Required Keys](#reserved-and-required-keys)
@@ -38,6 +37,8 @@
     - [`/bookmarks` Are Resources](#bookmarks-are-resources)
     - [`application/vnd.oada.bookmarks.1+json` Media Type](#applicationvndoadabookmarks1json-media-type)
     - [Example `/bookmarks` document](#example-bookmarks-document)
+
+*Version 1.0.0+*
 - [`/users`](#users)
   - [`/users/{userId}`](#usersuserid)
     - [`/users` Are Resources](#users-are-resources)
@@ -52,8 +53,6 @@
   - [`/authorizations/{authorizationId}`](#authorizationsauthorizationid)
     - [`/authorizations` Are Resources](#authorizations-are-resources)
     - [Example `/authorizations/{authorizationId}` document](#example-authorizationsauthorizationid-document)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # `/resources`
 
@@ -665,7 +664,7 @@ managed in the same way.
   "_id": "jf72jsd",
   "_rev": "3-dkjfowwf",
   "name": "Employees",
-  "members: {
+  "members": {
     "jaio3j": {
       "_id": "kdufe3f", 
       "_rev": "3-kdjf02fdd",
