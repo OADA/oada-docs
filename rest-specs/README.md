@@ -11,9 +11,9 @@
 * [/bookmarks](REST-API-Endpoints.md#bookmarks)
 
 *Draft: Version 1.0.0+*
-* [/users (Draft)](REST-API-Endpoints.md#users)
-* [/groups (Draft)](REST-API-Endpoints.md#groups)
-* [/authorizations (Draft)](REST-API-Endpoints.md#authorizations)
+* [/users (Draft)](REST-API-Endpoints.md#users-draft)
+* [/groups (Draft)](REST-API-Endpoints.md#groups-draft)
+* [/authorizations (Draft)](REST-API-Endpoints.md#authorizations-draft)
 
 ## Discovery Endpoints
 
