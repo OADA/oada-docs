@@ -124,8 +124,8 @@ Rules for updating `_rev`:
   change, or set of changes, to a resource becomes available via the API.
   1. The links in parent resources to the modified resource must be updated to
   the new `_rev` value.
-    - As a result, the parent resource's `_rev` must also be updated because the
-      change in link's `_rev` represents a change the parent resource.
+- As a result, the parent resource's `_rev` must also be updated because the
+change in link's `_rev` represents a change the parent resource.
   1. Continue the above steps until their are no more parent changes.
 
 As one can see, links and `_rev` form a graph of resources, all of which are
