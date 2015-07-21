@@ -75,7 +75,6 @@ Content-Type: application/vnd.oada.yield+json
 HTTP/1.1 201 Created
 Location: /resources/ixm24ws
 Content-Type: application/vnd.oada.yield+json
-Etag: "9083423jkadfu9382x"
 
 ```
 
@@ -127,7 +126,6 @@ Content-Type: application/shape
 HTTP/1.1 201 Created
 Location: /resources/Kcdi32S
 Content-Type: application/shape
-Etag: "xjksd8f3fp89d8dx8z"
 
 ```
 
@@ -158,7 +156,6 @@ Accept: application/json
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/vnd.oada.machines.status.v1+json
-Etag: "686897696a7c876b7e"
 
 {
   "_id": "kdj83mx",
@@ -204,7 +201,6 @@ Content-Type: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Etag: "893rjdklia9w383984"
 
 ```
 
@@ -229,7 +225,6 @@ Content-Type: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Etag: "asf9cka3a08345rjj4"
 
 ```
 
@@ -250,7 +245,6 @@ Content-Type: application/json
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
-Etag: "893rjdklia9w383984"
 
 ```
 
@@ -269,7 +263,6 @@ Accept: application/json
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/vnd.oada.machines.status.v1+json
-Etag: "686897696a7c876b7e"
 
 {
   "_id": "kdj83mx",
@@ -320,7 +313,6 @@ Authentication: Bearer SlAV32hkKG
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/vnd.oada.bookmarks.1+json
-Etag: "aodskjfoa3j9af7883"
 
 {
   "_id": "fd8as8c",
@@ -349,7 +341,6 @@ Authentication: Bearer SlAV32hkKG
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
-Etag: "qewriuquicjdkcj832"
 
 "application/vnd.oada.fields.1+json"
 ```
@@ -370,7 +361,6 @@ Accept: application/vnd.oada.field+json
 ```http
 HTTP/1.1 200 Ok
 Content-Type: application/vnd.oada.fields.1+json
-Etag: "qewriuquicjdkcj832"
 
 {
   "_id": "fd8as8c",
@@ -424,7 +414,6 @@ Authentication: Bearer SlAV32hkKG
 HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Location: /resources/ajd82mx
-Etag: "ajja97823jfaksdhfx"
 
 6-jkxjaxf
 ```
@@ -461,7 +450,7 @@ or poll sync between both clouds, in both directions.
 
 **Request - api.agcloud.com**
 ```http
-POST /resources/ajd82mx/_meta/syncs HTTP/1.1
+POST /resources/ajd82mx/_meta/_syncs HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
@@ -480,25 +469,14 @@ Content-Type: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Location: resources/ajd82mx/_meta/syncs/xjf3ft6
+Content-Location: resources/ajd82mx/_meta/_syncs/xjf3ft6
 Content-Type: application/json
-Etag: "zjalkwjc3ldsua43ir"
 
-{
-  "type": "poll",
-  "url": "http://api.openag.io/resources/xl2nfd0",
-  "headers": {},
-  "lastChangeId": "uc47fcs",
-  "interval": 3600,
-  "authorization": {
-    "_id": "8ackam3"
-  }
-}
 ```
 
 **Request - api.openag.io**
 ```http
-POST /resources/xl2nfd0/_meta/syncs HTTP/1.1
+POST /resources/xl2nfd0/_meta/_syncs HTTP/1.1
 Host: api.openag.io
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
@@ -517,19 +495,9 @@ Content-Type: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Location: /resources/xl2nfd0/_meta/syncs/8dkvf4r
+Content-Location: /resources/xl2nfd0/_meta/_syncs/8dkvf4r
 Content-Type: application/json
-Etag: "kdjvjklasfje498u39"
 
-{
-  "type": "poll",
-  "url": "http://api.agcloud.com/resources/ajd82mx",
-  "headers": {},
-  "lastChangeId": "fur4cxs5",
-  "interval": 3600,
-  "authorization": {
-    "_id": "3dcif83"
-  }
 }
 ```
 
@@ -556,24 +524,14 @@ Content-Type: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Location: resources/ajd82mx/_meta/syncs/xjf3ft6
+Content-Location: resources/ajd82mx/_meta/_syncs
 Content-Type: application/json
-Etag: "zjalkwjc3ldsua43ir"
 
-{
-  "type": "push",
-  "url": "http://api.openag.io/notifications",
-  "headers": {},
-  "events": ["change"],
-  "authorization": {
-    "_id": "8ackam3"
-  }
-}
 ```
 
 **Request - api.openag.io**
 ```http
-POST /resources/xl2nfd0/_meta/syncs HTTP/1.1
+POST /resources/xl2nfd0/_meta/_syncs HTTP/1.1
 Host: api.openag.io
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
@@ -592,19 +550,9 @@ Content-Type: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Location: /resources/xl2nfd0/_meta/syncs/8dkvf4r
+Content-Location: /resources/xl2nfd0/_meta/_syncs/8dkvf4r
 Content-Type: application/json
-Etag: "kdjvjklasfje498u39"
 
-{
-  "type": "push",
-  "url": "http://api.agcloud.com/notifications",
-  "headers": {},
-  "events": ["changed"],
-  "authorization": {
-    "_id": "3dcif83"
-  }
-}
 ```
 
 *One push and one poll*
@@ -619,11 +567,11 @@ Frank's file syncing application wants to discover all resources that have
 changed since the last time it checked. The last time Frank's app checked it had
 processed all changes up to and including the change id `6`.
 
-*Decoded GET URI: /resources?view={"$each._meta.changeId":{"$gt":6}}*
+*Decoded GET URI: /resources?view={"$each._rev":{"$gt":6}}*
 
 **Request**
 ```http
-GET /resources/%7B%22%24each._meta.changeId%22%3A%7B%22%24gt%22%3A6%7D%7D HTTP/1.1
+GET /resources/%7B%22%24each._rev%22%3A%7B%22%24gt%22%3A6%7D%7D HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 
@@ -636,10 +584,12 @@ Content-Type: application/json
 
 {
   "jc4dcx6": {
-    "_id": "jc4dcx6"
+    "_id": "jc4dcx6",
+    "_rev": "4-elirjkj",
   },
   "xj3jdc5": {
     "_id": "xj3jdc5"
+    "_rev": "2-pojakdu",
   }
 }
 ```
@@ -664,7 +614,7 @@ document must be added.
 
 **Request**
 ```http
-POST /resources/ixm24ws/_meta/permissions HTTP/1.1
+POST /resources/ixm24ws/_meta/_permissions HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
@@ -682,16 +632,8 @@ Content-Type: application/json
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
-Location: /resources/ixm24ws/_meta/permissions/9mxjs7c
-Etag: "xJDS9fd8f2838fxay4"
+Content-Location: /resources/ixm24ws/_meta/_permissions/9mxjs7c
 
-{
-  "user": {
-    "_id": "jdx83jx"
-  },
-  "type": "user",
-  "level": "owner"
-}
 ```
 
 Now Andy can access the resource with his identity.
@@ -709,18 +651,26 @@ Accept: application/json
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
-Etag: "aodskjfoa3j9af7883"
 
 {
+  "_id": "xklajfe",
+  "_rev": '59-nczjicuds",
+  "_meta": {
+    "_metaid": "xklajfe",
+    "_rev": "1-eiqknxxz",
+  },
   "totalYield": {
     "value": 5.6,
     "unit": "bushel"
   },
-  "type": "FeatureCollection",
-  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
-  "features": [{
-      "....": "...."
-  }]
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [125.6, 10.1]
+  },
+  "properties": {
+    "name": "Dinagat Islands"
+  }
 }
 ```
 
@@ -735,6 +685,12 @@ given resource or any resource in its tree of children.
 
 ```json
 {
+  "_id": "xjkaldf",
+  "_rev": "10-aklsjxh",
+  "_meta": {
+    "_metaid": "xjkaldf",
+    "_rev": "1-eklinkx",
+  },
   "name": "Smith30",
   "acres": 30.3,
   "boundary": { <geojson-of-boundary-polygons> }
@@ -745,11 +701,11 @@ given resource or any resource in its tree of children.
 resource but Andy just edited Smith30's field boundary. Franks's app needs to
 poll the resource to see if it has changed.
 
-*Decoded GET URI: /resources/ixm24ws?view={"_meta.changeId":{"$gt":15}}*
+*Decoded GET URI: /resources/ixm24ws?view={"_rev":{"$gt":15}}*
 
 **Request**
 ```http
-GET /resources/ixm24ws?view=%7B%22_meta.changeId%22%3A%7B%22%24gt%22%3A15%7D%7D HTTP/1.1
+GET /resources/ixm24ws?view=%7B%22_rev%22%3A%7B%22%24gt%22%3A15%7D%7D HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 
@@ -768,6 +724,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
+  "_id": "xjkaldf",
+  "_rev": "10-aklsjxh",
+  "_meta": {
+    "_metaid": "xjkaldf",
+    "_rev": "1-eklinkx",
+  },
   "name": "Smith30",
   "acres": 33.8,
   "boundary": { <geojson-of-boundary-polygons> }
@@ -788,7 +750,7 @@ resource.
 
 **Request**
 ```http
-POST /resources/ixm24ws/_meta/derivatives HTTP/1.1
+POST /resources/ixm24ws/_meta/_derivatives HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
@@ -805,7 +767,7 @@ Content-Type: application/json
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
-Location: /resources/ixm24ws/_meta/derivatives/jed82ar
+Content-Location: /resources/ixm24ws/_meta/_derivatives/jed82ar
 
 {
   "contentType": "application/shape",
@@ -825,7 +787,7 @@ This is accomplished by adding a derivatives entry to the originating resource.
 
 **Request**
 ```http
-POST /resources/ixm24ws/_meta/derivatives HTTP/1.1
+POST /resources/ixm24ws/_meta/_derivatives HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
@@ -841,8 +803,7 @@ Content-Type: application/json
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
-Location: /resources/ixm24ws/_meta/derivatives/xjd83jf
-Etag: "ckjlwj387fcakdfjk3"
+Content-Location: /resources/ixm24ws/_meta/_derivatives/xjd83jf
 
 {
   "contentType": "application/shape",
