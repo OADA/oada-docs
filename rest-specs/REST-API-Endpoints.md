@@ -305,6 +305,30 @@ required for OADA v1.0.0 conformance. More details can be found in the
 Clouds may support other query parameters but they should not expect that clients
 can make use of them.
 
+### The Usage of Arrays
+
+Arrays are tricky creatures in highly scalable systems because they have
+inherent order. If a particular OADA platform grows to a scale where an
+eventually-consistent underlying data store is necessary, arrays will cause
+problems because simultaneous requests have undefined order. Therefore, OADA
+recommends that clouds and clients use object's with random key strings over
+arrays whenever possible in new formats. Therefore, ordering is no longer an
+issue, and the client can arbitrarily append new data and choose to order the
+resource however they want after retrieving it.
+
+### Partitioning of Data Using Versioned Links
+
+OADA’s versioned links make it possible to partition your data into sets of
+manageable-sized chunks as their own resources, and use the versioned links to
+allow a client to synchronize only the chunks that have changed since the last
+time they checked. 
+
+A partitioning hash can be used as the key to chunk the data in a way that
+achieves some sort of lookup index. For example, geospatial data could use
+geohashes and time-series data could use a UNIX timestamp quantized to a certain
+number of seconds. See the OADA [as-harvested][as-harvested] format for a
+geohash example.
+
 ### Example `/resource/{resourceId}` document
 
 The following is a example of a JSON type crop resource.
@@ -417,6 +441,12 @@ The timestamp at which the resource was last modified.
 A link to the user which last modified the resource (*Note: Users are not
 currently defiend*)
 
+### Storing data in meta
+
+OADA expects clouds and clients to store data in the `/meta` document only when
+that information can not be stored within the resource itself. For example, the
+resource type is not JSON and so not be easily extended, or the formats schema
+is violated if an extra key is present.
 
 ### Example `/meta/{resourceId}` Document
 
@@ -629,3 +659,4 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 [rfc6901]: http://www.ietf.org/rfc/rfc6901.txt
 [view]: https://github.com/OADA/oada-docs/blob/master/rest-specs/View-Proposal.md
 [duck-typed]: https://en.wikipedia.org/wiki/Duck_typing
+[as-harvested]: https://github.com/OADA/oada-docs/blob/1.0.0-rc/formats/harvest/harvest.as-harvested.map.yield-moisture.js
