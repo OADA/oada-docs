@@ -373,7 +373,10 @@ Etag: "qewriuquicjdkcj832"
 
 {
   "_id": "fd8as8c",
-  "_rev": "34-kjxfdu73"
+  "_rev": "34-kjxfdu73",
+  "_meta": {
+    "_metaid": "fd8as8c",
+    "_rev": "3-xkjadfjx", 
   "type": "GeometeryCollection",
   "...": "...",
   "features": [{
@@ -398,8 +401,8 @@ resource's `_rev` value.
 
 - Frank's monitor device already has authorization and a valid token
   (SlAV32hkKG).
-- The monitor has previously downloaded the resource `ajd82ms` with a `_rev` of
-  `4-k23odkf`.
+- The monitor has previously downloaded the 'machine_1' document (resource
+  `ajd82ms`) with a `_rev` of `4-k23odkf`.
 
 The monitor periodically checks the resource's `_rev` value by issuing the
 following efficient HTTP request:
@@ -424,7 +427,9 @@ Etag: "ajja97823jfaksdhfx"
 ```
 
 And because the `_rev` for the resource (`ajd92mx`) has changed, the monitor
-should make a follow up request to update the resource.
+should make a follow up request to update the resource. *Note: The monitor can
+issue a GET on /resources/ajd92mx or a GET to
+/bookmarks/planting/prescriptions/list/machine_1*
 
 *Version 1.0.0+*
 
