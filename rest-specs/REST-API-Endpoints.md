@@ -1,6 +1,5 @@
 # Contents
 
-*Version 1.0.0*
 - [`/resources`](#resources)
   - [`/resources/{resourceId}`](#resourcesresourceid)
     - [Reserved and Required Keys](#reserved-and-required-keys)
@@ -38,18 +37,18 @@
     - [`application/vnd.oada.bookmarks.1+json` Media Type](#applicationvndoadabookmarks1json-media-type)
     - [Example `/bookmarks` document](#example-bookmarks-document)
 
-*Version 1.0.0+*
-- [`/users`](#users)
+*Draft: Version 1.0.0+*
+- [`/users` (Draft)](#users)
   - [`/users/{userId}`](#usersuserid)
     - [`/users` Are Resources](#users-are-resources)
     - [Federated Identity](#federated-identity)
     - [`me` {userId}](#me-userid)
     - [Example `/users/{userId}` document](#example-usersuserid-document)
-- [`/groups`](#groups)
+- [`/groups` (Draft)](#groups)
   - [`/groups/{groupId}`](#groupsgroupid)
     - [`/groups` Are Resources](#groups-are-resources)
     - [Example `/groups/{groupId}` document](#example-groupsgroupid-document)
-- [`/authorizations`](#authorizations)
+- [`/authorizations` (Draft)](#authorizations)
   - [`/authorizations/{authorizationId}`](#authorizationsauthorizationid)
     - [`/authorizations` Are Resources](#authorizations-are-resources)
     - [Example `/authorizations/{authorizationId}` document](#example-authorizationsauthorizationid-document)
@@ -64,13 +63,12 @@ result, are the most complex. That said, the OADA team has tried to keep the
 required functionally as simple as possible. The responsibilities of
 `/resources` include:
 
-*Version 1.0.0:*
 - Storing all data: binary files, JSON documents, etc.
 - Storing user defined metadata about the resource.
 - Maintaining links between data.
 - Maintaining resource version information.
 
-*Version 1.0.0+:*
+*Draft: Version 1.0.0+:*
 - Transforming and representing data in multiple formats.
 - Sharing data with other users.
 
@@ -586,11 +584,9 @@ Examples of some currently standardize keys are:
 }
 ```
 
-*Version 1.0.0+*
+*Draft: Version 1.0.0+*
 
-# `/users`
-
-*Draft API*
+# `/users` (Draft)
 
 ## `/users/{userId}`
 
@@ -646,9 +642,7 @@ bookmarks resource.
 }
 ```
 
-# `/groups`
-
-*Draft API*
+# `/groups` (Draft)
 
 ## `/groups/{groupId}`
 
@@ -682,9 +676,7 @@ managed in the same way.
 }
 ```
 
-# `/authorizations`
-
-*Draft API*
+# `/authorizations` (Draft)
 
 ## `/authorizations/{authorizationId}`
 

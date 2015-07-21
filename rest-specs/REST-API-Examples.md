@@ -21,25 +21,20 @@ OADA publications, but just in below is a quick reminder of them.
 
 # Examples
 
-*Version 1.0.0*
-
 * [JSON Resource Upload](#json-resource-upload)
 * [Binary Resource Upload](#binary-resource-upload)
 * [Resource Update](#resource-update)
 * [Field Discovery](#field-discovery)
 * [Manual Resource Syncing](#manual-resource-syncing)
 
-*Version 1.0.0+*
-* [Automatic Resource Syncing](#automatic-resource-syncing)
-* [Resource Sharing](#resource-sharing)
-* [View Changes](#view-changes)
-* [View Changes for a Resource and Its Children](#view-changes-for-a-resource-and-its-children)
-* [More View Examples](#more-view-examples)
-* [Copy Resource](#copy-resource)
-* [Make Existing Resource a Derivative of Another](#make-existing-resource-a-derivative-of-another)
-
-
-*Version 1.0.0*
+*Draft: Version 1.0.0+*
+* [Automatic Resource Syncing (Draft)](#automatic-resource-syncing)
+* [Resource Sharing (Draft)](#resource-sharing)
+* [View Changes (Draft)](#view-changes)
+* [View Changes for a Resource and Its Children (Draft)](#view-changes-for-a-resource-and-its-children)
+* [More View Examples (Draft)](#more-view-examples)
+* [Copy Resource (Draft)](#copy-resource)
+* [Make Existing Resource a Derivative of Another (Draft)](#make-existing-resource-a-derivative-of-another)
 
 # JSON Resource Upload
 
@@ -431,11 +426,9 @@ should make a follow up request to update the resource. *Note: The monitor can
 issue a GET on /resources/ajd92mx or a GET to
 /bookmarks/planting/prescriptions/list/machine_1*
 
-*Version 1.0.0+*
+*Draft: Version 1.0.0+*
 
-# Automatic Resource Syncing
-
-*Example Uses Draft API*
+# Automatic Resource Syncing (Draft)
 
 ![Resource auto syncing](resource_auto_syncing.png "Resource auto syncing")
 
@@ -612,9 +605,7 @@ It is possible to establish the synchronization by conducting polls in one
 direction and pushes in the other. The documents for each sync type are the same
 as the above examples.
 
-# View Changes
-
-*Example Uses Draft API*
+# View Changes (Draft)
 
 Frank's file syncing application wants to discover all resources that have
 changed since the last time it checked. The last time Frank's app checked it had
@@ -645,9 +636,7 @@ Content-Type: application/json
 }
 ```
 
-# Resource Sharing
-
-*Example Uses Draft API*
+# Resource Sharing (Draft)
 
 ![Resource sharing](resource_sharing.png "Resource sharing")
 
@@ -727,9 +716,7 @@ Etag: "aodskjfoa3j9af7883"
 }
 ```
 
-# View Changes for a Resource and Its Children
-
-*Example Uses Draft API*
+# View Changes for a Resource and Its Children (Draft)
 
 Frank's application wants to discover all changes that occurred to either the
 given resource or any resource in its tree of children.
@@ -779,16 +766,12 @@ Content-Type: application/json
 }
 ```
 
-# More View Examples
-
-*Example Uses Draft API*
+# More View Examples (Draft)
 
 More examples of the view parameter can be found in the 
 [View Proposal](View-Proposal.md#examples).
 
-# Copy Resource
-
-*Example Uses Draft API*
+# Copy Resource (Draft)
 
 Frank wants to make copy of a GeoJSON OADA yield resource but as a shape file.
 
@@ -824,9 +807,7 @@ Location: /resources/ixm24ws/_meta/derivatives/jed82ar
 }
 ```
 
-# Make Existing Resource a Derivative of Another
-
-*Example Uses Draft API*
+# Make Existing Resource a Derivative of Another (Draft)
 
 Frank modified a shape file yield map resource using a non-OADA compliant
 application. After uploading the result as a new resource he wants to make it a
