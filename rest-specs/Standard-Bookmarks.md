@@ -1,12 +1,15 @@
 # Standard Bookmarks
 
-*Work in progress*
+***Work in progress***
 
-## `/bookmarks/fields`
-Resources related to fields and field boundaries.
+## `/bookmarks/irrigation`
+Resources related to irrigation
 
-## `/bookmarks/clients`
-Client bookmarks
+## `/bookmarks/planting`
+Resources related to planting
+
+## `/bookmarks/harvest`
+Resources realted to harvest
 
 ## `/bookmarks/machines`
 Resources related to machines.
