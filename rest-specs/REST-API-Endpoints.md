@@ -540,11 +540,13 @@ Examples of some currently standardize keys are:
 }
 ```
 
+*Version 1.0.0+*
+
 # `/users`
 
 ## `/users/{userId}`
 
-`/users` provides details of another user's identity, such as, real name, email
+`/users` provide details of another user's identity, such as, real name, email
 address, avatar, etc assuming that user is *known* to the end user. Another user
 becomes *known* when it is:
 
@@ -555,7 +557,9 @@ Knowledge of personal identity makes sharing a lot easier and less error prone.
 For example, a user can see a picture and real name of another *before* sharing
 data.
 
-Users are just plain resources and so they may be shared, synchronized, and
+### `/users` Are Resources
+
+`/users` are plain resources and therefore can be shared, synchronized, and
 managed in the same way.
 
 ### Federated Identity
@@ -564,8 +568,8 @@ federated identity unless that identity has previously logged into the cloud and
 the owner of the identity agreed to share the personal information. Later
 versions of OADA may consider user discovery across the federation.
 
-### `me` userId
-The 'me' userId is a special id that refers the currently logged in user. This
+### `me` {userId}
+The 'me' {userId} is a special id that refers the currently logged in user. This
 can be used by an application to "bootstrap" itself. That is, the application
 can automatically discover the necessary information to show the user a
 reasonable first screen. For example, locating the root resource or the user's
@@ -573,12 +577,7 @@ bookmarks resource.
 
 ### Example `/users/{userId}` document
 
-```http
-GET /users/kdufe3f HTTP/1.1
-Host: agcloud.com
-Content-Type: application/json
-Authorization: Bearer ajCX83jfax.arfvFA323df
-
+```json
 {
   "_id": "kdufe3f",
   "_rev": "2-kdjf02",
@@ -589,42 +588,46 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
   },
   "email": "frank@agcloud.com",
   "rootResource": {
-    "_id": "jx9j3x8", "_rev": "2-kdjf2d"
+    "_id": "jx9j3x8",
+    "_rev": "2-kdjf2d"
   },
   "currentUser": {
-    "_id": "kdufe3f", "_rev": "2-kdjf2d"
+    "_id": "kdufe3f",
+    "_rev": "2-kdjf2d"
   }
 }
 ```
 
 # `/groups`
 ## `/groups/{groupId}`
+
 `/groups` list, creates, and manages groups of users. They can be used to
 allocate resource permissions more flexibly. For example, at any time a user can
 be added or removed from a group and all previously shared files are
 automatically become accessible or inaccessible, respectively.
 
-Groups are just plain resources and so they may be shared, synchronized, and
+### `/groups` Are Resources
+
+`/groups` are plain resources and so they may be shared, synchronized, and
 managed in the same way.
 
 ### Example `/groups/{groupId}` document
 
-```http
-GET /groups/jf72jsd HTTP/1.1
-Host: agcloud.com
-Content-Type: application/json
-Authorization: Bearer ajCX83jfax.arfvFA323df
-
+```json
 {
   "_id": "jf72jsd",
   "_rev": "3-dkjfowwf",
   "name": "Employees",
-  "members": [{
-    "_id": "kdufe3f", "_rev": "3-kdjf02fdd",
-  },
-  {
-    "_id": "3jkxi82", "_rev": "3-kdjf02fdd",
-  }]
+  "members: {
+    "jaio3j": {
+      "_id": "kdufe3f", 
+      "_rev": "3-kdjf02fdd",
+    },
+    "ejijmc": {
+      "_id": "3jkxi82",
+      "_rev": "3-kdjf02fdd",
+    }
+  }
 }
 ```
 
@@ -635,24 +638,29 @@ Authorization: Bearer ajCX83jfax.arfvFA323df
 for a third party. Currently it is meant to manage OAuth 2.0 tokens, but could
   hypothetically manage any type of authorization.
 
+### `/authorizations` Are Resources
+
+`/authorizations` are plain resources and so they may be shared, synchronized,
+and managed in the same way.
+
 ### Example `/authorizations/{authorizationId}` document
 
-```http
-GET /groups/jf72jsd HTTP/1.1
-Host: agcloud.com
-Content-Type: application/json
-Authorization: Bearer ajCX83jfax.arfvFA323df
-
+```json
 {
   "_id": "jf72jsd",
   "_rev": "4-jkf2olkdf",
-  "user": {
-    "_id": "fjf23cd", "_rev": "8-kjdf02j"
-  },
-  "scope": "resources groups",
-  "created": "1985-04-12T23:20:50.52Z",
-  "modified": "1985-04-12T23:20:50.52Z",
-  "expires": "1985-05-12T23:20:50.52Z"
+  "tokens": {
+    "kaljf": {
+      "user": {
+        "_id": "fjf23cd",
+        "_rev": "8-kjdf02j"
+      },
+      "scope": "resources groups",
+      "created": "1985-04-12T23:20:50.52Z",
+      "modified": "1985-04-12T23:20:50.52Z",
+      "expires": "1985-05-12T23:20:50.52Z"
+    }
+  }
 }
 ```
 
