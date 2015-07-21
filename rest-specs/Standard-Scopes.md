@@ -1,15 +1,18 @@
 # Standard OAuth 2.0 Scopes
 
-*Work in progress*
+***Work in progress***
 
-*All keys below `/bookmarks`, joined by periods, are implicitly a standard OADA scope.*
-
-Below is a living table of standard OADA scopes and the descriptions that should
-be presented to the user on the OAuth 2.0 approve screen if requested.
+Below is a living table of standard OADA scopes.
 
 | Scope                         | Scope Description                             |
 | -----                         | -----------------                             |
-| bookmarks.fields              | Access all of your bookmarked field resources |
-| bookmarks.clients             | Access to the bookmarks of your clients       |
-| bookmarks.machines            | Access to all your machine resources          |
-| bookmarks.machines.harvesters | Access to all your harvester machines         |
+| oada.irrigation               | Access all irrigation media types             |
+| oada.planting                 | Access all planting media types               |
+| oada.harvest                  | Access all harvest media types                |
+| oada.machines                 | Access all machine media types                |
+| bookmarks.machines.harvesters | Access all harvester machine media types      |
+
+Scopes can also be qualified with:
+
+- read
+- read+write
