@@ -21,7 +21,6 @@ OADA publications, but just in below is a quick reminder of them.
 
 # Examples
 
-* [Federated Login](#federated-login)
 * [JSON Resource Upload](#json-resource-upload)
 * [Binary Resource Upload](#binary-resource-upload)
 * [Resource Update](#resource-update)
@@ -34,181 +33,6 @@ OADA publications, but just in below is a quick reminder of them.
 * [More View Examples](View-Proposal.md#examples)
 * [Copy Resource](#copy-resource)
 * [Make Existing Resource a Derivative of Another](#make-existing-resource-a-derivative-of-another)
-
-# Federated Login
-
-![Federated login](federated_login.png "Federated login")
-
-Frank logs into his agcloud.com OADA account with an OADA compliant Android app
-using his farmeridentity.com federated identity.
-
-To begin the process Frank's app discovers the authorization endpoints and
-agcloud.com's OADA base URI by issuing a GET request on the
-.well-known/oada-configuration URI.
-
-**Request**
-```http
-GET /.well-known/oada-configuration HTTP/1.1
-Host: agcloud.com
-Accept: application/json
-```
-
-**Response**
-```http
-HTTP/1.1 200 OK
-Content-Type: application/vnd.oada.oada-configuration.1+json
-
-{
-  "authorization_endpoint": "http://api.agcloud.com/authorize",
-  "token_endpoint": "http://api.agcloud.com/token",
-  "oada_base_uri": "https://api.agcloud.com",
-  "client_discovery": "https://api.agcloud.com/clientDiscovery"
-}
-```
-
-The second step is to start the OAuth 2.0 procedure by making an implicit flow
-request to the specified `authorization_endpoint`. Implicit flow is used because
-it makes most sense for an Android app. However, other OAuth 2.0 flows may be
-used.
-
-**Request**
-```http
-GET /authorize?response_type=token&client_id=s6BhdRkqt3%40agidentity.com&state=xyz&redirect_uri=https%3A%2F%2Flocalhost HTTP/1.1
-Host: api.agcloud.com
-Accept: text/html,application/xhtml+xml,application/xml
-```
-
-**Response**
-```http
-HTTP/1.1 200 OK
-Content-Type: text/html
-
-<html>
-...
-</html>
-```
-
-Agcloud.com's response is an HTML page that challenges Frank to login with local
-user credentials or an OADA federated identity.
-
-Frank elects to login with the OADA federated identity
-`frank@farmeridentity.com` and therefore his user-agent  generates a GET request
-back to agcloud.com.  If farmeridentity.com's OpenId Connect endpoint is unknown
-to agcloud.com then it queries
-`farmeridentity.com/.well-known/openid-configuration` to discover the correct
-URL.
-
-**Request**
-```http
-GET /.well-known/openid-configuration HTTP/1.1
-Host: farmeridentity.com
-Accept: application/json
-```
-
-**Response**
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "issuer": "https://farmeridentity.com",
-  "authorization_endpoint": "https://farmeridentity.com/oada/fed/auth",
-  "token_endpoint": "https://farmeridentity/oada/fed/token",
-  "userinfo_endpoint": "https://farmeridentity/oada/fed/userInfo",
-  "jwks_uri": "https://farmeridentity.com/oada/fed/certs",
-  "response_types_supported": [
-    "code",
-    "token",
-    "id_token",
-    "code token",
-    "code id_token",
-    "token id_token",
-    "code token id_token"
-  ],
-  "subject_types_supported": [
-    "public"
-  ],
-  "id_token_alg_values_supported": [
-    "RS256"
-  ],
-  "token_endpoint_auth_methods_supported": [
-    "client_secret_post"
-  ]
-}
-```
-
-Once the correct URL is known, agcloud.com responds to the above user-agent GET
-request with a redirect to the OpenID Connect endpoint. This begins the  OpenID
-Connect flow.
-
-**Response**
-```http
-HTTP/1.1 302 Found
-Location: https://farmeridentity.com/authorize?response_type=id_token%20token&client_id=s6BhdRkqt3%40agidentity.com&redirect_uri=https%3A%2F%2Fapi.agcloud.com%2Fcb&scope=openid%20profile&state=af0ifjsldkj&nonce=n-0S6_WzA2Mj HTTP/1.1
-```
-
-Therefore, Frank's user-agent makes a GET request to farmeridentity.com
-
-**Request**
-```http
-GET /authorize?response_type=code&client_id=s6bhdrkqt3%40agidentity.com&redirect_uri=https%3a%2f%2fapi.agcloud.com%2fcb&scope=openid%20profile HTTP/1.1
-Host: farmeridentity.com
-Accept: text/html,application/xhtml+xml,application/xml
-```
-
-**Response**
-```http
-HTTP/1.1 200 OK
-Content-Type: text/html; charset=UTF-8
-
-<html>
-...
-</html>
-```
-
-farmeridentity.com's response is an HTML page that challenges Frank to login
-with his local user credentials, in this case the account of Frank's federated
-identity.
-
-After a successfully log in Frank is asked if agcloud.com is allowed to access
-his profile information, e.g., real name, email, etc. When Frank agrees
-farmeridentity.com issues a redirect response back to agcloud.com.
-
-**Response**
-```http
-HTTP/1.1 302 Found
-Location: https://api.agcloud.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&state=af0ifjsldkj
-```
-
-Frank's user-agent makes the redirect GET request and therefore completes the
-OpenId Connect flow. The original OAuth 2.0 resumes.
-
-**Request**
-```http
-GET /cb?code=SplxlOBeZQQYbYS6WxSbIA&state=af0ifjsldkj HTTP/1.1
-Host: api.agcloud.com
-Accept: text/html,application/xhtml+xml,application/xml
-```
-
-In the background, agcloud.com communicates with farmeridentity.com using
-standard OpenID Connect protocol to retrieve the actual `id_token` that asserts
-Frank's identity and a JSON document which contains Frank's personal profile
-information.
-
-When agcloud.com validates the `id_token` Frank is considered logged as the
-identity `frank@agidentity.com` and an OAuth 2.0 token is generated.
-
-Agcloud.com responds to the above GET request with a redirect that includes the
-generated token.
-
-**Response**
-```http
-HTTP/1.1 302 Found
-Location: https://localhost#access_token=SlAV32hkKG&token_type=bearer&expires_in=3600&state=af0ifjsldkj
-```
-
-Finally, the Android app parses the `access_token` from the Location URI
-fragment and stores it for later use.
 
 # JSON Resource Upload
 
@@ -236,12 +60,14 @@ Content-Type: application/vnd.oada.yield+json
     "value": 5.6,
     "unit": "bushel"
   },
-  "type": "FeatureCollection",
-  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
-  "features": [{
-      "....": "...."
-  }],
-  "name": "Frank's Yield"
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [125.6, 10.1]
+  },
+  "properties": {
+    "name": "Dinagat Islands"
+  }
 }
 ```
 
@@ -252,59 +78,7 @@ Location: /resources/ixm24ws
 Content-Type: application/vnd.oada.yield+json
 Etag: "9083423jkadfu9382x"
 
-{
-  "totalYield": {
-    "value": 5.6,
-    "unit": "bushel"
-  },
-  "type": "FeatureCollection",
-  "bbox": [40.42426718029455, 40.42429718029455, -86.841822197086, -86.841852197086],
-  "features": [{
-      "....": "...."
-  }],
-  "_meta": {
-    "_id": "ixm24ws/_meta",
-    "etag": "alsjfadksja9388x7d",
-    "changeId": 1,
-    "mimeType": "application/vnd.oada.yield+json",
-    "created": "1985-04-12T23:20:50.52Z",
-    "createdBy": {
-      "_id": "ixm24ws/_meta/createdBy"
-    },
-    "modified": "1985-04-12T23:20:50.52Z",
-    "modifiedBy": {
-      "_id": "ixm24ws/_meta/modifiedBy"
-    },
-    "meta": {
-      "_id": "ixm24ws/_meta/meta",
-      "name": "Frank's Yield"
-    },
-    "formats": {
-      "_id": "ixm24ws/_meta/formats"
-    },
-    "parents": {
-      "_id": "ixm24ws/_meta/parents"
-    },
-    "children": {
-      "_id": "ixm24ws/_meta/children"
-    },
-    "derivatives": {
-      "_id": "ixm24ws/_meta/derivatives"
-    },
-    "permissions": {
-      "_id": "ixm24ws/_meta/permissions"
-    },
-    "derivatives": {
-      "_id": "ixm24ws/_meta/derivatives"
-    }
-  }
-}
 ```
-
-Because `_meta` was given in the original POST request the response assumed that
-the view for `_meta` should implicitly be truthy. If the original POST contained
-only the native document, then only the native document would have been
-returned.
 
 # Binary Resource Upload
 
@@ -320,7 +94,7 @@ entire shape file as a new resource to Frank's agcloud.com.
 - The telematics device already has authorization and a valid token
   (SlAV32hkKG).
 
-To set the new resource's metadata  and upload the associated data
+To set the new resource's metadata and upload the associated data
 simultaneously a POST request with the header `Content-Type:
 multipart/form-data` is made. The JSON metadata document is sent with the
 form-data named `metadata` and the data with form-data named `data`.
@@ -334,13 +108,11 @@ Content-Type: multipart/form-data; boundary=AaB03x
 
 --AaB03x
 Content-Disposition: form-data; name="metadata"
-Content-Type: application/json
+Content-Type: application/vnd.oada.metadata+json
 
 {
   "_meta": {
-    "meta": {
-      "name": "Frank's Yield"
-    }
+    "name": "Frank's Yield"
   }
 }
 
@@ -355,61 +127,10 @@ Content-Type: application/shape
 ```http
 HTTP/1.1 201 Created
 Location: /resources/Kcdi32S
-Content-Type: multipart/mixed; boundary="Ox6Csz";
-
---Ox6Csz
-Content-Disposition: form-data; name="metadata"
-Content-Type: application/vnd.oada.metadata+json
-
-{
-  "_meta": {
-    "_id": "Kcdi32S/_meta",
-    "etag": "JzlCjsjaljcaw8723x",
-    "changeId": 1,
-    "mimeType": "application/shape",
-    "created": "1985-04-12T23:20:50.52Z",
-    "createdBy": {
-      "_id": "Kcdi32S/_meta/createdBy"
-    },
-    "modified": "1985-04-12T23:20:50.52Z",
-    "modifiedBy": {
-      "_id": "Kcdi32S/_meta/modifiedBy"
-    },
-    "meta": {
-      "_id": "Kcdi32S/_meta/meta",
-      "name": "Frank's Yield"
-    },
-    "formats": {
-      "_id": "Kcdi32S/_meta/formats"
-    },
-    "parents": {
-      "_id": "Kcdi32S/_meta/parents"
-    },
-    "children": {
-      "_id": "Kcdi32S/_meta/children"
-    },
-    "derivatives": {
-      "_id": "Kcdi32S/_meta/derivatives"
-    },
-    "permissions": {
-      "_id": "Kcdi32S/_meta/permissions"
-    },
-    "derivatives": {
-      "_id": "Kcdi32S/_meta/derivatives"
-    }
-  }
-}
-
---Ox6Csz
-Content-Disposition: form-data; name="data"
 Content-Type: application/shape
+Etag: "xjksd8f3fp89d8dx8z"
 
-...binary data...
 ```
-Because `_meta` was given in the original POST request the response assumed that
-the view for `_meta` should implicitly be truthy. If the original POST contained
-only the native document, then only the native document would have been
-returned.
 
 # Resource Update
 
@@ -431,15 +152,22 @@ GET /resources/kdj83mx HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Accept: application/json
+
 ```
 
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/vnd.oada.machines.status.v1+json
 Etag: "686897696a7c876b7e"
 
 {
+  "_id": "kdj83mx",
+  "_rev": "2-jxkjadhd",
+  "_meta": {
+    "_metaid": "kdj83mx",
+    "_rev": "1-xkaj8fd"
+  },
   "hours": 1523,
   "fuel_level": "80%",
   "service_intervals": {
@@ -463,7 +191,6 @@ PUT /resources/kdj83mx HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
-If-Match: "686897696a7c876b7e"
 
 {
   "hours": 1524,
@@ -474,37 +201,28 @@ If-Match: "686897696a7c876b7e"
   }
 }
 ```
-
-Notice the `If-Match` header provides concurrency protection. That is the PUT
-will fail if the document has changed since the initial GET.
 
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
 Etag: "893rjdklia9w383984"
 
-{
-  "hours": 1524,
-  "fuel_level": "80%",
-  "service_intervals": {
-    "50_hour": -5,
-    "100_hour": 45
-  }
-}
 ```
 
-## With two separate puts to update each section of the document independently
+Notice however, that if the resource changed between the client completing the
+read and issuing the write then some data may be lost. As a result, it is often
+better to change the resource as far down the object as possible. For example,
+we could achieve the same updates with less chance of data loss by issuing two
+PUT requests.
 
-*Unless the application carefully considers concurrency issues this method may
-result in a inconsistent document.*
+## With two separate puts to update each section of the document independently
 
 **Request**
 ```http
 PUT /resources/kdj83mx/hours HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
-Content-Type: plain/text
+Content-Type: application/json
 
 1524
 ```
@@ -512,10 +230,8 @@ Content-Type: plain/text
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: plain/text
 Etag: "asf9cka3a08345rjj4"
 
-1524
 ```
 
 **Request**
@@ -524,7 +240,6 @@ PUT /resources/kdj83mx/service_intervals HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
 Content-Type: application/json
-If-Match: "asf9cka3a08345rjj4"
 
 {
   "50_hour": -5,
@@ -538,46 +253,38 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 Etag: "893rjdklia9w383984"
 
-{
-  "50_hour": -5,
-  "100_hour": 45
-}
 ```
-
-## With PATCH
+Now the final document state is:
 
 **Request**
 ```http
-PATCH /resources/kdj83mx HTTP/1.1
+GET /resources/kdj83mx HTTP/1.1
 Host: api.agcloud.com
 Authentication: Bearer SlAV32hkKG
-Content-Type: application/json
-If-Match: "686897696a7c876b7e"
+Accept: application/json
 
-{
-  "hours": 1524,
-  "service_intervals": {
-    "50_hour": -5,
-    "100_hour": 45
-  }
-}
 ```
 
 **Response**
 ```http
-HTTP/1.1 200 Ok
-Content-Type: application/json
-Etag: "893rjdklia9w383984"
+HTTP/1.1 200 OK
+Content-Type: application/vnd.oada.machines.status.v1+json
+Etag: "686897696a7c876b7e"
 
 {
-  "hours": 1524,
+  "_id": "kdj83mx",
+  "_rev": "4-kxjakdu3",
+  "_meta": {
+    "_metaid": "kdj83mx",
+    "_rev": "1-xkaj8fd"
+  },
+  "hours": 1523,
   "fuel_level": "80%",
   "service_intervals": {
-    "50_hour": -5,
-    "100_hour": 45
+    "50_hour": -4,
+    "100_hour": 46
   }
 }
-
 ```
 
 # Resource Sharing
