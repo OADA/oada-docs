@@ -590,6 +590,8 @@ Examples of some currently standardize keys are:
 
 # `/users`
 
+*Draft API*
+
 ## `/users/{userId}`
 
 `/users` provide details of another user's identity, such as, real name, email
@@ -645,6 +647,9 @@ bookmarks resource.
 ```
 
 # `/groups`
+
+*Draft API*
+
 ## `/groups/{groupId}`
 
 `/groups` list, creates, and manages groups of users. They can be used to
@@ -678,6 +683,9 @@ managed in the same way.
 ```
 
 # `/authorizations`
+
+*Draft API*
+
 ## `/authorizations/{authorizationId}`
 
 `/authorizations` list, creates, and manages the current user's authorizations

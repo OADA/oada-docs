@@ -435,6 +435,8 @@ issue a GET on /resources/ajd92mx or a GET to
 
 # Automatic Resource Syncing
 
+*Example Uses Draft API*
+
 ![Resource auto syncing](resource_auto_syncing.png "Resource auto syncing")
 
 Frank stores the same resource in two different OADA implementations. Frank
@@ -612,6 +614,8 @@ as the above examples.
 
 # View Changes
 
+*Example Uses Draft API*
+
 Frank's file syncing application wants to discover all resources that have
 changed since the last time it checked. The last time Frank's app checked it had
 processed all changes up to and including the change id `6`.
@@ -642,6 +646,8 @@ Content-Type: application/json
 ```
 
 # Resource Sharing
+
+*Example Uses Draft API*
 
 ![Resource sharing](resource_sharing.png "Resource sharing")
 
@@ -723,6 +729,8 @@ Etag: "aodskjfoa3j9af7883"
 
 # View Changes for a Resource and Its Children
 
+*Example Uses Draft API*
+
 Frank's application wants to discover all changes that occurred to either the
 given resource or any resource in its tree of children.
 
@@ -773,10 +781,14 @@ Content-Type: application/json
 
 # More View Examples
 
+*Example Uses Draft API*
+
 More examples of the view parameter can be found in the 
 [View Proposal](View-Proposal.md#examples).
 
 # Copy Resource
+
+*Example Uses Draft API*
 
 Frank wants to make copy of a GeoJSON OADA yield resource but as a shape file.
 
@@ -813,6 +825,8 @@ Location: /resources/ixm24ws/_meta/derivatives/jed82ar
 ```
 
 # Make Existing Resource a Derivative of Another
+
+*Example Uses Draft API*
 
 Frank modified a shape file yield map resource using a non-OADA compliant
 application. After uploading the result as a new resource he wants to make it a
