@@ -353,7 +353,7 @@ particular OADA-conformant clients can make use of them since they are non-stand
 ### The Usage of Arrays
 
 Arrays are tricky creatures in highly scalable systems because they have
-inherent order. If a particular OADA platform grows to a scale where an
+an inherent order. If a particular OADA platform grows to a scale where an
 eventually-consistent underlying data store is necessary, arrays will cause
 problems because simultaneous requests have undefined order. Therefore, OADA
 recommends that clouds and clients use object's with random key strings over
@@ -369,7 +369,7 @@ incrementally add data in a scalable way.
 ### Partitioning of Data Using Versioned Links
 
 OADA’s versioned links make it possible to partition your data into sets of
-manageable-sized chunks as their own resources, and use the versioned links to
+manageably-sized chunks as their own resources, and use the versioned links to
 allow a client to synchronize only the chunks that have changed since the last
 time they checked. 
 
@@ -435,7 +435,7 @@ one meta-data document and it is used to help accomplish tasks such as:
   - Resource sharing
   - Resource synchronization between clouds and applications
   
-`/meta` documents share the id of the associated resource and have an
+`/meta` documents share the id of their associated resource and have an
 authoritative URI of `/meta/{resourceId}`. However, the `/meta` document can
 also be accessed via the top-level `_meta` key of a resource since all resources
 contain a versioned link to their meta documents..
@@ -532,7 +532,7 @@ key stored in the meta document):
 
 ## `/bookmarks/{key 1}/.../{key N}`
 
-`/bookmarks` provides a standard way to link to and discover interesting
+`/bookmarks` provide a standard way to link to and discover interesting
 resources. OADA has defined a JSON bookmark media type,
 `application/vnd.oada.bookmarks.1+json`, and we strongly encourage everyone to
 use it. In doing so, clients will be able to easily discover various available
@@ -547,7 +547,7 @@ a versioned link to a resource.
 `/bookmarks` are plain resources and therefore can be shared, synchronized, and
 managed in the same way. Additionally they must function identically to and meet
 the same requirements as resources. In fact, we recommend that clouds just use
-their resource implementation for bookmarks and view the `/bookmark` URI as
+their resource implementation for bookmarks and view the `/bookmarks` URI as
 merely a convenient way for a client to access the specific user's bookmark
 resource.
 
@@ -608,7 +608,7 @@ Another user becomes *known* when it is:
 - Has previously shared files with the end user.
 
 Knowledge of personal identity makes sharing a lot easier and less error prone.
-For example, a user can see a picture and real name of another *before* sharing
+For example, a user can see a picture and the real name of another *before* sharing
 data.
 
 ### `/users` Are Resources
@@ -618,8 +618,8 @@ managed in the same way.
 
 ### Federated Identity
 Currently a cloud is not expected to return information for an arbitrary
-federated identity unless that identity has previously logged into the cloud and
-the owner of the identity agreed to share the personal information. Later
+federated identity unless that identity has previously logged in to the cloud and
+the owner of the identity agreed to share their personal information. Later
 versions of OADA may consider user discovery across the federation.
 
 ### `me` {userId}
@@ -662,7 +662,7 @@ bookmarks resource.
 
 `/groups` lists, creates, and manages groups of users. They can be used to
 allocate resource permissions more flexibly. For example, at any time a user can
-be added or removed from a group and all previously shared files are
+be added or removed from a group and all previously shared files
 automatically become accessible or inaccessible, respectively.
 
 ### `/groups` Are Resources
@@ -698,9 +698,9 @@ managed in the same way.
 
 ## `/authorizations/{authorizationId}`
 
-`/authorizations` list, creates, and manages the current user's authorizations
-for a third party. Currently it is meant to manage OAuth 2.0 tokens, but could
-  hypothetically manage any type of authorization.
+`/authorizations` list, create, and manage the current user's authorizations
+to third parties. Currently they are meant to manage OAuth 2.0 tokens, but could
+hypothetically manage any type of authorization.
 
 ### `/authorizations` Are Resources
 
