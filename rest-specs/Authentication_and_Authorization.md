@@ -373,7 +373,7 @@ Accept: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/vnd.oada.oada-configuration.1+json
 
 {
   "oada_base_uri": "https://provider.example.org",
@@ -535,7 +535,7 @@ Accept: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/vnd.oada.oada-configuration.1+json
 
 {
   "oada_base_uri": "https://provider.example.org",
@@ -552,7 +552,7 @@ Content-Type: application/json
 making a POST request with it's client registration document to
 `registration_endpoint`.
 
-  **Request**
+**Request**
 ```http
 POST /register HTTP/1.1
 Host: provider.example.org
