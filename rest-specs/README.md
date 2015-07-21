@@ -52,10 +52,10 @@
 * [Manual Resource Syncing](REST-API-Examples.md#manual-resource-syncing)
 
 *Draft: Version 1.0.0+*
-* [Automatic Resource Syncing (Draft)](REST-API-Examples.md#automatic-resource-syncing)
-* [Resource Sharing (Draft)](REST-API-Examples.md#resource-sharing)
-* [View Changes (Draft)](REST-API-Examples.md#view-changes)
-* [View Changes for a Resource and Its Children (Draft)](REST-API-Examples.md#view-changes-for-a-resource-and-its-children)
-* [More View Examples (Draft)](REST-API-Examples.md#more-view-examples)
-* [Copy Resource (Draft)](REST-API-Examples.md#copy-resource)
-* [Make Existing Resource a Derivative of Another (Draft)](REST-API-Examples.md#make-existing-resource-a-derivative-of-another)
+* [Automatic Resource Syncing (Draft)](REST-API-Examples.md#automatic-resource-syncing-draft)
+* [Resource Sharing (Draft)](REST-API-Examples.md#resource-sharing-draft)
+* [View Changes (Draft)](REST-API-Examples.md#view-changes-draft)
+* [View Changes for a Resource and Its Children (Draft)](REST-API-Examples.md#view-changes-for-a-resource-and-its-children-draft)
+* [More View Examples (Draft)](REST-API-Examples.md#more-view-examples-draft)
+* [Copy Resource (Draft)](REST-API-Examples.md#copy-resource-draft)
+* [Make Existing Resource a Derivative of Another (Draft)](REST-API-Examples.md#make-existing-resource-a-derivative-of-another-draft)

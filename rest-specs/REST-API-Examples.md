@@ -28,13 +28,13 @@ OADA publications, but just in below is a quick reminder of them.
 * [Manual Resource Syncing](#manual-resource-syncing)
 
 *Draft: Version 1.0.0+*
-* [Automatic Resource Syncing (Draft)](#automatic-resource-syncing)
-* [Resource Sharing (Draft)](#resource-sharing)
-* [View Changes (Draft)](#view-changes)
-* [View Changes for a Resource and Its Children (Draft)](#view-changes-for-a-resource-and-its-children)
-* [More View Examples (Draft)](#more-view-examples)
-* [Copy Resource (Draft)](#copy-resource)
-* [Make Existing Resource a Derivative of Another (Draft)](#make-existing-resource-a-derivative-of-another)
+* [Automatic Resource Syncing (Draft)](#automatic-resource-syncing-draft)
+* [Resource Sharing (Draft)](#resource-sharing-draft)
+* [View Changes (Draft)](#view-changes-draft)
+* [View Changes for a Resource and Its Children (Draft)](#view-changes-for-a-resource-and-its-children-draft)
+* [More View Examples (Draft)](#more-view-examples-draft)
+* [Copy Resource (Draft)](#copy-resource-draft)
+* [Make Existing Resource a Derivative of Another (Draft)](#make-existing-resource-a-derivative-of-another-draft)
 
 # JSON Resource Upload
 
