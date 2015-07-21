@@ -159,7 +159,7 @@ to meta documents versus links to resources, the `_metaid` is used in place of t
 key. The `_rev` key can still be used, and functions the same.
 
 ### Accessing Resources
-Resources can be directly downloaded with an HTTP GET request on it's
+A resource can be directly downloaded with an HTTP GET request on its
 `/resources/{resourceId}` endpoint. There are two main format options:
 
 #### Binary blob
@@ -167,8 +167,8 @@ Resources can be directly downloaded with an HTTP GET request on it's
 Binary blobs are stored directly at the `/resources/{resourceId}` URI. Only the
 reserved and required JSON resource keys, e.g., `_id`, `_rev`, `_meta`, exist
 beyond that. They can be access directly by adding their name as a suffix to the
-of the resource URI or by using the `view` parameter to expand them and
-therefore resulting in a `Multipart/mixed` response.
+resource URI or by using the `view` parameter to expand them,
+resulting in a `Multipart/mixed` response.
 
 #### JSON Document
 
@@ -182,7 +182,7 @@ location, such as a Content Delivery Network (CDN).
 ##### Accessing sub-documents
 
 Any sub-document of a resource can directly accessed by appending a path of JSON
-keys to the end of it's `/resources/{resourceId}` URI.  The mapping follows [RFC
+keys to the end of its `/resources/{resourceId}` URI.  The mapping follows [RFC
 6901 JavaScript Object Notation (JSON) Pointer][rfc6901] (*Developers should be
 sure to take note of JSON Pointer's tilde escaping*).
 
@@ -223,7 +223,7 @@ current revision number of the resource.
 ##### Sub-documents follow links
 
 If a link is present in a given sub-path the cloud will attempt to automatically
-follow and link and continue applying the path on the new resource.
+follow the link and continue applying the path on the new resource.
 
 For example, if the document stored at `/resources/234` is:
 
@@ -275,19 +275,19 @@ And a GET request to `/resoruces/234/a/c` is the same as `/resources/345/c`:
 ```
 
 This feature is particularly useful to a client when dealing with `/bookmarks`,
-where it can directly access the data it is interested in rather then first
+where it can directly access the data it is interested in rather than first
 looking up the resource id from the bookmark.
 
 ### Media Types (or Content-Types)
 
 OADA makes use of HTTP Content-Types to help inform the client what kind of
-data it is receiving. There are no restrictions to the media types names, other
-then what is imposed by HTTP itself. However, it is recommended that it contains
-sufficient information for a client to successful interpret the data.
+data it is receiving. There are no restrictions on the media types names, other
+than what is imposed by HTTP itself. However, it is recommended that it contains
+sufficient information for a client to successfully interpret the data.
 
 For example, the media type `application/json` tells a client that it should be
 able to parse it as valid JSON, but it does not tell it what keys to expect.
-Where, the media type `application/vnd.example.sensor.1+json` tells the client
+ALternately, the media type `application/vnd.example.sensor.1+json` tells the client
 that the response is not only JSON but that it should also expect to see the
 keys defined by version 1 of the application/vnd.example.sensor model. 
 
@@ -301,12 +301,12 @@ The only *officially* supported query parameter is `view`, however it is **not**
 required for OADA v1.0.0 conformance. More details can be found in the 
 [View Proposal][view].
 
-Clouds may support other query parameters but it should not expect that clients
+Clouds may support other query parameters but they should not expect that clients
 can make use of them.
 
 ### Example `/resource/{resourceId}` document
 
-The following is a example of JSON type crop resource.
+The following is a example of a JSON type crop resource.
 
 ```json
 {
@@ -364,7 +364,7 @@ also be accessed via the top-level `_meta` key of a resource.
 
 ### Meta Documents Are Basically Resources
 
-`/meta` documents are basically resources. They behave identically with the 
+`/meta` documents are basically resources. They behave identically to resources, with the 
 single exception that `/meta` documents do not have `/meta` documents themselves
 and therefore also do not have the requirement of a top level `_meta` key. 
 
@@ -390,7 +390,7 @@ start with the underscore character.
 
 ### `_mediaType`
 
-The media type stored in `_mediaType` must be the same value that is return in 
+The media type stored in `_mediaType` must be the same value that is returned in 
 the HTTP Content-Type header.
 
 ### `_stats`
@@ -400,20 +400,20 @@ from a UNIX type file system. The required keys are:
 
 #### `created`
 
-The timestamp in which the resource was created.
+The timestamp at which the resource was created.
 
 #### `createdBy`
 
-A link the user which created the resource (*Note: User's are not currently
-defiend*)
+A link to the user who created the resource (*Note: Users are not currently
+defined*)
 
 #### `modified`
 
-The timestamp in which the resource was last modified.
+The timestamp at which the resource was last modified.
 
 #### `modifiedBy`
 
-A link the user which last modified the resource (*Note: User's are not
+A link to the user which last modified the resource (*Note: Users are not
 currently defiend*)
 
 
