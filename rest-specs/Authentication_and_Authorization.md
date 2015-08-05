@@ -161,6 +161,7 @@ The above `software_statement` example breaks down into:
 {
   "typ": "JWT",
   "alg": "RS256",
+  "jku": "https://registration.example.com/certs",
   "kid": "nc63dhaSdd82w32udx6v"
 }
 ```
@@ -191,7 +192,8 @@ The above `software_statement` example breaks down into:
   "tos_uri": "http://example.com/tos.html",
   "policy_uri": "http://example.com/policy.html",
   "software_id": "djxkjau3n937xz7jakl3",
-  "registration_provider": "registration.example.com"
+  "registration_provider": "registration.example.com",
+  "jwks_uri": "https://example.com/certs"
 }
 ```
 
