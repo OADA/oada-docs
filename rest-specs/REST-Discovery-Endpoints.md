@@ -97,7 +97,11 @@ Content-Type: application/json
   "registration_endpoint": "https://example.org/register",
   "token_endpoint_auth_signing_alg_values_supported": [
     "RS256"
-  ]
+  ],
+  "scopes_supported": {
+    "name": "oada.all.1",
+    "read+write": true
+  }
 }
 ```
 
