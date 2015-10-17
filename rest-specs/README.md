@@ -4,6 +4,8 @@
 
 # OADA API
 
+## [API Philosophy](API-Philosophy.md)
+
 ## Base Endpoints
 
 * [/resources](REST-API-Endpoints.md#resources)
