@@ -415,7 +415,7 @@ Accept: application/json
 
 **Response**
 ```http
-HTTP/1.1 200 OK
+HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
@@ -578,7 +578,7 @@ Accept: application/json
 
   **Response**
 ```http
-HTTP/1.1 200 OK
+HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
@@ -696,7 +696,7 @@ grant_type=authorization_code&code=Pi2dY-FBxZqLx81lTbDM4WGlI&redirect_uri=https%
 
 **Response**
 ```http
-HTTP/1.1 200 OK
+HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
@@ -812,7 +812,7 @@ Accept: application/json
 
 **Response**
 ```http
-HTTP/1.1 200 OK
+HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
@@ -867,7 +867,7 @@ Accept: application/json
 
 **Response**
 ```http
-HTTP/1.1 200 OK
+HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
@@ -1087,7 +1087,7 @@ Accept: application/json
 
 **Response**
 ```http
-HTTP/1.1 200 OK
+HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
@@ -1208,7 +1208,7 @@ grant_type=authorization_code&code=5MZVZOgNV-nh3brHM78UoaJ-w&redirect_uri=https%
 
 **Response**
 ```http
-HTTP/1.1 200 OK
+HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
