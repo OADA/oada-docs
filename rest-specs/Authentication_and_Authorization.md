@@ -238,27 +238,28 @@ algorithm described in the `header`, all joined together by a period.
 
 An example of a valid RS256 JWS client assertion is show below:
 
-`eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImtqY1NjamMzMmR3SlhYTEpEczNyMTI0c2ExIn0.eyJqdGkiOiJQaTJkWS1GQnhacUx4ODFsVGJETTRXR2xJIiwiaWF0IjoxNDE4NDIxMTAyLCJhdWQiOiJodHRwczovL3Byb3ZpZGVyLm9hZGEtZGV2LmNvbS90b2tlbiIsImlzcyI6IjNrbGF4dTgzOGFrYWhmMzhhY3VjYWl4NzNAaWRlbnRpdHkub2FkYS1kZXYuY29tIn0.utoCmRrIg20MgxxpEoGq7waY5XSPPoFBD0q97Y-XvGXjGHQ04Kth8MQxsMMGkOZ07xjhBuM9upax2XFMiWDvCbjqi8thlQyI0Th-qA7sQ-pCcJEI0Eakee28rRI8Xay_WX7GmDeuSItXvloLSJIC8kkB5DKTtebWP0TdAJYd5ds`
+`eyJraWQiOiJuYzYzZGhhU2RkODJ3MzJ1ZHg2diIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJqdGkiOiJFcXdOWXhhbm9aYkJGNHp0YjAzTXQ4Sy1MIiwiaWF0IjoxNDQ4Mzc0MDA0LCJleHAiOjE0NDgzNzQwNjQsImF1ZCI6Imh0dHBzOi8vcHJvdmlkZXIub2FkYS1kZXYuY29tL3Rva2VuIiwiaXNzIjoiOWNiZjBkMGEtYTk1Ni00NzUyLTg2OTUtYWMyZTJhNzkzZGY2Iiwic3ViIjoiOWNiZjBkMGEtYTk1Ni00NzUyLTg2OTUtYWMyZTJhNzkzZGY2In0.aA62EPbHxHqOyNl5sMza76BPRobbudECVyA2q005N3Ybvd35IcUIUiqLEM5PZ4YHqAd8rCBtDPBzG4H0Hpd7iaTf1Euv6F_3PnWbJGRrSuwPZMeTB-vaQ0dvvNcP-gUedoTvDt-RpWwq5FgX83JtXpNZ0g0mnEjy9qJFLfaSmYw`
 
 Where
 
 `header` decodes to:
 ```json
 {
+  "kid": "nc63dhaSdd82w32udx6v",
   "typ": "JWT",
-  "alg": "RS256",
-  "kid": "kjcScjc32dwJXXLJDs3r124sa1"
+  "alg": "RS256"
 }
 ```
 
 `payload` decodes to:
 ```json
 {
-  "jti": "Pi2dY-FBxZqLx81lTbDM4WGlI",
-  "iat": 1418421102,
-  "aud": "https://provider.example.org/token",
-  "iss": "3klaxu838akahf38acucaix73",
-  "sub": "3klaxu838akahf38acucaix73",
+  "jti": "EqwNYxanoZbBF4ztb03Mt8K-L",
+  "iat": 1448374004,
+  "exp": 1448374064,
+  "aud": "https://provider.oada-dev.com/token",
+  "iss": "9cbf0d0a-a956-4752-8695-ac2e2a793df6",
+  "sub": "9cbf0d0a-a956-4752-8695-ac2e2a793df6"
 }
 ```
 
@@ -267,11 +268,11 @@ validate the JWS is:
 
 ```json
 {
+  "kty": "RSA",
   "alg": "RS256",
   "use": "sig",
-  "kid": "kjcScjc32dwJXXLJDs3r124sa1",
-  "kty": "RSA",
-  "n": "359ZykLITko_McOOKAtpJRVkjS5itwZxzjQidW2X6tBEOYCH4LZbwfj8fGGvlUtzpyuwnYuIlNX8TvZLTenOk45pphXr5PMCMKi7YZgkhd6_t_oeHnXY-4bnDLF1r9OUFKwj6C-mFFM-woKc-62tuK6QJiuc-5bFfn9wRL15K1E",
+  "kid": "nc63dhaSdd82w32udx6v",
+  "n": "qPy65Egcxqr4QlV_Z3VCgHUNK8W9hDddrWC9XFpeDEOIX34OHts7l_RWi2tgPTkyq9j1f_PEX-Khx4KHf-vCM0VVHE2ech8bHyig477V_hJmQcT6ZuEU57RYVcmq3k89IvllFhuZkoZStBa9FHL8rAEdkPMPnVvT6sKOWqIWHo0",
   "e": "AQAB"
 }
 ```
