@@ -1,5 +1,7 @@
 ## Welcome to the **Open Ag Data Alliance** (OADA).
 
+[![Join the chat at https://gitter.im/OADA/oada-docs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/OADA/oada-docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This wiki is the main source of documentation for OADA developers.
 Documentation will be built over time as the project progresses.  We're in the
 early stages now, so please help build out some documentation, or check back
