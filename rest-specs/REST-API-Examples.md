@@ -469,7 +469,7 @@ Content-Type: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Location: resources/ajd82mx/_meta/_syncs/xjf3ft6
+Content-Location: /resources/ajd82mx/_meta/_syncs/xjf3ft6
 Content-Type: application/json
 
 ```
@@ -524,7 +524,7 @@ Content-Type: application/json
 **Response**
 ```http
 HTTP/1.1 200 OK
-Content-Location: resources/ajd82mx/_meta/_syncs
+Content-Location: /resources/ajd82mx/_meta/_syncs
 Content-Type: application/json
 
 ```
