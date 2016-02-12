@@ -578,6 +578,12 @@ Examples of some currently standardized keys are:
 
 ```json
 {
+  "_id": "fJXCdjDS",
+  "_rev": "20-asFae3",
+  "_meta": {
+    "_id": "FKx34dvs",
+    "_rev": "1-sd23cx"
+  },
   "irrigation": {
     "_id": "XcHd76xz",
     "_rev": "10-jfi3fu"
