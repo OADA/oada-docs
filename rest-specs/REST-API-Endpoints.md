@@ -581,7 +581,7 @@ Examples of some currently standardized keys are:
   "_id": "fJXCdjDS",
   "_rev": "20-asFae3",
   "_meta": {
-    "_id": "FKx34dvs",
+    "_metaid": "FKx34dvs",
     "_rev": "1-sd23cx"
   },
   "irrigation": {
