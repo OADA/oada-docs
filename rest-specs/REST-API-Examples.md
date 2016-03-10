@@ -51,7 +51,7 @@ entire GeoJSON file as a new resource to Frank's agcloud.com.
 ```http
 POST /resources HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/vnd.oada.yield+json
 
 {
@@ -101,7 +101,7 @@ form-data named `metadata` and the data with form-data named `data`.
 ```http
 POST /resources HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: multipart/form-data; boundary=AaB03x
 
 --AaB03x
@@ -147,7 +147,7 @@ status resource in Frank's agcloud.com with the new total runtime.
 ```http
 GET /resources/kdj83mx HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Accept: application/json
 
 ```
@@ -185,7 +185,7 @@ This can be accomplished several ways.
 ```http
 PUT /resources/kdj83mx HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
@@ -216,7 +216,7 @@ PUT requests.
 ```http
 PUT /resources/kdj83mx/hours HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 1524
@@ -232,7 +232,7 @@ HTTP/1.1 200 OK
 ```http
 PUT /resources/kdj83mx/service_intervals HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
@@ -254,7 +254,7 @@ In either case, assuming no lost data, the end result is:
 ```http
 GET /resources/kdj83mx HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Accept: application/json
 
 ```
@@ -305,7 +305,7 @@ The first step is to request /bookmarks to see if there is a fields key in it:
 ```http
 GET /bookmarks HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 
 ```
 
@@ -334,7 +334,7 @@ this example, we'll use the _meta/_mediaType method:
 ```http
 GET /resources/fd8as8c/_meta/_mediaType HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 ```
 
 **Response**
@@ -353,7 +353,7 @@ request it directly from /bookmarks):
 ```http
 GET /bookmarks/fields HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Accept: application/vnd.oada.field+json
 ```
 
@@ -405,7 +405,7 @@ following efficient HTTP request:
 ```http
 GET /bookmarks/planting/prescriptions/_rev HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 
 ```
 
@@ -452,7 +452,7 @@ or poll sync between both clouds, in both directions.
 ```http
 POST /resources/ajd82mx/_meta/_syncs HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
@@ -478,7 +478,7 @@ Content-Type: application/json
 ```http
 POST /resources/xl2nfd0/_meta/_syncs HTTP/1.1
 Host: api.openag.io
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
@@ -507,7 +507,7 @@ Content-Type: application/json
 ```http
 POST /resources/ajd82mx/_meta/syncs HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
@@ -533,7 +533,7 @@ Content-Type: application/json
 ```http
 POST /resources/xl2nfd0/_meta/_syncs HTTP/1.1
 Host: api.openag.io
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
@@ -573,7 +573,7 @@ processed all changes up to and including the change id `6`.
 ```http
 GET /resources/%7B%22%24each._rev%22%3A%7B%22%24gt%22%3A6%7D%7D HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 
 ```
 
@@ -616,7 +616,7 @@ document must be added.
 ```http
 POST /resources/ixm24ws/_meta/_permissions HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
@@ -642,7 +642,7 @@ Now Andy can access the resource with his identity.
 ```http
 GET /resources/ixm24ws HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer kaJH38da3x
+Authorization: Bearer kaJH38da3x
 Accept: application/json
 
 ```
@@ -707,7 +707,7 @@ poll the resource to see if it has changed.
 ```http
 GET /resources/ixm24ws?view=%7B%22_rev%22%3A%7B%22%24gt%22%3A15%7D%7D HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 
 ```
 
@@ -752,7 +752,7 @@ resource.
 ```http
 POST /resources/ixm24ws/_meta/_derivatives HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
@@ -789,7 +789,7 @@ This is accomplished by adding a derivatives entry to the originating resource.
 ```http
 POST /resources/ixm24ws/_meta/_derivatives HTTP/1.1
 Host: api.agcloud.com
-Authentication: Bearer SlAV32hkKG
+Authorization: Bearer SlAV32hkKG
 Content-Type: application/json
 
 {
