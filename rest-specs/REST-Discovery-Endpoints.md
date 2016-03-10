@@ -74,7 +74,7 @@ particular instance of the OADA API.
   Registration][oauth-dyn-reg] endpoint for the associated OADA API.  *Note:
   This key is inspired from [OpenId Connect Discovery][oidc-discovery]*
 
-- `client_assertion_signing_alg_values_supported` (**Array[String]**)  
+- `token_endpoint_auth_signing_alg_values_supported` (**Array[String]**)  
   *REQUIRED*. List of JWT signing algorithms that a client may use to sign an
   OAuth 2.0 client assertion ([JSON Web Token (JWT) Profile for OAuth
   2.0 Client Authentication and Authorization Grants][jwt-bearer]). The
