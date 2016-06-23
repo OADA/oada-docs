@@ -7,7 +7,7 @@ This wiki is the main source of documentation for OADA developers.
 ## The important stuff: API Docs
 [Rest API Spec](rest-specs/README.md)
 
-[tl;dr Intro to the OADA API slides](https://cdn.rawgit.com/OADA/oada-docs/master/OADA_API_Intro_Irrigation.html)
+[tl;dr Intro to the OADA API slides](https://cdn.rawgit.com/OADA/oada-docs/master/intro/OADA_API_Intro_Irrigation.html)
 
 ## Examples: Demonstration specs
 [Demonstrations](demo-specs/README.md)
