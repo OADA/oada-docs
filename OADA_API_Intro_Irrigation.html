@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>tl;dr OADA Intro - Irrigation</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      table {
+        margin: auto;
+        border-collapse: collapse;
+      }
+      table, th, td {
+        border: 1px solid #929897;
+      }
+      th, td {
+        padding: 10px;
+      }
+      th {
+        color: #66D9EF;
+        /*background-color: #474842; */
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: #66D9EF;
+        text-decoration: underline;
+      }
+      code {
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: 2px;
+        background-color: #474842;
+        color: rgb(249, 38, 114);
+      }
+      .remark-code {
+        font-family: 'Ubuntu Mono'; 
+      }
+      .remark-inline-code { 
+        font-family: 'Ubuntu Mono'; 
+      }
+      .remark-code-line-highlighted     { 
+        /* background-color: #373832;  */
+      }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        color: #777872;
+        /*text-shadow: 0 0 20px #333; */
+      }
+      .inverse h1 {
+        color: #f3f3f3;
+        line-height: 0.9em;
+      }
+      .inverse h2 {
+        color: rgb(249, 38, 114);
+        line-height: 0.9em;
+      }
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+      .left-column h2:last-of-type, .left-column h3:last-child {
+         color: #000;
+      }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle, inverse
+
+# tl;dr Intro to the OADA API 
+## Flavored with Irrigation
+-----------------------------------
+[http://openag.io](http://openag.io)  
+[http://github.com/oada](http://github.com/oada)  
+[http://github.com/oada/valleyix-formats](http://github.com/oada/valleyix-formats)
+
+.footnote[
+  created with [remark](http://github.com/gnab/remark)
+]
+
+
+
+---
+class: center, middle, inverse
+# Brief intro to API's
+
+
+
+---
+class: middle, inverse
+
+# Problem: you have bytes about your dog Fido.  
+* Steve wants those bytes.  
+* You want Steve to have those bytes.
+
+---
+class: middle, inverse
+
+# Problem: you have some bytes about your dog Fido.  
+* Steve wants those bytes.  
+* You want Steve to have those bytes.
+
+## Solution: you email the bytes to Steve.
+
+
+
+
+---
+class: middle, inverse
+
+# Problem: Steve loses emails.
+* You are on vacation today: Steve needs to get them himself.
+
+---
+class: inverse
+
+# Problem: Steve loses emails.
+* You are on vacation today: Steve needs to get them himself.
+
+## Solution: Webpage [https://pets.com/fido](https://pets.com/fido)
+* give link to Steve
+* always has latest info about Fido
+* bytes returned have HTML format
+
+Request:
+```http
+GET /fido HTTP/1.1
+Host: pets.com
+```
+Response:
+```xml
+<html>
+  <body>
+    <h1>Fido</h1>Nickname: fifi
+  </body>
+</html>
+```
+
+
+
+
+---
+class: center, middle, inverse
+
+# You have an API!
+
+Host: `pets.com`  
+Security: SSL, public
+
+Endpoint|Content-Type| Description
+:------:|:----------:|:--------------: 
+`/fido` | `text/html`| Info about Fido
+
+
+
+---
+
+class: inverse
+
+# Problem: Fido is female and pregnant.
+
+---
+class: inverse
+
+# Problem: Fido is female and pregnant.
+
+## Solution: add more endpoints
+-------------------------------------------
+Endpoint   |Content-Type| Description
+:---------|:----------:|:-------------- 
+`/fido`    | `text/html`| Info about Fido
+`/frida`   | `text/html`| Info about Frida
+`/fritter` | `text/html`| Info about Fritter
+`/fila`    | `text/html`| Info about Fila
+`/flipper` | `text/html`| Info about Flipper
+`/felix`   | `text/html`| Info about Felix
+
+
+
+
+---
+class: inverse
+
+# Problem: Steve can't remember all your dogs
+
+---
+class: inverse
+
+# Problem: Steve can't remember all your dogs
+
+## Solution: Add a list document
+
+-----------------------------------
+
+Endpoint   |Content-Type| Description
+:---------|:----------:|:--------------
+`/dogs`         | `text/html`| Links to all dogs
+`/dogs/fido`    | `text/html`| Info about Fido
+`/dogs/frida`   | `text/html`| Info about Frida
+`/dogs/fritter` | `text/html`| Info about Fritter
+`/dogs/fila`    | `text/html`| Info about Fila
+`/dogs/flipper` | `text/html`| Info about Flipper
+`/dogs/felix`   | `text/html`| Info about Felix
+
+
+---
+class: inverse
+
+# Problem: Steve forgets.  Alot.
+* Steve watches lots of dogs, including yours.
+
+---
+class: inverse
+
+# Problem: Steve forgets.  Alot.
+* Steve watches lots of dogs, including yours.
+
+## Solution: Custom app to read dog feeding schedule
+--------------------------------------
+Endpoint   |Content-Type| Description
+:---------|:----------:|:--------------
+`/api/dogs`                 | `application/json`| Links to all dogs
+`/api/dogs/{id}`            | `application/json`| Info about dog {id}
+`/api/dogs/{id}/schedule`   | `application/json`| {id}'s feeding schedule
+
+---
+class: inverse
+
+# Example request from an app: List
+Request:
+```http
+GET /api/dogs HTTP/1.1
+Host: pets.com
+```
+Response:
+```javascript
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+     'fido': 'https://pets.com/api/dogs/fido',
+    'frida': 'https://pets.com/api/dogs/frida',
+  'fritter': 'https://pets.com/api/dogs/fritter',
+     'fila': 'https://pets.com/api/dogs/fila',
+  'flipper': 'https://pets.com/api/dogs/flipper',
+    'felix': 'https://pets.com/api/dogs/felix',
+}
+```
+Code:
+```javascript
+const res = await request
+  .get('https://pets.com/api/dogs/fido/schedule');
+const all_dogs = JSON.parse(response.body);
+console.log('Here are all the dogs: ', all_dogs);
+```
+
+---
+class: inverse 
+
+# Example request from an app: Fido's feeding schedule
+Request:
+```http
+GET /api/dogs/fido/schedule HTTP/1.1
+Host: pets.com
+```
+Response:
+```javascript
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+  feedings: [
+    {
+      'time': 144799203,
+      'amount': 2, 'units': 'scoop',
+      'done': true
+    },
+    {
+      'time': 144799777,
+      'amount': 2, 'units': 'scoop',
+      'done': false
+    }
+  ],
+}
+```
+
+---
+class: inverse
+# Example request from an app: Fido's feeding schedule
+## Alert Steve about Fido:
+
+Code:
+```javascript
+const response = await request.get('https://pets.com/api/dogs/fido/schedule');
+const fido_schedule = JSON.parse(response.body);
+const now = moment();
+fido_schedule.feedings.each((feeding) => {
+  let time_passed = now.isAfter(feeding.time);
+  if (time_passed && !feeding.done) {
+    alert_steve('Fido needs food!!');
+  }
+});
+```
+
+---
+class: middle, inverse 
+
+# Problem: Fido's info should be private
+
+
+---
+class: middle, inverse 
+
+# Problem: Fido's info should be private
+
+## Solution: Add an authorization token
+Request:
+```http
+GET /api/dogs/fido/schedule HTTP/1.1
+Host: pets.com
+Authorization: Bearer 20kdjf20i3kjlejf03i
+```
+
+OAuth2 is how you hand out tokens via OADA
+
+
+
+---
+class: center, middle, inverse
+
+# Some design principles that make the web work
+
+## a.k.a. How the REST was won
+
+---
+class: middle, inverse
+
+# Principles
+* Info about Fido is `state`
+* You can transfer a representation of that state
+* `REpresentational State Transfer (REST)`
+* The web is one big REST API.  It seems to work, let's use it.
+* New architectures transfer events instead of state, but the log 
+  of events themselves are state, and generally still have "snapshots" 
+  of state
+
+---
+class: inverse
+
+# Important Stuff About REST:
+
+## Principle 1: Everything is a _resource_.
+* resource is a generic concept for "some bytes"
+
+---
+class: inverse
+# Important Stuff About REST:
+
+## Principle 1: Everything is a _resource_.
+## Principle 2: Resources have a unique ID 
+  * i.e. a URL
+---
+class: inverse
+# Important Stuff About REST:
+
+## Principle 1: Everything is a _resource_.
+## Principle 2: Resources have a unique ID 
+## Principle 3: Resources should be _cacheable_ via a _version_
+  * allows scaling, load balancing, etc.
+  * HTTP does this with an `Etag`
+
+---
+class: inverse
+# Important Stuff About REST:
+
+## Principle 1: Everything is a _resource_.
+## Principle 2: Resources have a unique ID 
+## Principle 3: Resources should be _cacheable_ via a _version_
+## Principle 4: HATEOAS: HAs To bE the wOrst Acronym eveR
+  * Hypertext As The Engine Of Application State
+  * Means resources should be able to link to each other
+
+---
+class: inverse
+# Important Stuff About REST:
+
+## Principle 1: Everything is a _resource_.
+## Principle 2: Resources have a unique ID 
+## Principle 3: Resources should be _cacheable_ via a _version_
+## Principle 4: HATEOAS
+## Principle 5: Resources have _content-types_
+  * negotiation between server/client about what form to use for state
+  
+---
+class: inverse
+# Important Stuff About REST:
+
+## Principle 1: Everything is a _resource_.
+## Principle 2: Resources have a unique ID 
+## Principle 3: Resources should be _cacheable_ via a _version_
+## Principle 4: HATEOAS
+## Principle 5: Resources have _content-types_
+## Principle 6: Only 4 verbs 
+  * GET, PUT, POST, DELETE
+  * all else is nouns (i.e. state)
+
+
+
+---
+class: center, middle, inverse
+
+# OADA Design Goals
+## based on REST architectural principles
+
+---
+class: center, middle, inverse
+
+# Goal: Only need to know domain
+
+---
+class: middle, inverse
+
+# Goal: Only need to know domain
+
+## Solution: /.well-known/
+Discover domain stuff here.  
+`/.well-known/oada-configuration`:
+```javascript
+{
+  "oada_base_uri": "https://api.example.org/v1",
+  "authorization_endpoint": "https://example.org/auth",
+  "token_endpoint": "https://example.org/token",
+  "registration_endpoint": "https://example.org/register",
+  "token_endpoint_auth_signing_alg_values_supported": [
+    "RS256"
+  ]
+}
+```
+similar for openid-configuration
+
+
+
+[//]: # (-------------------------------------------------------------)
+---
+
+class: center, middle, inverse
+# Goal: Easy to adapt well-designed existing REST API's
+
+---
+
+class: middle, inverse
+# Goal: Easy to adapt well-designed existing REST API's
+
+## Solution: one big JSON document graph
+
+* don't break HTTP
+* 4 verbs (GET/PUT/POST/DELETE), all else is nouns
+* JSON is 80% use case
+
+
+
+[//]: # (-------------------------------------------------------------)
+---
+
+class: center, middle, inverse
+# Goal: API defined by the data you put in it.
+
+---
+
+class: middle, inverse
+# Goal: API defined by the data you put in it.
+
+## Solution: URL's built from underlying data
+```http
+/resources/123/a/b/c --&gt;
+{
+  "a": {
+    "b": {
+      "c": "hello"
+    }
+  }
+}
+```
+
+## Solution: Minimal number of endpoints
+```http
+  /resources
+  /bookmarks
+  /meta
+  + a few other minor ones
+```
+
+
+
+[//]: # (-------------------------------------------------------------)
+---
+
+class: center, middle, inverse
+# Goal: Everything is a resource.
+
+---
+
+class:  middle, inverse
+# Goal: Everything is a resource.
+
+## Solution:
+```http
+/resources --&gt; everything
+/bookmarks --&gt; is a resource
+/meta --&gt; is resources*
++ a few other minor ones --&gt; all resources
+```
+
+.footnote[
+  \* without it's own meta
+]
+
+
+
+[//]: # (-------------------------------------------------------------)
+---
+
+class: center, middle, inverse
+
+# /resources
+
+---
+
+class: middle, inverse
+
+# /resources
+
+* GET: give me the resource
+* PUT: merge with existing resource, or create new one
+* POST: add new
+* DELETE: ummm.....delete
+
+## --&gt; JSON types:
+* \+GET/PUT/POST/DELETE at any level
+* \+URL's implicitly follow links (covered later)
+
+---
+
+class: middle, inverse
+# /resources
+```http
+GET /resources/123 HTTP/1.1
+{
+  "_id": "123", "_rev": "4-kdjf02",
+  "_type": "application/vnd.montypython.grail.1+json",
+  "_meta": { "_metaid": "123", "_rev": "3-kljdfs09" },
+  "the_knights": "who say Ni!" 
+}
+```
+`_id` is part of URL after /resources/
+
+---
+
+class: middle, inverse
+# PUT: merge
+
+```http
+PUT /resources/123/a HTTP/1.1
+{
+  "killer": "rabbit"
+}
+```
+* creates resource 123 if it doesn't exist
+* creates key "a" as an object if !a or !object
+* only changes "killer" key on a, leaves others alone
+* can overwrite simultaneous data: _change farthest down graph possible_!
+* idempotent jokes are funny no matter how many times you tell them
+
+---
+
+class: middle, inverse
+# POST: add/append
+
+```http
+POST /resources/123/a HTTP/1.1
+{
+  "killer": "rabbit"
+}
+```
+
+* creates "a" if it doesn't exist
+* if a is array, append value
+* if a is object, put value at random key: `/resources/123/a/0d2jokldf`
+* returns key/array index created as location
+* NOT idempotent
+* safe from race conditions for existing keys that are objects
+
+
+
+---
+class: middle, inverse
+# /resources
+## Actual resource:
+```http
+GET /resources/123 HTTP/1.1
+{
+  "_id": "123", "_rev": "4-kdjf02",
+  "_type": "application/vnd.montypython.grail.1+json",
+  "_meta": { "_metaid": "123", "_rev": "3-kljdfs09" },
+  "the_knights": "who say Ni!"
+}
+```
+## Versioned link to resource:
+```http
+{
+  "_id": "123", "_rev": "4-kdjf02"
+}
+```
+Link looks same as resource, just "unexpanded".
+
+
+---
+
+class: center, middle, inverse
+
+# Goal: need to add my own stuff to a resource whose format doesn't support it
+
+
+---
+
+class: middle, inverse
+
+# Goal: need to add my own stuff to a resource whose format doesn't support it
+
+## Solution: `/meta`
+
+* Custom things that can't go in native format (shapefiles...)
+
+* OADA-specified keys start with `_`
+
+* Don't use this for storing data unless you have no other choice.
+
+* It's a resource*: GET/PUT/POST/DELETE to it like normal.
+
+* `_metaid` === resource's `_id`
+
+.footnote[
+  \* without it's own meta, and _metaid instead of _id
+]
+
+---
+
+class: middle, inverse
+# /meta
+```http
+GET /meta/123 HTTP/1.1
+{
+  "_metaid": "123", "_rev": "3-kdjf02j",
+  "_type": "application/vnd.oada.meta.1+json",
+  "_mediaType": "application/vnd.awesomeness+json",
+  "_stats": {
+    "created": 1438729551,
+    "modified": 1438729551,
+    "createdBy": { "_id": "234" },
+    "modifiedBy": { "_id": "234" }
+  }
+  "the_number_of_thy_counting": 3
+}
+```
+
+---
+
+class: center, middle, inverse
+
+# Goal: efficient polling
+
+---
+
+class: middle, inverse
+
+# Goal: efficient polling
+
+## Solution: `_rev` graph
+
+```javascript
+format: 3-fj0202fj
+        ^ ^------^
+        |    |
+        |    +--- random
+        +-------- 'eventually' increasing number
+```
+
+`_rev` eventually changes when resource changes
+
+Cloud has leeway to control delay for when `_rev` updates
+* Example: service level agreements, adaptive load control, ...
+
+* Doesn't _have_ to be eventual, but can be for scalable systems.
+
+---
+
+class: middle, inverse
+# Goal: efficient polling
+
+## Solution: versioned links
+
+* versioned links contain _rev as part of parent document: 
+```json
+"a_key": { "_id": "123", "_rev": "3-kj2ofd" }
+```
+
+* Can just watch parent `_rev` for changes to graph below.
+
+* Can find subset of recently changed resources from parent.
+
+* Makes push trivial: notify that now is a good time to poll
+  * extension for web sockets, web hooks, Kafka/Event Bus
+
+---
+
+class: middle, inverse
+
+# Goal: Sometimes ignorance is bliss
+
+## Solution: non-versioned links
+
+```json
+"a_key": { "_id": "123" }
+```
+## _Use when change detection is not important_
+
+or to prevent large-scale meaningless `_rev` updates
+* Ex: harvest data that links back to machine
+(machine name change would trigger all harvest data to update)
+
+---
+
+class: center, middle, inverse
+# Goal: find the resources you want
+
+---
+
+class: middle, inverse
+# Goal: find the resources you want
+
+## Solution: `/bookmarks` resource discovery
+
+```http
+GET /bookmarks HTTP/1.1
+{
+  "_id": "123", "_rev": "6-k6i67i",
+  "_type": "application/vnd.oada.bookmarks.1+json".
+  "_meta": { "_metaid": "123", "4-kdfj02fkd" },
+  "fields"    : { "_id": "0ijo2flk", "3-kdjf02fj2" },
+  "irrigation": { "_id": "9nflwjfo", "2-kjdf0ijof" },
+  "harvest"   : { "_id": "jkjf2dj9", "9-djf02jkls" }
+}
+```
+* it's a resource
+* each user has their own: `/bookmarks` === `/users/me/bookmarks`
+
+---
+class: center, middle, inverse
+
+# Goal: agnostic to ontology and format
+
+---
+class: middle, inverse
+
+# Goal: agnostic to ontology and format
+
+## Solution: _type
+
+* media type of /bookmarks and any other resources determine ontology
+
+* can mix-match ontologies 
+
+## DUCK TYPING IS AMBROSIA FOR PROGRAMMING.  USE IT.
+
+---
+
+class: center, middle, inverse
+# Goal: want to `GET /bookmarks/irrigation`
+
+---
+
+class: middle, inverse
+# Goal: want to GET /bookmarks/irrigation
+
+## Solution: URL's implicitly follow links
+
+```javascript
+GET /bookmarks
+{
+         "_id": "123", "_rev": "6-k6i67i",
+       "_type": "application/vnd.oada.bookmarks.1+json",
+       "_meta": { "_metaid": "123", "_rev": "4-kdfj02fkd" },
+  "irrigation": { "_id": "jkjf2dj9", "_rev": "9-djf02jkls" }
+}
+```
+```javascript
+GET /bookmarks/irrigation
+{
+       "_id": "9nflwjfo", "_rev": "6-k6i67i",
+     "_meta": { "_metaid": "9nflwjfo", "_rev": "4-kdfj02fkd" },
+  "machines": { "_id": "0ijo2flk", "_rev": "3-kdjf02fj2" },
+      "PAIL": { "_id": "902jif3d", "_rev": "7-kjf03ij2k3" },
+}
+```
+.footnote[
+  \* media type determines available links.
+]
+
+---
+class: middle, inverse
+
+# Goal: find valleyix pivot locations for user
+
+---
+class: middle, inverse
+
+# Goal: find valleyix pivot locations for user
+
+```javascript
+GET /bookmarks/irrigation/machines
+{
+  "_id": "37hfh23", "_rev": "6-k6i67i",
+  "_type": "application/vnd.oada.irrigation.machines.1+json",
+  "_meta": { "_metaid": "37hfh23", "_rev": "4-kdfj02fkd" },
+  "list": {
+    "k02jkf33": { "_id": "k02jkf33", "_rev": "9-fkdj20ifj3" },
+    "02kjfl3f": { "_id": "02kjfl3f", "_rev": "2-df23fj09ji" }
+  }
+}
+```
+## Notice switch to valleyix ontology:
+```javascript
+GET /bookmarks/irrigation/machines/list/k02jkf33
+{
+               "_id": "59i34jf4", "_rev": "10-9j2f3iokl23",
+             "_type": "application/vnd.valleyix.machine.1+json",
+             "_meta": { "_metaid": "59i34jf4", "_rev": "6-kfkfj02if" },
+     "configuration": { "_id": "qwe123", "_rev": "1-kdjf02" },
+            "status": { "_id": "asd456", "_rev": "4-k2g234gw02" },
+           "applied": { "_id": "zxc789", "_rev": "2-svcwevws2" },
+          "vriZones": { "_id": "rty012", "_rev": "1-kwg2g02" },
+  "vriPrescriptions": { "_id": "fgh345", "_rev": "7-swedrg24g02" },
+        "workOrders": { "_id": "vbn678", "_rev": "13-534nberv2302" }
+```
+
+---
+class: middle, inverse
+
+# Goal: find valleyix pivot locations for user
+
+```javascript
+GET /bookmarks/irrigation/machines/list/k02jkf33/configuration
+{
+             "_id": "qwe123", "_rev": "10-9j2f3iokl23",
+           "_type": "application/vnd.valleyix.machine.configuration.1+json",
+           "_meta": { "_metaid": "qwe123", "_rev": "6-kfkfj02if" },
+        "Latitude": -40.0290384,
+       "Longitude": 81.2930423,
+   "MachineLength": 350,
+    "ForwardAngle": 279.9203,
+    "ReverseAngle": 32.0909,
+   "....": "...." 
+}
+```
+Defined by [https://github.com/oada/valleyix-formats](https://github.com/oada/valleyix-formats)
+
+Could have [https://github.com/aggateway/pail-formats](https://github.com/aggateway/pail-formats)
+
+
+
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
