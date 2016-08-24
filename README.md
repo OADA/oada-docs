@@ -28,7 +28,7 @@ The best way to get familiar with the OADA API is to use it.  Do do that:
    `npm run start`
 
 4. Learn about your server.  Open a browser and go to 
-   [https://localhost:3000/.well-known/oada-configuration].
+   (https://localhost:3000/.well-known/oada-configuration).
    Look for `oada_base_uri` (where the data is), and 
    `authorization_endpoint` (where to ask for a token)
 
@@ -39,7 +39,7 @@ The best way to get familiar with the OADA API is to use it.  Do do that:
 
 6. Copy the access_token.  Looks something like `its8IrYYjlZba_uhdnVMjRNv6FWnZYA3SkCWdEdFa`
 
-7. Get an API tool like [Postman|https://www.getpostman.com/]
+7. Get an API tool like (Postman|https://www.getpostman.com/)
 
 8. Discover what data is on your server for your token.  In Postman,
    do a `GET` to `https://localhost:3000/bookmarks`.  Without an `Authorization:` header
@@ -49,18 +49,19 @@ The best way to get familiar with the OADA API is to use it.  Do do that:
 
 9. Add some data to your server.  In Postman with  the same `Authorization:` header, 
    do a `PUT` to `https://localhost:3000/bookmarks/theknights` with the body:
-```json
-{
-  "whosay": "Ni!"
-}
-```
-Add the "Content-Type: application/json" header to the request, too.
+   ```json
+   {
+     "whosay": "Ni!"
+   }
+   ```
+   Add the "Content-Type: application/json" header to the request, too.
 
 10. And get it back: do a `GET` to `https://localhost:3000/bookmarks` again
     and you should see your data.
 
 Read up on the [Rest API Spec](rest-specs/README.md) with examples to learn how to
 create resources, link them between documents, track changes, and more.
+--------------------------------------------------
 
 ## Examples: Demonstration specs
 [Demonstrations](demo-specs/README.md)
