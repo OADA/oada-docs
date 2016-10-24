@@ -18,14 +18,16 @@ top-level domain where their data sits in order for the app or service to use it
 The best way to get familiar with the OADA API is to use it.  Do do that:
 
 1. Install the OADA demo server:
-   `git clone git@github.com:OADA/oada-api-server.git`
+   ```git clone git@github.com:OADA/oada-api-server.git```
 
 2. Get node.js if you don't have it, install libraries:
-   `curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.6/install.sh | bash`
-   `nvm install node && nvm use node && npm install`
+   ```
+   curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.6/install.sh | bash
+   nvm install node && nvm use node && npm install
+   ```
 
 3. Start up the server (it runs localhost:3000):
-   `npm run start`
+   ```npm run start```
 
 4. Learn about your server.  Open a browser and go to 
    (https://localhost:3000/.well-known/oada-configuration).
@@ -39,13 +41,13 @@ The best way to get familiar with the OADA API is to use it.  Do do that:
 
 6. Copy the access_token.  Looks something like `its8IrYYjlZba_uhdnVMjRNv6FWnZYA3SkCWdEdFa`
 
-7. Get an API tool like (Postman|https://www.getpostman.com/)
+7. Get an API tool like [Postman](https://www.getpostman.com/)
 
 8. Discover what data is on your server for your token.  In Postman,
    do a `GET` to `https://localhost:3000/bookmarks`.  Without an `Authorization:` header
    it will fail.  Add it with the token you copied: 
-   `Authorization: its8IrYYjlZbuhdnVMjRNv6FWnZYA3SkCWdEdFa`.  Now you should get back
-   some JSON listing the data that's available.
+   ```Authorization: Bearer its8IrYYjlZbuhdnVMjRNv6FWnZYA3SkCWdEdFa```.  
+   Now you should get back some JSON listing the data that's available.
 
 9. Add some data to your server.  In Postman with  the same `Authorization:` header, 
    do a `PUT` to `https://localhost:3000/bookmarks/theknights` with the body:
