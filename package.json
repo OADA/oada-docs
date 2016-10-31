@@ -1,0 +1,26 @@
+{
+  "name": "oada-docs",
+  "version": "1.0.0",
+  "description": "Repo for all OADA documentations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "all-diagrams": "find . -name '*.wsd' | xargs node tools/generate_sequence_diagrams.js",
+    "diagram": "node tools/generate_sequence_diagrams.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OADA/oada-docs.git"
+  },
+  "author": "Aaron Ault <aultac@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/OADA/oada-docs/issues"
+  },
+  "homepage": "https://github.com/OADA/oada-docs#readme",
+  "devDependencies": {
+    "bluebird": "^3.4.6",
+    "minimist": "^1.2.0",
+    "websequencediagrams": "0.0.2"
+  }
+}
