@@ -397,7 +397,7 @@ Content-Type: application/vnd.oada.oada-configuration.1+json
 ```
 
 **Step 3**: The application dynamically registers itself with the provider by
-making a POST request with it's client registration document to
+making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
@@ -560,7 +560,7 @@ Content-Type: application/vnd.oada.oada-configuration.1+json
 ```
 
 **Step 3**: The application dynamically registers itself with the provider by
-making a POST request with it's client registration document to
+making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
@@ -718,19 +718,22 @@ Content-Type: application/json
 
 ### Retrieving an OAuth 2.0 Access Token (Client Credentials Flow)
 
-The code flow is similar to the implicit flow with a few extra steps. Usually
-the code flow results in a longer term access tokens and sometimes refresh
-tokens. The client is authenticated in the code flow and the access token is
-never exposed to the user's user-agent and so an intermediate server is
-required. Please see the [OAuth 2.0 RFC][oauth2-rfc6749] for complete details.
+This flow is for a client to authenticate without a user,
+such as needed in a pre-approved business-to-business use case.
+The client credentials flow is similar to the final steps of the code flow,
+except without a code.
+The client is authenticated as in the code flow,
+but then the client is given a token without a user approving at that time.
+Please see the [OAuth 2.0 RFC][oauth2-rfc6749] for complete details.
 
 The example only shows the steps of a successful authorization and
 authentication. See the [OAuth 2.0 RFC][oauth2-rfc6749] for complete technical
 details.
 
-**Step 1**: Frank instructs the application at `client.example.org` to access
-his data at `provider.example.org` by typing in `provider.example.org` and
-clicking a "fetch data" button/link.
+**Step 1**:
+Since this client is running without a user,
+it automatically determines from where to access data.
+For demonstration, assume it is determined to be `provider.example.org`.
 
 **Step 2**: The application retrieves the `provider.example.org`
 `oada-configuration` document to discover the necessary OAuth 2.0 endpoints.
@@ -761,7 +764,7 @@ Content-Type: application/vnd.oada.oada-configuration.1+json
 ```
 
 **Step 3**: The application dynamically registers itself with the provider by
-making a POST request with it's client registration document to
+making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
@@ -937,7 +940,7 @@ Content-Type: application/json
 ```
 
 **Step 3**: The application dynamically registers itself with the provider by
-making a POST request with it's client registration document to
+making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
@@ -992,7 +995,7 @@ Content-Type: application/json
 ```
 
 **Step 3**: The application dynamically registers itself with the provider by
-making a POST request with it's client registration document to
+making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
@@ -1212,7 +1215,7 @@ Content-Type: application/json
 ```
 
 **Step 3**: The application dynamically registers itself with the provider by
-making a POST request with it's client registration document to
+making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
