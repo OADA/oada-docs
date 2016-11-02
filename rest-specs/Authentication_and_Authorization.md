@@ -222,9 +222,13 @@ aforementioned specification):
 - The `iss` claim MUST be set to the client's OAuth 2.0 clientId.
 - The `sub` claim MUST be set to the client's OAuth 2.0 clientId (per the
   [JWT Bearer spec][jwt-bearer] spec),
-- The JWT body must include the `jti` key and MUST be equal to the access code
-  from the OAuth 2.0 code flow. The secret should be considered invalid if
-  either the `jti` key is missing or is not equal to that sessions access code.
+- The JWT body MUST include the `jti` claim and
+  the secret SHOULD be considered invalid if either the `jti` key is missing or
+  it does not meet the following conditions.
+  * When performing the Oauth 2.0 code flow,
+    it MUST be equal to the access code.
+  * Otherwise, it MUST be a valid JWT ID acoording to the [JWT spec][jwt]
+    (a reccomened method of computing this ID is to hash all other JWT claims).
 
 #### Example Client Assertion
 
