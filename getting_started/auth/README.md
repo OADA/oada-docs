@@ -14,7 +14,8 @@ can be found [here](../Authentication_and_Authorization.md).
 ### Concept: Tokens
 
 API Authorization is basically about _tokens_: long random strings of
-characters that get sent along with every API request.  These strings are
+characters that get sent along with every API request.  They look like this:
+`kd0f2ijl3kj02i3fjkjr0982oi3lkjf23ewo`.  These strings are
 sufficiently random and hard to guess that they act like a username and 
 password all in one package.  If a request has a token, and that token
 has been given permission to do whatever the request indicates, then
@@ -93,5 +94,5 @@ cloud service.  "dumb" means that the device does not have the ability
 to present a web browser to the user.  If a web browser is available,
 either the implicit or code flow should be used.
 
-[Here is an example of the device grant authorization flow](../../auth-examples/device-grant-scouting/README.md)
+Device grant flow example coming soon...
 
