@@ -1,29 +1,39 @@
 # Table of Contents
 
-  * [Authentication and Authorization](#authentication-and-authorization)
-    * [What should I support?](#what-should-i-support)
-  * [OADA Distributed Federation](#oada-distributed-federation)
-      * [Well-Known Documents](#well-known-documents)
- * [`/.well-known/oada-configuration`](#well-knownoada-configuration)
- * [`/.well-known/openid-configuration`](#well-knownopenid-configuration)
-      * [Client Registration](#client-registration)
-        * [Example Client Registration](#example-client-registration)
-      * [Client Authentication](#client-authentication)
-        * [Requirements on the JWT](#requirements-on-the-jwt)
-        * [Example Client Assertion](#example-client-assertion)
-      * [Grant Screen](#grant-screen)
-        * [Example Grant Screen with Licenses and PUC](#example-grant-screen-with-licenses-and-puc)
-        * [Example Grant Screen without PUC](#example-grant-screen-without-puc)
-        * [Example Grant Screen without Licenses](#example-grant-screen-without-licenses)
-  * [Examples](#examples)
-    * [Live Demonstration](#live-demonstration)
-    * [OAuth 2.0 Examples (Authorization)](#oauth-20-examples-authorization)
-      * [Retrieving an OAuth 2.0 Access Token (Implicit Flow)](#retrieving-an-oauth-20-access-token-implicit-flow)
-      * [Retrieving an OAuth 2.0 Access Token (Code Flow)](#retrieving-an-oauth-20-access-token-code-flow)
-      * [Retrieving an OAuth 2.0 Access Token (Refresh Flow)](#retrieving-an-oauth-20-access-token-refresh-flow)
-    * [OpenID Connect Examples (Authentication)](#openid-connect-examples-authentication)
-      * [Retrieving an OpenID Connect ID Token (Implicit Flow)](#retrieving-an-openid-connect-id-token-implicit-flow)
-      * [Retrieving an OpenID Connect ID Token (Code Flow)](#retrieving-an-openid-connect-id-token-code-flow)
+* [Authentication and Authorization](#authentication-and-authorization)
+  * [What should I support?](#what-should-i-support)
+* [OADA Distributed Federation](#oada-distributed-federation)
+  * [Well-Known Documents](#well-known-documents)
+* [`/.well-known/oada-configuration`](#well-knownoada-configuration)
+* [`/.well-known/openid-configuration`](#well-knownopenid-configuration)
+  * [Client Registration](#client-registration)
+    * [Example Client Registration](#example-client-registration)
+  * [Client Authentication](#client-authentication)
+    * [Requirements on the JWT](#requirements-on-the-jwt)
+    * [Example Client Assertion](#example-client-assertion)
+  * [Grant Screen](#grant-screen)
+    * [Example Grant Screen with Licenses and PUC
+      ](#example-grant-screen-with-licenses-and-puc)
+    * [Example Grant Screen without PUC](#example-grant-screen-without-puc)
+    * [Example Grant Screen without Licenses
+      ](#example-grant-screen-without-licenses)
+* [Examples](#examples)
+  * [Live Demonstration](#live-demonstration)
+  * [OAuth 2.0 Examples (Authorization)](#oauth-20-examples-authorization)
+    * [Retrieving an OAuth 2.0 Access Token (Implicit Flow)
+      ](#retrieving-an-oauth-20-access-token-implicit-flow)
+    * [Retrieving an OAuth 2.0 Access Token (Code Flow)
+      ](#retrieving-an-oauth-20-access-token-code-flow)
+    * [Retrieving an OAuth 2.0 Access Token (Client Credentials Flow)
+      ](#retrieving-an-oauth-20-access-token-client-credentials-flow)
+    * [Retrieving an OAuth 2.0 Access Token (Refresh Flow)
+      ](#retrieving-an-oauth-20-access-token-refresh-flow)
+  * [OpenID Connect Examples (Authentication)
+    ](#openid-connect-examples-authentication)
+    * [Retrieving an OpenID Connect ID Token (Implicit Flow)
+      ](#retrieving-an-openid-connect-id-token-implicit-flow)
+    * [Retrieving an OpenID Connect ID Token (Code Flow)
+      ](#retrieving-an-openid-connect-id-token-code-flow)
 
 # Authentication and Authorization
 
@@ -157,6 +167,7 @@ algorithm described in the `header`, all joined together by a period.
 The above `software_statement` example breaks down into:
 
 `header`:
+
 ```json
 {
   "jku": "https://identity.oada-dev.com/certs",
@@ -167,6 +178,7 @@ The above `software_statement` example breaks down into:
 ```
 
 `payload`:
+
 ```json
 {
   "redirect_uris": [
@@ -211,18 +223,18 @@ the token endpoint during the OAuth 2.0 authorization code flow. However, for
 OADA there are a few additional requirements (which are still in accord to the
 aforementioned specification):
 
-- The client assertion can only be signed using an algorithm listed in the
+* The client assertion can only be signed using an algorithm listed in the
   `token_endpoint_auth_signing_alg_values_supported` key of the provider's
   `oada-configuration`. RSA 256 (RS256 in [JSON Web Algorithms][jwa] speak) is
   required to be supported by all clients and providers.
-- The `aud` claim MUST be set to the provider's token endpoint URL (as
+* The `aud` claim MUST be set to the provider's token endpoint URL (as
   recommended by the [JWT Bearer spec][jwt-bearer]). It MUST be identical
   (case sensitive) to the string from the `token_endpoint` key of the provider's
   [.well-known/oada-configuration document][well-known-oada-configuration-docs].
-- The `iss` claim MUST be set to the client's OAuth 2.0 clientId.
-- The `sub` claim MUST be set to the client's OAuth 2.0 clientId (per the
+* The `iss` claim MUST be set to the client's OAuth 2.0 clientId.
+* The `sub` claim MUST be set to the client's OAuth 2.0 clientId (per the
   [JWT Bearer spec][jwt-bearer] spec),
-- The JWT body MUST include the `jti` claim and
+* The JWT body MUST include the `jti` claim and
   the secret SHOULD be considered invalid if either the `jti` key is missing or
   it does not meet the following conditions.
   * When performing the Oauth 2.0 code flow,
@@ -247,6 +259,7 @@ An example of a valid RS256 JWS client assertion is show below:
 Where
 
 `header` decodes to:
+
 ```json
 {
   "kid": "nc63dhaSdd82w32udx6v",
@@ -256,6 +269,7 @@ Where
 ```
 
 `payload` decodes to:
+
 ```json
 {
   "jti": "EqwNYxanoZbBF4ztb03Mt8K-L",
@@ -376,6 +390,7 @@ clicking a "fetch data" button/link.
 `oada-configuration` document to discover the necessary OAuth 2.0 endpoints.
 
 **Request**
+
 ```http
 GET /.well-known/oada-configuration HTTP/1.1
 Host: provider.example.org
@@ -384,6 +399,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/vnd.oada.oada-configuration.1+json
@@ -405,6 +421,7 @@ making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
+
 ```http
 POST /register HTTP/1.1
 Host: provider.example.org
@@ -419,6 +436,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
@@ -461,11 +479,13 @@ GET on the resource in the `authorization_endpoint` key from
 `oada-configuration` document above.
 
 **Request**
+
 ```http
 GET /auth?response_type=token&client_id=3klaxu838akahf38acucaix73&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb&scope=read:planting.prescriptions HTTP/1.1
 Host: provider.example.org
 
 ```
+
 *The response pends until step 6*
 
 Where the request parameters are,
@@ -504,6 +524,7 @@ redirects Frank's user-agent to the `redirect_uri` from the initial request with
 the access token and other details in the fragment.
 
 **Response**
+
 ```http
 HTTP/1.1 302 Found
 Location: https://client.example.org/cb#access_token=2YotnFZFEjr1zCsicMWpAA&state=xyz&token_type=bearer&expires_in=3600
@@ -539,6 +560,7 @@ clicking a "fetch data" button/link.
 `oada-configuration` document to discover the necessary OAuth 2.0 endpoints.
 
 **Request**
+
 ```http
 GET /.well-known/oada-configuration HTTP/1.1
 Host: provider.example.org
@@ -547,6 +569,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/vnd.oada.oada-configuration.1+json
@@ -568,6 +591,7 @@ making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
+
 ```http
 POST /register HTTP/1.1
 Host: provider.example.org
@@ -582,6 +606,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
@@ -624,11 +649,13 @@ flow by either popping up a pop-up window or redirecting Frank's user-agent.
 The request is a GET on the resource in the `authorization_endpoint` key from `oada-configuration` document above.
 
 **Request**
+
 ```http
 GET /auth?response_type=code&client_id=3klaxu838akahf38acucaix73&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb&scope=write:planting.prescription HTTP/1.1
 Host: provider.example.org
 
 ```
+
 *The response pends until step 6*
 
 Where the request parameters are,
@@ -666,6 +693,7 @@ user with a choice to allow or deny. The user approves the authorization.
 user-agent to the `redirect_uri` from the initial request.
 
 **Response**
+
 ```http
 HTTP/1.1 302 Found
 Location: https://client.example.org/cb?code=Pi2dY-FBxZqLx81lTbDM4WGlI&state=xyz
@@ -690,8 +718,8 @@ from client registration document, is valid by the [JWT standard][jwt], and
 contains an `ac` key equal to the access code in the body.
 
 **Request**
-
 *The extra line breaks in the below example are for display purposes only*
+
 ```http
 POST /token HTTP/1.1
 Host: provider.example.org
@@ -705,9 +733,11 @@ client_id=3klaxu838akahf38acucaix73%40identity.example.org&
 client_assertion_type=urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer&
 client_assertion=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im5jNjNkaGFTZGQ4MnczMnVkeDZ2In0.eyJqdGkiOiJQaTJkWS1GQnhacUx4ODFsVGJETTRXR2xJIiwiaWF0IjoxNDE4NDIxMTAyLCJhdWQiOiJodHRwczovL3Byb3ZpZGVyLm9hZGEtZGV2LmNvbS90b2tlbiIsImlzcyI6IjNrbGF4dTgzOGFrYWhmMzhhY3VjYWl4NzNAaWRlbnRpdHkub2FkYS1kZXYuY29tIn0.Te_NzrMTfrMaIldbIPRm5E0MnI1SjBf1G_19MslsJVdDSIUj_9YMloa4iTt_ztuJD4G0IP77AfU2x-XHqTjB8LybDlL8nyDERQhO8KNV3jbPKpKNsndZx5LDGX1XKJNH53IE4GB9Le8CE3TZNdVPxxuJcNi4RGYk0RJtdv6h1bo
 ```
+
 *Hint: http://jwt.io can be used to view client_secret*
 
 **Response**
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -743,6 +773,7 @@ For demonstration, assume it is determined to be `provider.example.org`.
 `oada-configuration` document to discover the necessary OAuth 2.0 endpoints.
 
 **Request**
+
 ```http
 GET /.well-known/oada-configuration HTTP/1.1
 Host: provider.example.org
@@ -751,6 +782,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/vnd.oada.oada-configuration.1+json
@@ -772,6 +804,7 @@ making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
+
 ```http
 POST /register HTTP/1.1
 Host: provider.example.org
@@ -786,6 +819,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
@@ -829,8 +863,8 @@ The request is a POST on the resource in the `token_endpoint` key from
 `oada-configuration` document above.
 
 **Request**
-
 *The extra line breaks in the below example are for display purposes only*
+
 ```http
 POST /token HTTP/1.1
 Host: provider.example.org
@@ -845,6 +879,7 @@ scope=write:planting.prescription
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -856,7 +891,6 @@ Content-Type: application/json
   "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA"
 }
 ```
-
 
 ### Retrieving an OAuth 2.0 Access Token (Refresh Flow)
 
@@ -903,6 +937,7 @@ with his federated identity `andy@identity.example.org`.
 endpoints.
 
 **Request**
+
 ```http
 GET /.well-known/openid-configuration HTTP/1.1
 Host: identity.example.org
@@ -911,6 +946,7 @@ Accept: application/json
   ```
 
 **Response**
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -948,6 +984,7 @@ making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
+
 ```http
 POST /register HTTP/1.1
 Host: identity.example.org
@@ -962,6 +999,7 @@ Accept: application/json
   ```
 
 **Response**
+
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
@@ -1003,6 +1041,7 @@ making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
+
 ```http
 POST /register HTTP/1.1
 Host: identity.example.org
@@ -1017,6 +1056,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
@@ -1059,11 +1099,13 @@ is a GET on the resource in the `authorization_endpoint` key from
 `openid-configuration` document above.
 
 **Request**
+
 ```http
 GET /auth?response_type=id_token%40token&client_id=3klaxu838akahf38acucaix73&state=xyz&nonce=XJds9a7cAesf&redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb&scope=openid%40profile HTTP/1.1
 Host: identity.example.org
 
 ```
+
 *The response pends until step 6*
 
 Where the request parameters are,
@@ -1105,6 +1147,7 @@ Andy's user-agent back the `redirect_uri` from the initial request with the id
 token and other details in the fragment.
 
 **Response**
+
 ```http
 HTTP/1.1 302 Found
 Location: https://client.example.org/cb#access_token=2YotnFZFEjr1zCsicMWpAA&state=xyz&token_type=bearer&expires_in=3600&id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImtqY1NjamMzMmR3SlhYTEpEczNyMTI0c2ExIn0.eyJpYXQiOjE0MTg2NzY0MzAsImV4cCI6MTQxODY4MDAzMCwiYXVkIjoiM2tsYXh1ODM4YWthaGYzOGFjdWNhaXg3M0BpZGVudGl0eS5vYWRhLWRldi5jb20iLCJpc3MiOiJodHRwczovL2lkZW50aXR5Lm9hZGEtZGV2LmNvbSIsInN1YiI6MX0.SZGoDLalL5Kvabuw3EGdeShrHJWghJ8U5cTzqc0fNDt-bCYYG5bhgODkuBel4NLyOtusI9gW2LMYuSWCaNjddxkFP0eIT43Ij_w71eUMGPZNYPj2OpMupq77FsR5XttgIynF-ErtZlp9t0Ff1rnSjZKIQ-DoSCcoyPtiKLuHicg
@@ -1143,6 +1186,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -1178,6 +1222,7 @@ with his federated identity `andy@identity.example.org`.
 endpoints.
 
 **Request**
+
 ```http
 GET /.well-known/openid-configuration HTTP/1.1
 Host: identity.example.org
@@ -1186,6 +1231,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -1223,6 +1269,7 @@ making a POST request with its client registration document to
 `registration_endpoint`.
 
 **Request**
+
 ```http
 POST /register HTTP/1.1
 Host: identity.example.org
@@ -1237,6 +1284,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
@@ -1279,11 +1327,13 @@ request is a GET on the resource in the `authorization_endpoint` key from
 `openid-configuration` document above.
 
 **Request**
+
 ```http
 GET /auth?response_type=code&client_id=3klaxu838akahf38acucaix73&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb&scope=openid%40profile HTTP/1.1
 Host: identity.example.org
 
 ```
+
 *The response pends until step 6*
 
 Where the request parameters are,
@@ -1323,6 +1373,7 @@ client to access his identity information. Andy approves the authorization.
 user-agent back the `redirect_uri` from the initial request.
 
 **Response**
+
 ```http
 HTTP/1.1 302 Found
 Location: https://client.example.org/cb?code=5MZVZOgNV-nh3brHM78UoaJ-w&state=xyz
@@ -1346,6 +1397,7 @@ validates against a public key from client registration document, is valid by
 the JWT standard, and contains an ac key equal to the access code in the body.
 
 **Request**
+
 ```http
 POST /token HTTP/1.1
 Host: identity.example.org
@@ -1358,6 +1410,7 @@ grant_type=authorization_code&code=5MZVZOgNV-nh3brHM78UoaJ-w&redirect_uri=https%
 *Hint: http://jwt.io can be used to view the client assertion*
 
 **Response**
+
 ```http
 HTTP/1.1 201 Created
 Content-Type: application/json
@@ -1394,6 +1447,7 @@ Accept: application/json
 ```
 
 **Response**
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
