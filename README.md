@@ -3,9 +3,13 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/OADA/oada-docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## The important stuff: API Docs
-[Rest API Spec](rest-specs/README.md)
 
-[tl;dr Intro to the OADA API slides](https://cdn.rawgit.com/OADA/oada-docs/master/intro/OADA_API_Intro_Irrigation.html)
+
+|   Getting Started       |       Specs                 |
+|:-----------------------:|:---------------------------:|
+| [Intro to the OADA API](https://cdn.rawgit.com/OADA/oada-docs/master/intro/OADA_API_Intro_Irrigation.html) | [Rest API Spec](rest-specs/README.md)
+| [Intro to OADA Authentication and Authorization](getting_started/auth/README.md) | [Authorization and Authentication](rest-specs/Authentication_and_Authorization.md) |
+
 
 ## Overview
 The purpose of the Open Ag Data Alliance is to develop a standard API framework for 
@@ -15,7 +19,7 @@ top-level domain where their data sits in order for the app or service to use it
 
 ## Getting Started
 --------------------------------------
-The best way to get familiar with the OADA API is to use it.  Do do that:
+The best way to get familiar with the OADA API is to use it.  Do that:
 
 1. Install the OADA demo server:
    ```git clone git@github.com:OADA/oada-api-server.git```
@@ -46,7 +50,9 @@ The best way to get familiar with the OADA API is to use it.  Do do that:
 8. Discover what data is on your server for your token.  In Postman,
    do a `GET` to `https://localhost:3000/bookmarks`.  Without an `Authorization:` header
    it will fail.  Add it with the token you copied: 
-   ```Authorization: Bearer its8IrYYjlZbuhdnVMjRNv6FWnZYA3SkCWdEdFa```.  
+   ```
+   Authorization: Bearer its8IrYYjlZbuhdnVMjRNv6FWnZYA3SkCWdEdFa
+   ```  
    Now you should get back some JSON listing the data that's available.
 
 9. Add some data to your server.  In Postman with  the same `Authorization:` header, 
@@ -56,7 +62,7 @@ The best way to get familiar with the OADA API is to use it.  Do do that:
      "whosay": "Ni!"
    }
    ```
-   Add the "Content-Type: application/json" header to the request, too.
+   Add the `Content-Type: application/json` header to the request, too.
 
 10. And get it back: do a `GET` to `https://localhost:3000/bookmarks` again
     and you should see your data.

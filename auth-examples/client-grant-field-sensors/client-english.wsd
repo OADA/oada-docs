@@ -1,0 +1,22 @@
+title OAuth2 Client Grant Flow (Basic Business-to-Business)
+
+note right of moisturemapper.com
+moisturemap.com has given its
+client registration to grounddata.com
+ahead of time for identification.
+end note
+moisturemapper.com->grounddata.com: Tell me about yourself
+grounddata.com->moisturemapper.com: Here's how you connect to me
+moisturemapper.com->grounddata.com: I am moisturemapper.com,\ngive me an ID
+note left of grounddata.com
+grounddata.com verifies it has 
+known business relationship 
+with this registration
+end note
+grounddata.com->moisturemapper.com: Here's an ID
+moisturemapper.com->grounddata.com: I'd like an authorized token\nhere is my signature and ID
+note left of grounddata.com
+Check signature and info
+to verify this is moisturemapper.com
+end note
+grounddata.com->moisturemapper.com: Here is your token

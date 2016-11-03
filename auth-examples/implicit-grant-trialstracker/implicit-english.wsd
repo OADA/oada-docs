@@ -1,0 +1,20 @@
+title OAuth2 Implicit Flow (Third-party App Authentication)
+
+Frank->Browser: https://trialstracker.oada-dev.com
+Browser->Frank: Where is your yield data?
+Frank->Browser: https://yield.oada-dev.com
+Browser->yield.oada-dev.com: Tell me about yourself
+yield.oada-dev.com->Browser: Here's how you connect to me
+Browser->yield.oada-dev.com: I am TrialsTracker,\ngive me an ID
+yield.oada-dev.com->Browser: Here's an ID
+Browser->yield.oada-dev.com: I'd like an authorized token\nfor yield, please ask my user to\nlogin and authorize me
+yield.oada-dev.com->Browser: redirect to my login screen
+Browser->Frank: Login screen for yield.oada-dev.com
+Frank->Browser: Username: Frank\nPassword: pass
+Browser->yield.oada-dev.com: submitted login form
+yield.oada-dev.com->Browser: Here's my authorization screen\nfor Frank
+Browser->Frank:An app claiming to be TrialsTracker\nwants to access your yield data.\nAllow or Deny?
+Frank->Browser: Allow
+Browser->yield.oada-dev.com: Allow
+yield.oada-dev.com->Browser: Redirect back to TrialsTracker,\nand here is a token that can\naccess Frank's yield data.
+Browser->Frank: Here's a map with\nyour yield data on it.
