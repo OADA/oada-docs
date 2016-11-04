@@ -240,7 +240,7 @@ aforementioned specification):
   * When performing the Oauth 2.0 code flow,
     it MUST be equal to the access code.
   * Otherwise, it MUST be a valid JWT ID acoording to the [JWT spec][jwt]
-    (a reccomened method of computing this ID is to hash all other JWT claims).
+    (a recommended method of computing this ID is to hash all other JWT claims).
 
 #### Example Client Assertion
 
