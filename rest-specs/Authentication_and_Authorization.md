@@ -235,7 +235,7 @@ aforementioned specification):
 * The `sub` claim MUST be set to the client's OAuth 2.0 clientId (per the
   [JWT Bearer spec][jwt-bearer] spec),
 * The JWT body MUST include the `jti` claim and
-  the secret SHOULD be considered invalid if either the `jti` key is missing or
+  the entire JWT SHOULD be considered invalid if either the `jti` key is missing or
   it does not meet the following conditions.
   * When performing the Oauth 2.0 code flow,
     it MUST be equal to the access code.
