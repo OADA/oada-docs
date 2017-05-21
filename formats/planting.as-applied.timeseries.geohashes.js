@@ -18,12 +18,12 @@
   // guaranteed to exist, but if they exist, their content is well defined.  This is
   // because different farms and different machines will have different data recording
   // capabilities.
-    position: { _id: "902jfk", _rev: "3-d802fhjk" },
-    coverage: { _id: "kjdf20", _rev: "9-2o0kfkdj" },
-  population: { _id: "9023jf", _rev: "1-kdp022hl" },
-   downforce: { _id: "kjf02f", _rev: "3-92kdjf02" },
-       skips: { _id: "kdjf02", _rev: "6-02nfk2kl" },
-        crop: { _id: "9kjdfd", _rev: "7-dkd0p2kl" },
-       speed: { _id: "xkxzld", _rev: "2-oo04f2jl" },
-     heading: { _id: "SDkfdk", _rev: "1-kdjfo2kl" }
+    position: { _id: "resources/902jfk", _rev: "3-d802fhjk" },
+    coverage: { _id: "resources/kjdf20", _rev: "9-2o0kfkdj" },
+  population: { _id: "resources/9023jf", _rev: "1-kdp022hl" },
+   downforce: { _id: "resources/kjf02f", _rev: "3-92kdjf02" },
+       skips: { _id: "resources/kdjf02", _rev: "6-02nfk2kl" },
+        crop: { _id: "resources/9kjdfd", _rev: "7-dkd0p2kl" },
+       speed: { _id: "resources/xkxzld", _rev: "2-oo04f2jl" },
+     heading: { _id: "resources/SDkfdk", _rev: "1-kdjfo2kl" }
 }

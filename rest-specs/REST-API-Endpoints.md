@@ -1,7 +1,7 @@
 # Contents
 
 - [`/resources`](#resources)
-  - [`/resources/{resourceId}`](#resourcesresourceid)
+  - [`/resources/{randomStringId}`](#resourcesresourceid)
     - [Reserved and Required Keys](#reserved-and-required-keys)
       - [`_id`](#_id)
       - [`_rev`](#_rev)
@@ -18,7 +18,7 @@
     - [Query Parameters](#query-parameters)
     - [The Usage of Arrays](#the-usage-of-arrays)
     - [Partitioning of Data Using Versioned Links](#partitioning-of-data-using-versioned-links)
-    - [Example `/resource/{resourceId}` document](#example-resourceresourceid-document)
+    - [Example `/resources/{randomStringId}` document](#example-resourceresourceid-document)
 - [`/meta`](#meta)
   - [`/meta/{resourceId}`](#metaresourceid)
     - [Meta Documents Are Basically Resources](#meta-documents-are-basically-resources)
@@ -55,7 +55,7 @@
 
 # `/resources`
 
-## `/resources/{resourceId}`
+## `/resources/{randomStringId}`
 
 OADA's `/resources` are the meat and potatoes of the OADA API (in fact
 `/bookmarks`, `/meta`,  etc are just special cases of `/resources`) and, as a
@@ -73,7 +73,7 @@ required functionally as simple as possible. The responsibilities of
 - Sharing data with other users.
 
 Many of the OADA endpoints are actually just resources with valid resource ids.
-That is, they can be directly accessed with a `/resources/{resourceId}` URI.
+That is, they can be directly accessed with a `/{resourceId}` URI.
 They are only given special names within the API to make it easier and allow
 automatic discovery of the available data.
 
@@ -81,13 +81,13 @@ automatic discovery of the available data.
 
 All OADA resources have three reserved and required JSON keys, `_id`, `_rev`,
 and `_meta`. These keys are present even if the resource is binary, and may
-either be accessed directly , i.e., `/resources/{resourceId}/_id`,
-`/resources/{resourceId}/_rev`, `/resources/{resourceId}/_meta`, or via a
+either be accessed directly , i.e., `/{resourceId}/_id`,
+`/{resourceId}/_rev`, `/{resourceId}/_meta`, or via a
 `Multipart/mixed` response. Therefore, the minimal OADA resource is:
 
 ```json
 {
-  "_id": "8flaRxfRAjf7203",
+  "_id": "resources/8flaRxfRAjf7203",
   "_rev": "34-NXKcjasd72",
   "_meta": {
     "_metaid": "8flaRxfRAjf7203",
@@ -99,17 +99,16 @@ either be accessed directly , i.e., `/resources/{resourceId}/_id`,
 #### `_id`
 
 All resources must be assigned an id that is unique within a specifc cloud (referred
-to as `{resourceId}`) and it must be the same id used to access the resource
-under the `/resources` endpoint.  A cloud can choose to let a user create a
-resource with an id of his or her choosing (via a PUT to
-`/resource/{resourceId}`), however, it is not required by OADA.
+to as `{resourceId}`).  It must equal the part of the URL after the OADA base.
+For a generic resource, an `_id` would look like `resources/122fekj3`.  For
+a user resource, an `_id` would look like `users/143kfj23i`.  Note the part
+after `resources/` or `users/` is any random string.
 
 #### `_rev`
 
 Each resource must be assigned a revision number (`_rev`) that is used by other
 remote clouds and applications to track changes on that resources. A cloud
-or application may GET the `_rev` value on a resource and
-compare it to the last known value to detect changes.
+or application may GET the `_rev` value on a resource and compare it to the last known value to detect changes.
 
 The format of a `_rev` is an incrementing number, a dash, and a random string,
 e.g., “34-kdfj02kjlskdf”.  Whenever `_rev` is updated, the front number must
@@ -158,7 +157,7 @@ An example of a non-versioned link is:
 ```json
 {
   "some_nonversioned_link": {
-    "_id": "456"
+    "_id": "resources/456"
   }
 }
 ```
@@ -177,7 +176,7 @@ An example of a versioned link is:
 ```json
 {
   "some_versioned_link": {
-    "_id": "456",
+    "_id": "resources/456",
     "_rev": "34-kjdf02jkld"
   }
 }
@@ -228,7 +227,7 @@ location, such as a Content Delivery Network (CDN).
 ##### Accessing sub-documents
 
 Any sub-document of a resource can directly accessed by appending a path of JSON
-keys to the end of its `/resources/{resourceId}` URI.  The mapping follows [RFC
+keys to the end of its `/{resourceId}` URI.  The mapping follows [RFC
 6901 JavaScript Object Notation (JSON) Pointer][rfc6901] (*Developers should be
 sure to take note of JSON Pointer's tilde escaping*).
 
@@ -263,7 +262,7 @@ And a GET request to `/resources/123/a/b` returns:
 ```
 
 This can be particularly useful to a client checking if a resource changed. One
-can make an very efficient request to `/resources/{resourceId}/_rev` to get the
+can make an very efficient request to `/{resourceId}/_rev` to get the
 current revision number of the resource.
 
 ##### Sub-documents follow links
@@ -379,7 +378,7 @@ geohashes and time-series data could use a UNIX timestamp quantized to a certain
 number of seconds. See the OADA [as-harvested][as-harvested] format for a
 geohash example.
 
-### Example `/resource/{resourceId}` document
+### Example `/{resourceId}` document
 
 The following is a example of a possible JSON prescription planting resource:
 

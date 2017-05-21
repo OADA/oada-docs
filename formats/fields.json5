@@ -5,7 +5,7 @@
     // Here is a top-level grouping: Growers.  If constructing a list for farmers to choose fields from, start with these
     // unless you know which one in particular they want to use ahead of time.
     "4kfj492-Growers": { // Note this is a random unique string.  The word "Growers" is just here for clarity in this example.
-      "_id": "4kfj492-Growers"  // The existence of _id means it's a linked resource that exists independently of this document.
+      "_id": "resources/4kfj492-Growers"  // The existence of _id means it's a linked resource that exists independently of this document.
     },                          // Note that is a standard definition in OADA, not something specific to this format.
 
     // Some other handy top-level groups a farmer may want to create themselves: landlords, corn fields, bean fields, wet fields, 
@@ -30,7 +30,7 @@
     "list": {
 
       "4kfj492-Growers": {
-        "_id": "4kfj492-Growers",  // The existence of _id means it's a linked resource that exists independently of this document.
+        "_id": "resources/4kfj492-Growers",  // The existence of _id means it's a linked resource that exists independently of this document.
         "name": "Growers",
         
         // Here is a list of standard structures to which this object conforms.  A single object may be able to simultaneously 
@@ -59,10 +59,10 @@
             // tree from the other items under resources.
             "list": {
               "kjdf20-Smith": { // This is a farm
-                "_id": "kjdf20-Smith" // Available under this key in this "resources" grouping: i.e. resources["kjdf20-Smith"] gets you the farm.
+                "_id": "resources/kjdf20-Smith" // Available under this key in this "resources" grouping: i.e. resources["kjdf20-Smith"] gets you the farm.
               },
               "9fj32-Denver250": {
-                "_id": "9fj32-Denver250" // This is a farm
+                "_id": "resources/9fj32-Denver250" // This is a farm
               },
             },
           },
@@ -72,26 +72,26 @@
   
       // Farm: Smith
       "kjdf20-Smith": {
-        "_id": "kjdf20-Smith",
+        "_id": "resources/kjdf20-Smith",
         "name": "Smith",
         "list": {
           // The Smith30 field is inside the Smith farm
           "ifjewk-Smith30": {
-            "_id": "ifjewk-Smith30",
+            "_id": "resources/ifjewk-Smith30",
           },
         }
       },
   
       // Field: Smith30
       "ifjewk-Smith30": {
-        "_id": "ifjewk-Smith30",
+        "_id": "resources/ifjewk-Smith30",
         "name": "Smith30",
         "boundary": "<geojson of boundary>"
       },
   
       // Farm: Denver250
       "9fj32-Denver250": {
-        "_id": "9fj32-Denver250",
+        "_id": "resources/9fj32-Denver250",
         "name": "Denver250",
         // The "aliases" interface is completely optional.  If it exists on a field, it is an array of alternative names
         // that the farmer may also call this field.  The definitive name is the one in the name interface, but 
@@ -105,17 +105,17 @@
         ],
         "list": {
           "wfdjiowf-West200": {
-            "_id": "wfdjiowf-West200",
+            "_id": "resources/wfdjiowf-West200",
           },
           "ghijfdw-Chili50": {
-            "_id": "ghijfdw-Chili50",
+            "_id": "resources/ghijfdw-Chili50",
           },
         },
       },
   
       // Field: West200
       "wfdjiowf-West200": {
-        "_id": "wfdjiowf-West200",
+        "_id": "resources/wfdjiowf-West200",
         "name": "West200",
         "boundary": "<geojson of boundary>"
         "list": {
@@ -134,7 +134,7 @@
   
       // Field: Chili50
       "ghijfdw-Chili50": {
-        "_id": "ghijfdw-Chili50",
+        "_id": "resources/ghijfdw-Chili50",
         "name": "Chili50",
         "aliases": [
           "Chili"
@@ -181,7 +181,7 @@
   // Important note: in OADA, every level of a JSON document can be an external link or a native object within that
   // document.  The way to distinguish in most cases is whether the "_id" is present.  In the off chance you requested
   // the _id for a native object, it's _id will be the same as it's parent "_id" with it's key appended to it.  The 
-  // definition of "_id" in OADA is "the part of the URL after /resources/".
+  // definition of "_id" in OADA is "the part of the URL after the OADA base".
 
 
 

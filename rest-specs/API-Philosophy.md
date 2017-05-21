@@ -14,7 +14,7 @@ Assuming the JSON resource at `/resources/jikdf` is:
 
 ```json
 {
-  "_id": "jikdf",
+  "_id": "resources/jikdf",
   "_rev": "1-5dfj02",
   "_meta": {
     "_metaId": "jikdf",
@@ -50,25 +50,25 @@ For more detailed documentation see the [OADA resource documentation][resource-d
 
 ## Linking Resources (and Meta Resources) Together
 
-A JSON resource can use the `_id` property to link to another resource. Its value should be set equal to part of the URL after `/resources` (i.e. `/resources/123` has an `_id` of `123`, and `/resources/123/a` has an `_id` of `123/a`). 
+A JSON resource can use the `_id` property to link to another resource. Its value should be set equal to part of the URL after the OADA base (i.e. the URL `/resources/123` has an `_id` of `resources/123`, and `/resources/123/a` has an `_id` of `resources/123/a`). 
 
 If you want the `_rev` property of a resource to update when another resource is changed, the `_rev` property can be included in the link.   OADA-conformant APIs will set it equal to the linked to resource's `_rev`.  This style of link containing `_rev` is called a _versioned link_, which means the parent resource's `_rev` will eventually change when the linked resource changes. Versioned links allow for efficient tracking of changes to data as a graph built naturally from the underlying data structure..
 
 ```json
 {
     "otherResource": {
-      "_id": "abc123"
+      "_id": "resources/abc123"
     },
     "otherResourceVersioned": {
-      "_id": "abc123",
+      "_id": "resources/abc123",
       "_rev": "1-dkjfKDJSfsd"
     },
 
     "otherResourceSubDocument": {
-      "_id": "abc123/a/b"
+      "_id": "resources/abc123/a/b"
     },
     "otherResourceVersionedSubDocument": {
-      "_id": "abc123/a/b",
+      "_id": "resources/abc123/a/b",
       "_rev": "1-dkjfKDJSfsd"
     }
 }

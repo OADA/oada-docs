@@ -14,8 +14,8 @@
   configurations: {
     "kd20jkfdl": {
       machines: {
-        tractor: { _id: "kdj02fjkd", _rev: "1-dkjf02ddf" },
-        implement: { _id: "4iofjikd", _rev: "3-dkjdfowf" },
+        tractor: { _id: "resources/kdj02fjkd", _rev: "1-dkjf02ddf" },
+        implement: { _id: "resources/4iofjikd", _rev: "3-dkjdfowf" },
         sections: {
           number: 16, // The planter has 16 independently-controlled sections that can adjust population
           units: {

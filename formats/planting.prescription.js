@@ -1,5 +1,5 @@
 {
-  _id: "02kdjf02",
+  _id: "resources/02kdjf02",
   _rev: "1-o20923j3k3l",
 
   // NOTE: the _meta key is a standard OADA key.  It is meant to hold
@@ -20,18 +20,18 @@
     // know that a field has been assigned to the prescription.  It is also possible for
     // a 3rd party to fill in this parameter if the cloud supports it, or if the cloud does
     // not support field reconciliation.
-    fields: [ { _id: "kjd20fkj" } ],
+    fields: [ { _id: "resources/kjd20fkj" } ],
     // A 3rd party can monitor this key to see if the prescrition has been marked for transfer
     // to particular machines, and also when it actually exists on a machine.  Similar to fields,
     // the details of the linked machine will only be viewable by the third party if they
     // have a token approved with read:oada.machines scope.
     transfer_status: { 
       "jfj0234u": { 
-        machine: { _id: "jfj0234u", _rev: "3-kldfjo2ijwe" }, // link to a machine resource
+        machine: { _id: "resources/jfj0234u", _rev: "3-kldfjo2ijwe" }, // link to a machine resource
         status: "COMPLETE"  // prescription is physically present on this machine
       },
       "0f22f239": { 
-        machine: { _id: "48jf49j0", _rev: "6-df92fu02j" }, // link to a machine resource
+        machine: { _id: "resources/48jf49j0", _rev: "6-df92fu02j" }, // link to a machine resource
         status: "PENDING" // prescription is marked for transfer to this machine
       },
     },

@@ -1,5 +1,5 @@
 {
-  _id: "klsdjf02",
+  _id: "resources/klsdjf02",
   _rev: "39-dklsfjwef",
 
   // The inclusion of _meta._mediaType is not part of the format, it
@@ -32,8 +32,8 @@
     // compensate for edge effects, time lags, and calibration offsets.
     // The map-reconciled version of data still has edge effect issues with the tiles
     // (as do all geometries), however the issues are less pronounced.
-    "dp4jzje": { _id: "jfd0kw", _rev: "2-kljslkfsd" },
-    "dp4jzjf": { _id: "920o4i", _rev: "1-sd0f9sojk" },
+    "dp4jzje": { _id: "resources/jfd0kw", _rev: "2-kljslkfsd" },
+    "dp4jzjf": { _id: "resources/920o4i", _rev: "1-sd0f9sojk" },
   }
 
 }

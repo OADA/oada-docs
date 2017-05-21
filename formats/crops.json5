@@ -51,10 +51,10 @@
       // instead.
       "list": {
         "ifjewk-Smith30": {
-          "_id": "ifjewk-Smith30" // From the fields list
+          "_id": "resources/ifjewk-Smith30" // From the fields list
         },
         "11je290-Zone1": {
-          "_id": "11je290-Zone1" // This is a new sub-zone within another field
+          "_id": "resources/11je290-Zone1" // This is a new sub-zone within another field
         }
       }
 
@@ -92,7 +92,7 @@
 
       // Same object as the example fields list
       "ifjewk-Smith30": {
-        "_id": "ifjewk-Smith30",
+        "_id": "resources/ifjewk-Smith30",
         "name": "Smith30",
         "boundary": "<geojson of boundary>"
       },
@@ -103,11 +103,11 @@
       // between the boundary of this object and the boundary of any field objects
       // should definitively determine which fields this zone belongs to.
       "11je290-Zone1": {
-        "_id": "11je290-Zone1",
+        "_id": "resources/11je290-Zone1",
         "name": "Crop Zone 1",
         "boundary": "<geojson of boundary>",
         "field": {
-          "_id": "ghijfdw-Chili50" // The field this zone belongs to
+          "_id": "resources/ghijfdw-Chili50" // The field this zone belongs to
         }
       },
 
@@ -115,7 +115,7 @@
       // in the resources list, even though it doesn't appear in any of the crop
       // lists above.
       "ghijfdw-Chili50": {
-        "_id": "ghijfdw-Chili50",
+        "_id": "resources/ghijfdw-Chili50",
         "name": "Chili50",
         "boundary": "<geojson of boundary>",
       },

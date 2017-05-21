@@ -626,13 +626,13 @@ class: middle, inverse
 ```http
 GET /resources/123 HTTP/1.1
 {
-  "_id": "123", "_rev": "4-kdjf02",
+  "_id": "resources/123", "_rev": "4-kdjf02",
   "_type": "application/vnd.montypython.grail.1+json",
   "_meta": { "_metaid": "123", "_rev": "3-kljdfs09" },
   "the_knights": "who say Ni!" 
 }
 ```
-`_id` is part of URL after /resources/
+`_id` is part of URL after the OADA base
 
 ---
 
@@ -679,7 +679,7 @@ class: middle, inverse
 ```http
 GET /resources/123 HTTP/1.1
 {
-  "_id": "123", "_rev": "4-kdjf02",
+  "_id": "resources/123", "_rev": "4-kdjf02",
   "_type": "application/vnd.montypython.grail.1+json",
   "_meta": { "_metaid": "123", "_rev": "3-kljdfs09" },
   "the_knights": "who say Ni!"
@@ -688,7 +688,7 @@ GET /resources/123 HTTP/1.1
 ## Versioned link to resource:
 ```http
 {
-  "_id": "123", "_rev": "4-kdjf02"
+  "_id": "resources/123", "_rev": "4-kdjf02"
 }
 ```
 Link looks same as resource, just "unexpanded".
@@ -736,8 +736,8 @@ GET /meta/123 HTTP/1.1
   "_stats": {
     "created": 1438729551,
     "modified": 1438729551,
-    "createdBy": { "_id": "234" },
-    "modifiedBy": { "_id": "234" }
+    "createdBy": { "_id": "users/234" },
+    "modifiedBy": { "_id": "users/234" }
   }
   "the_number_of_thy_counting": 3
 }
@@ -781,7 +781,7 @@ class: middle, inverse
 
 * versioned links contain _rev as part of parent document: 
 ```json
-"a_key": { "_id": "123", "_rev": "3-kj2ofd" }
+"a_key": { "_id": "resources/123", "_rev": "3-kj2ofd" }
 ```
 
 * Can just watch parent `_rev` for changes to graph below.
@@ -800,7 +800,7 @@ class: middle, inverse
 ## Solution: non-versioned links
 
 ```json
-"a_key": { "_id": "123" }
+"a_key": { "_id": "resources/123" }
 ```
 ## _Use when change detection is not important_
 
@@ -826,9 +826,9 @@ GET /bookmarks HTTP/1.1
   "_id": "123", "_rev": "6-k6i67i",
   "_type": "application/vnd.oada.bookmarks.1+json".
   "_meta": { "_metaid": "123", "4-kdfj02fkd" },
-  "fields"    : { "_id": "0ijo2flk", "3-kdjf02fj2" },
-  "irrigation": { "_id": "9nflwjfo", "2-kjdf0ijof" },
-  "harvest"   : { "_id": "jkjf2dj9", "9-djf02jkls" }
+  "fields"    : { "_id": "resources/0ijo2flk", "3-kdjf02fj2" },
+  "irrigation": { "_id": "resources/9nflwjfo", "2-kjdf0ijof" },
+  "harvest"   : { "_id": "resources/jkjf2dj9", "9-djf02jkls" }
 }
 ```
 * it's a resource
@@ -867,19 +867,19 @@ class: middle, inverse
 ```javascript
 GET /bookmarks
 {
-         "_id": "123", "_rev": "6-k6i67i",
+         "_id": "resources/123", "_rev": "6-k6i67i",
        "_type": "application/vnd.oada.bookmarks.1+json",
        "_meta": { "_metaid": "123", "_rev": "4-kdfj02fkd" },
-  "irrigation": { "_id": "jkjf2dj9", "_rev": "9-djf02jkls" }
+  "irrigation": { "_id": "resources/jkjf2dj9", "_rev": "9-djf02jkls" }
 }
 ```
 ```javascript
 GET /bookmarks/irrigation
 {
-       "_id": "9nflwjfo", "_rev": "6-k6i67i",
+       "_id": "resources/9nflwjfo", "_rev": "6-k6i67i",
      "_meta": { "_metaid": "9nflwjfo", "_rev": "4-kdfj02fkd" },
-  "machines": { "_id": "0ijo2flk", "_rev": "3-kdjf02fj2" },
-      "PAIL": { "_id": "902jif3d", "_rev": "7-kjf03ij2k3" },
+  "machines": { "_id": "resources/0ijo2flk", "_rev": "3-kdjf02fj2" },
+      "PAIL": { "_id": "resources/902jif3d", "_rev": "7-kjf03ij2k3" },
 }
 ```
 .footnote[
@@ -899,12 +899,12 @@ class: middle, inverse
 ```javascript
 GET /bookmarks/irrigation/machines
 {
-  "_id": "37hfh23", "_rev": "6-k6i67i",
+  "_id": "resources/37hfh23", "_rev": "6-k6i67i",
   "_type": "application/vnd.oada.irrigation.machines.1+json",
   "_meta": { "_metaid": "37hfh23", "_rev": "4-kdfj02fkd" },
   "list": {
-    "k02jkf33": { "_id": "k02jkf33", "_rev": "9-fkdj20ifj3" },
-    "02kjfl3f": { "_id": "02kjfl3f", "_rev": "2-df23fj09ji" }
+    "k02jkf33": { "_id": "resources/k02jkf33", "_rev": "9-fkdj20ifj3" },
+    "02kjfl3f": { "_id": "resources/02kjfl3f", "_rev": "2-df23fj09ji" }
   }
 }
 ```
@@ -912,15 +912,15 @@ GET /bookmarks/irrigation/machines
 ```javascript
 GET /bookmarks/irrigation/machines/list/k02jkf33
 {
-               "_id": "59i34jf4", "_rev": "10-9j2f3iokl23",
+               "_id": "resources/59i34jf4", "_rev": "10-9j2f3iokl23",
              "_type": "application/vnd.valleyix.machine.1+json",
              "_meta": { "_metaid": "59i34jf4", "_rev": "6-kfkfj02if" },
-     "configuration": { "_id": "qwe123", "_rev": "1-kdjf02" },
-            "status": { "_id": "asd456", "_rev": "4-k2g234gw02" },
-           "applied": { "_id": "zxc789", "_rev": "2-svcwevws2" },
-          "vriZones": { "_id": "rty012", "_rev": "1-kwg2g02" },
-  "vriPrescriptions": { "_id": "fgh345", "_rev": "7-swedrg24g02" },
-        "workOrders": { "_id": "vbn678", "_rev": "13-534nberv2302" }
+     "configuration": { "_id": "resources/qwe123", "_rev": "1-kdjf02" },
+            "status": { "_id": "resources/asd456", "_rev": "4-k2g234gw02" },
+           "applied": { "_id": "resources/zxc789", "_rev": "2-svcwevws2" },
+          "vriZones": { "_id": "resources/rty012", "_rev": "1-kwg2g02" },
+  "vriPrescriptions": { "_id": "resources/fgh345", "_rev": "7-swedrg24g02" },
+        "workOrders": { "_id": "resources/vbn678", "_rev": "13-534nberv2302" }
 ```
 
 ---
@@ -931,7 +931,7 @@ class: middle, inverse
 ```javascript
 GET /bookmarks/irrigation/machines/list/k02jkf33/configuration
 {
-             "_id": "qwe123", "_rev": "10-9j2f3iokl23",
+             "_id": "resources/qwe123", "_rev": "10-9j2f3iokl23",
            "_type": "application/vnd.valleyix.machine.configuration.1+json",
            "_meta": { "_metaid": "qwe123", "_rev": "6-kfkfj02if" },
         "Latitude": -40.0290384,

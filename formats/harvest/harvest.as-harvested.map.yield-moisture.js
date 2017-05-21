@@ -27,7 +27,7 @@
     // Here is one configuration that contains recorded data:
     "02kjfo2sfd": {
       machine: {
-        link: { _id: '209u2r3', _rev: '3-kdfj02l' },
+        link: { _id: 'resources/209u2r3', _rev: '3-kdfj02l' },
         name: '6088 combine',
       },
       data: {
@@ -50,7 +50,7 @@
     // One machine may have many configurations.
     "kdj20fkdk": { // This is data from a different machine in this tile
       machine: {
-        link: { _id: 'fej02jfkwl' }, // different combine than the other configuration
+        link: { _id: 'resources/fej02jfkwl' }, // different combine than the other configuration
         name: '8010 combine',
       },
       data: {
