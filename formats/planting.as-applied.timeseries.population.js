@@ -1,5 +1,5 @@
 {
-  _meta: { _mediaType: "application/vnd.oada.planting.as-applied.timeseries.population" },
+  _type: "application/vnd.oada.planting.as-applied.timeseries.population",
   // This file represents a time series of seed population data records.
 
   // It can contain any number of data points, however it is recommended to keep the

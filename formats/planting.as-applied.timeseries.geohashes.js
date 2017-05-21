@@ -1,6 +1,6 @@
 {
   // Note the inclusion of _meta is for the information of the reader only.
-  _meta: _mediaType: "application/vnd.oada.planting.as-applied.timeseries.geohash";
+  _type: "application/vnd.oada.planting.as-applied.timeseries.geohash",
 
   // This format represents the data that resides at one time series geohash tile.
   // The types of data which exist at this tile are duck-typed according to the

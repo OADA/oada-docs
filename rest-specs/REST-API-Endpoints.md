@@ -19,8 +19,8 @@
     - [The Usage of Arrays](#the-usage-of-arrays)
     - [Partitioning of Data Using Versioned Links](#partitioning-of-data-using-versioned-links)
     - [Example `/resources/{randomStringId}` document](#example-resourceresourceid-document)
-- [`/meta`](#meta)
-  - [`/meta/{resourceId}`](#metaresourceid)
+- [`/{resourcesid}/_meta`](#meta)
+  - [`/{resourceId}/_meta`](#metaresourceid)
     - [Meta Documents Are Basically Resources](#meta-documents-are-basically-resources)
   - [Reserved and Required Keys](#reserved-and-required-keys-1)
     - [`_mediaType`](#_mediatype)
@@ -30,7 +30,7 @@
       - [`modified`](#modified)
       - [`modifiedBy`](#modifiedby)
     - [Storing data in meta](#storing-data-in-meta)
-    - [Example `/meta/{resourceId}` Document](#example-metaresourceid-document)
+    - [Example `/{resourceId}/_meta` Document](#example-metaresourceid-document)
 - [`/bookmarks`](#bookmarks)
   - [`/bookmarks/{key 1}/.../{key N}`](#bookmarkskey-1key-n)
     - [`/bookmarks` Are Resources](#bookmarks-are-resources)
@@ -58,7 +58,7 @@
 ## `/resources/{randomStringId}`
 
 OADA's `/resources` are the meat and potatoes of the OADA API (in fact
-`/bookmarks`, `/meta`,  etc are just special cases of `/resources`) and, as a
+`/bookmarks`,  etc are just special cases of `/resources`) and, as a
 result, are the most complex. That said, the OADA team has tried to keep the
 required functionally as simple as possible. The responsibilities of
 `/resources` include:
@@ -90,7 +90,7 @@ either be accessed directly , i.e., `/{resourceId}/_id`,
   "_id": "resources/8flaRxfRAjf7203",
   "_rev": "34-NXKcjasd72",
   "_meta": {
-    "_metaid": "8flaRxfRAjf7203",
+    "_id": "resources/8flaRxfRAjf7203/_meta",
     "_rev": "2-LduowjcS2j"
   }
 }
@@ -138,7 +138,7 @@ the links in parent documents.
 ### `_meta`
 
 A link to the resource's meta-document. See the [section on
-`/meta`](#user-ccontent-meta) for more information.
+`/resources/*/_meta`](#user-ccontent-meta) for more information.
 
 
 ### Links and Versioned Links
@@ -197,15 +197,10 @@ is expected that clients will typically set `_rev` to '0-0' when creating a link
 to indicate to the cloud that they would like it to be a versioned link, however 
 this particular value is not required.
 
-***A special note on meta document links***
-
-It is possible to define links to meta documents. To distinguish between links
-to meta documents versus links to resources, the `_metaid` is used in place of the `_id`
-key. The `_rev` key can still be used, and functions the same.
 
 ### Accessing Resources
 A resource can be directly downloaded with an HTTP GET request on its
-`/resources/{resourceId}` endpoint. There are two main format options:
+`/{resourceId}` endpoint. There are two main format options:
 
 #### Binary (non-JSON) blob
 
@@ -235,10 +230,10 @@ For example, if the document stored at `/resources/123` is:
 
 ```json
 {
-  "_id": "123",
+  "_id": "resources/123",
   "_rev": "9-jk2f30j2323",
   "_meta": {
-    "_metaid": "123",
+    "_id": "resources/123/_meta",
     "_rev": "3-fdkj20fj2f"
   },
   "a": {

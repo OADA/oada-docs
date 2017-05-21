@@ -9,7 +9,7 @@
   // are completed on the prescription like field reconciliation and transfer to machines.
   _meta: {
     // _meta is a special document whose id's reside at /meta
-    _metaid: "kdf2j0dfdfww",
+    _id: "resources/kdf2j0dfdfww/_meta",
     _rev: "2-dklfj2oi"
 
     // A 3rd party can monitor this key to see which fields a prescription is assigned to.

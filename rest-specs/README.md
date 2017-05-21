@@ -9,7 +9,7 @@
 ## Base Endpoints
 
 * [/resources](REST-API-Endpoints.md#resources)
-* [/meta](REST-API-Endpoints.md#meta)
+* [/resources/&lt;string/_meta&gt;](REST-API-Endpoints.md#meta)
 * [/bookmarks](REST-API-Endpoints.md#bookmarks)
 
 *Draft: Version 1.0.0+*

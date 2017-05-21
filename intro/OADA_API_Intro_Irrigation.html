@@ -566,7 +566,6 @@ class: middle, inverse
 ```http
   /resources
   /bookmarks
-  /meta
   + a few other minor ones
 ```
 
@@ -587,13 +586,8 @@ class:  middle, inverse
 ```http
 /resources --&gt; everything
 /bookmarks --&gt; is a resource
-/meta --&gt; is resources*
 + a few other minor ones --&gt; all resources
 ```
-
-.footnote[
-  \* without it's own meta
-]
 
 
 
@@ -628,7 +622,7 @@ GET /resources/123 HTTP/1.1
 {
   "_id": "resources/123", "_rev": "4-kdjf02",
   "_type": "application/vnd.montypython.grail.1+json",
-  "_meta": { "_metaid": "123", "_rev": "3-kljdfs09" },
+  "_meta": { "_id": "resources/123_meta", "_rev": "3-kljdfs09" },
   "the_knights": "who say Ni!" 
 }
 ```
@@ -681,7 +675,7 @@ GET /resources/123 HTTP/1.1
 {
   "_id": "resources/123", "_rev": "4-kdjf02",
   "_type": "application/vnd.montypython.grail.1+json",
-  "_meta": { "_metaid": "123", "_rev": "3-kljdfs09" },
+  "_meta": { "_id": "resources/123/_meta", "_rev": "3-kljdfs09" },
   "the_knights": "who say Ni!"
 }
 ```
@@ -707,7 +701,7 @@ class: middle, inverse
 
 # Goal: need to add my own stuff to a resource whose format doesn't support it
 
-## Solution: `/meta`
+## Solution: `_meta`
 
 * Custom things that can't go in native format (shapefiles...)
 
@@ -717,22 +711,21 @@ class: middle, inverse
 
 * It's a resource*: GET/PUT/POST/DELETE to it like normal.
 
-* `_metaid` === resource's `_id`
+* `_id` === resource's `_id` + `'/_meta'`
 
 .footnote[
-  \* without it's own meta, and _metaid instead of _id
+  \* without it's own meta
 ]
 
 ---
 
 class: middle, inverse
-# /meta
+# /resources/*/_meta
 ```http
-GET /meta/123 HTTP/1.1
+GET /resources/123/_meta HTTP/1.1
 {
-  "_metaid": "123", "_rev": "3-kdjf02j",
-  "_type": "application/vnd.oada.meta.1+json",
-  "_mediaType": "application/vnd.awesomeness+json",
+  "_id": "resources/123/_meta", "_rev": "3-kdjf02j",
+  "_type": "application/vnd.oada.awesome.1+json",
   "_stats": {
     "created": 1438729551,
     "modified": 1438729551,
@@ -825,7 +818,7 @@ GET /bookmarks HTTP/1.1
 {
   "_id": "123", "_rev": "6-k6i67i",
   "_type": "application/vnd.oada.bookmarks.1+json".
-  "_meta": { "_metaid": "123", "4-kdfj02fkd" },
+  "_meta": { "_id": "resources/123/_meta", "4-kdfj02fkd" },
   "fields"    : { "_id": "resources/0ijo2flk", "3-kdjf02fj2" },
   "irrigation": { "_id": "resources/9nflwjfo", "2-kjdf0ijof" },
   "harvest"   : { "_id": "resources/jkjf2dj9", "9-djf02jkls" }

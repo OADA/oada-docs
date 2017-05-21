@@ -4,7 +4,7 @@
 
   // The inclusion of _meta._mediaType is not part of the format, it
   // is simply informational for people browsing the format.
-  _meta: { _mediaType: "application/vnd.oada.planting.as-applied.timeseries.1" },
+  _type: "application/vnd.oada.planting.as-applied.timeseries.1",
 
   // As-applied data is organized geographically according to tiles defined
   // by a 7-character geohash.  Time-series

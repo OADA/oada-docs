@@ -1,5 +1,5 @@
 {
-  _meta: { _mediaType: "application/vnd.oada.harvest.as-harveted.map.yield-moisture.1+json" },
+  _type: "application/vnd.oada.harvest.as-harveted.map.yield-moisture.1+json" },
 
   // All keys are considered optional as per the normal OADA duck-typing preferecence.
   // If they are there, you can do things with them.  If they are not, handle their absence.

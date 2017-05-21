@@ -1,6 +1,5 @@
 {
-  // The _meta here is for informational purposes only.
-  _meta: { _mediaType: "application/vnd.oada.planting.as-applied.1+json" },
+  _type: "application/vnd.oada.planting.as-applied.1+json",
 
   // the raw as-applied data is here:
   timeseries: { _id: "resources/kjd0f2j", _rev: "2-dkjfjlkjsldf" },

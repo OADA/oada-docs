@@ -2,8 +2,8 @@
 
 The OADA API follows a few basic philosophies that allow it to remain general and easily mapped to existing APIs:
 
-1. Everything is a resource and has a unique canonical endpoint (`/resources/<resourceId>`)
-2. Every resource (regardless of its data type) has a JSON meta resource (`/meta/<resourceId>`) that follows the same rules as plain old resources [*Note*: in fact, we recommend that implementations just URL rewrite `/meta` to `/resources`].
+1. Everything is a resource and has a unique canonical endpoint (`/resources/someString`)
+2. Every resource (regardless of its data type) has a JSON meta resource (`/resources/someString/_meta`) that follows the same rules as plain old resources [*Note*: in fact, we recommend that implementations just URL rewrite `/meta` to `/resources`].
 3. Bookmarks are resources that follow the same rules as plain old resources [*Note*: in fact, we recommend that implementations just URL rewrite `/bookmarks` to `/resources`]. The properties should be nouns rather than verbs and are used to discover resources of interest (`/bookmarks/pets/fido`).
 
 ## Resources
@@ -17,7 +17,7 @@ Assuming the JSON resource at `/resources/jikdf` is:
   "_id": "resources/jikdf",
   "_rev": "1-5dfj02",
   "_meta": {
-    "_metaId": "jikdf",
+    "_id": "resources/jikdf/_meta",
     "_rev": "1-adfad",
   },
 
@@ -76,7 +76,7 @@ If you want the `_rev` property of a resource to update when another resource is
 
 In the example above, the property `otherResource` and `otherResourceVersioned` both link to `/resources/abc123` and `otherResourceSubDocument` and `otherResourceVersionedSubDocument` both link to the `abc123`'s `/a/b` sub-document, `/resources/abc123/a/b`.  When resource `abc123` changes, the _rev in both versioned links here will eventually change to match the new `_rev` of resource `abc123`.
 
-A link to a meta document can be made using the same functionality by replacing `_id` with `_metaid`. 
+A link to a meta document can be made using the same functionality.
 
 ## Bookmarks
 

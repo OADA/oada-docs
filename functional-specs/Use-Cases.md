@@ -150,11 +150,6 @@ provider (agcloud.com), it asks him to login and provide proper access to the
 app.  The app then proceeds to mirror the folder hierarchy at agcloud.com on his
 local machine.
 
-To handle the additonal metadata that is stored with files (filetype, custom
-JSON properties, etc.), the app chooses to sync the metadata to a directory
-named "meta" at the top level, inside which there are a set of files named by
-the ID of the file they represent which contain the meta properties about that
-file.
 
 A nice feature of this approach would be that Frank can point his OADA sync app
 at a different cloud provider, and ask it to sync the current state of his local
