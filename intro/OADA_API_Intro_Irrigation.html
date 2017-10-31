@@ -331,7 +331,7 @@ Code:
 ```javascript
 const res = await request
   .get('https://pets.com/api/dogs/fido/schedule');
-const all_dogs = JSON.parse(response.body);
+const all_dogs = JSON.parse(res.body);
 console.log('Here are all the dogs: ', all_dogs);
 ```
 
