@@ -19,8 +19,8 @@
     - [The Usage of Arrays](#the-usage-of-arrays)
     - [Partitioning of Data Using Versioned Links](#partitioning-of-data-using-versioned-links)
     - [Example `/resources/{randomStringId}` document](#example-resourceresourceid-document)
-- [`/{resourcesid}/_meta`](#meta)
-  - [`/{resourceId}/_meta`](#metaresourceid)
+- [`/resources/{resourceId}/_meta`](#meta)
+  - [`/resources/{resourceId}/_meta`](#metaresourceid)
     - [Meta Documents Are Basically Resources](#meta-documents-are-basically-resources)
   - [Reserved and Required Keys](#reserved-and-required-keys-1)
     - [`_mediaType`](#_mediatype)
@@ -29,6 +29,7 @@
       - [`createdBy`](#createdby)
       - [`modified`](#modified)
       - [`modifiedBy`](#modifiedby)
+    - [`_remote_syncs`](#_remote_syncs-draft)
     - [Storing data in meta](#storing-data-in-meta)
     - [Example `/{resourceId}/_meta` Document](#example-metaresourceid-document)
 - [`/bookmarks`](#bookmarks)
@@ -373,7 +374,7 @@ geohashes and time-series data could use a UNIX timestamp quantized to a certain
 number of seconds. See the OADA [as-harvested][as-harvested] format for a
 geohash example.
 
-### Example `/{resourceId}` document
+### Example `/resources/{resourceId}` document
 
 The following is a example of a possible JSON prescription planting resource:
 
@@ -421,32 +422,26 @@ The following is a example of a possible JSON prescription planting resource:
 }
 ```
 
-# `/meta`
+# `_meta`
 
-## `/meta/{resourceId}`
+## `/resources/{resourceId}/_meta`
 
-`/meta` is the base URI for all meta-data documents. Each resource has exactly
+Each resource has exactly
 one meta-data document and it is used to help accomplish tasks such as:
 
   - Storing user defined meta-data about a resource
   - Resource sharing
   - Resource synchronization between clouds and applications
-  
-`/meta` documents share the id of their associated resource and have an
-authoritative URI of `/meta/{resourceId}`. However, the `/meta` document can
-also be accessed via the top-level `_meta` key of a resource since all resources
-contain a versioned link to their meta documents..
 
 ### Meta Documents Are Basically Resources
 
-`/meta` documents are basically resources. They behave identically to resources, with the 
-single exception that `/meta` documents do not have `/meta` documents themselves
-and therefore also do not have the requirement of a top level `_meta` key.  For this reason,
-they do not have an _id property, but rather _metaid which is functionally equivalent.
+`_meta` documents are basically resources. They behave identically to resources, with the 
+single exception that `_meta` documents do not have `_meta` documents themselves
+and therefore also do not have the requirement of a top level `_meta` key.
 
 ## Reserved and Required Keys
 
-The following endpoints, or JSON sub-documents, must be present in a `/meta`
+The following endpoints, or JSON sub-documents, must be present in a `_meta`
 document.
 
 *Version: 1.0.0*
@@ -459,7 +454,7 @@ document.
 - `/_syncs`
 - `/_derivatives`
 
-Note that an application may add custom keys to a `/meta` document, however they
+Note that an application may add custom keys to a `_meta` document, however they
 must not conflict with the standard keys defined here or in the future. To avoid
 conflicts with the OADA spec, applications should avoid using custom keys that
 start with the underscore character.
@@ -492,16 +487,38 @@ The timestamp at which the resource was last modified.
 A link to the user which last modified the resource (*Note: Users are 
 currently defined only in v1.0.0+*)
 
-### Storing data in /meta
+### `_remote_syncs` (DRAFT)
 
-OADA expects clouds and clients to store data in the `/meta` document only when
+This key is reserved for a list of documents
+describing OADA destinations to which to sync the document at `/resources/{resourceId}`.
+
+#### Example `/resources/{resourceId}/_meta/_remote_synscs/{syncId}` Document
+
+The following is an example `_remote_syncs` document.
+One would `POST` it to `/resources/{resourceId}/_meta/_remote_synscs/` to register it.
+
+```json
+{
+  "domain": "example.com",
+  "url": "/bookmarks/foo",
+  "token": "Bearer DEADBEEF"
+}
+```
+
+The above document would tell the OADA cloud to sync the resource at `/resources/{resourceId}`
+to another OADA cloud at `domain` under `url` using the supplied `token`.
+It would also recursively sync over all the descdendant resources linked to from this resource.
+
+### Storing data in `_meta`
+
+OADA expects clouds and clients to store data in the `_meta` document only when
 that information can not be stored within the resource itself. For example, you might
-choose to store information in /meta if the resource type is not JSON-based and therefore
+choose to store information in `_meta` if the resource type is not JSON-based and therefore
 not be easily extended, or the format's schema is violated if an extra key is present.
 
-### Example `/meta/{resourceId}` Document
+### Example `/resources/{resourceId}/_meta` Document
 
-The following is an example `/meta` document ("the_meaning_of_everything" is a custom
+The following is an example `_meta` document ("the_meaning_of_everything" is a custom
 key stored in the meta document):
 
 ```json
