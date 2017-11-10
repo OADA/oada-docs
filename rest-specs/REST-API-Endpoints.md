@@ -30,8 +30,8 @@
       - [`modified`](#modified)
       - [`modifiedBy`](#modifiedby)
     - [`_remote_syncs`](#_remote_syncs-draft)
-    - [Storing data in meta](#storing-data-in-meta)
-    - [Example `/{resourceId}/_meta` Document](#example-metaresourceid-document)
+  - [Storing data in meta](#storing-data-in-meta)
+  - [Example `/{resourceId}/_meta` Document](#example-metaresourceid-document)
 - [`/bookmarks`](#bookmarks)
   - [`/bookmarks/{key 1}/.../{key N}`](#bookmarkskey-1key-n)
     - [`/bookmarks` Are Resources](#bookmarks-are-resources)
@@ -439,7 +439,7 @@ one meta-data document and it is used to help accomplish tasks such as:
 single exception that `_meta` documents do not have `_meta` documents themselves
 and therefore also do not have the requirement of a top level `_meta` key.
 
-## Reserved and Required Keys
+### Reserved and Required Keys
 
 The following endpoints, or JSON sub-documents, must be present in a `_meta`
 document.
@@ -459,40 +459,40 @@ must not conflict with the standard keys defined here or in the future. To avoid
 conflicts with the OADA spec, applications should avoid using custom keys that
 start with the underscore character.
 
-### `_mediaType`
+#### `_mediaType`
 
 The media type stored in `_mediaType` must be the same value that is returned in 
 the HTTP Content-Type header.
 
-### `_stats`
+#### `_stats`
 
 The `_stats` is a JSON document that contains the standard "file" statistics
 from a UNIX type file system. The required keys are:
 
-#### `created`
+##### `created`
 
 The timestamp at which the resource was created.
 
-#### `createdBy`
+##### `createdBy`
 
 A link to the user who created the resource (*Note: Users are currently
 defined only in v1.0.0+*)
 
-#### `modified`
+##### `modified`
 
 The timestamp at which the resource was last modified.
 
-#### `modifiedBy`
+##### `modifiedBy`
 
 A link to the user which last modified the resource (*Note: Users are 
 currently defined only in v1.0.0+*)
 
-### `_remote_syncs` (DRAFT)
+#### `_remote_syncs` (DRAFT)
 
 This key is reserved for a list of documents
 describing OADA destinations to which to sync the document at `/resources/{resourceId}`.
 
-#### Example `/resources/{resourceId}/_meta/_remote_synscs/{syncId}` Document
+##### Example `/resources/{resourceId}/_meta/_remote_synscs/{syncId}` Document
 
 The following is an example `_remote_syncs` document.
 One would `POST` it to `/resources/{resourceId}/_meta/_remote_synscs/` to register it.
