@@ -508,6 +508,23 @@ One would `POST` it to `/resources/{resourceId}/_meta/_remote_synscs/` to regist
 The above document would tell the OADA cloud to sync the resource at `/resources/{resourceId}`
 to another OADA cloud at `domain` under `url` using the supplied `token`.
 It would also recursively sync over all the descdendant resources linked to from this resource.
+This does ***not*** cause changes to resources at `domain` to be pulled over
+to the OADA cloud on which this sync was registered.
+
+##### Sync Procedure
+
+Sync is performed by initially `PUT`ing the resource at `/resources/{resourceId}`
+to the location created by prefixing the `oada_base_uri` for `domain` to the `url`,
+and then `PUT`ing any changes to that location again.
+
+Initially, for each descendant resource of the resource `/resources/{resourceId}`,
+it will create a new corresponding resource at `domain`.
+When one of the descendant resources changes,
+sync will then `PUT` the change to the corresponding resource at `domain`.
+
+When a `PUT` is performed for sync,
+any link encountered in the `PUT` body is replaced with a link to the equivalent corresponding resource for `domain`.
+All the `PUT`s for a given sync document will use the token `token`.
 
 ### Storing data in `_meta`
 
