@@ -45,6 +45,11 @@
   Extensions](Authentication_and_Authorization.md#distributed-federation-extensions)
 * [Examples](Authentication_and_Authorization.md#examples)
 
+## Synchronization and Push Notifications
+
+* [Cloud-to-Cloud Sync (DRAFT)](REST-API-Endpoints.md#_remote_syncs-draft)
+* [Websockets]()
+
 ## Example API Use Cases
 
 * [JSON Resource Upload](REST-API-Examples.md#json-resource-upload)
