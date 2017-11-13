@@ -55,7 +55,12 @@ Every websocket request is a `JSON` encoded object containing keys `requestId`,
 }
 ```
 
-### watch
+### `WATCH` Method:
 The `WATCH` method can be used to watch a resource for changes. All changes to
 that resource will be sent back to the client with the provided `requestId` from
 the request.
+
+## Errors:
+Error responses will be returned as a JSON object with `requestId`, `status`,
+and `data` keys. The `data` key will contain a standard error as described in
+[OADA Standard Error Response](Standard-Error.md).
