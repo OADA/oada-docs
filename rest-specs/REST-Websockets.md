@@ -27,7 +27,7 @@ Every websocket request is a `JSON` encoded object containing keys `requestId`,
 
 ## Example GET request:
 
-####Request:
+#### Request:
 ```json
 {
     "requestId": "abc123",
@@ -35,7 +35,7 @@ Every websocket request is a `JSON` encoded object containing keys `requestId`,
     "path": "/bookmarks"
 }
 ```
-####Response:
+#### Response:
 ```json
 {
     "requestId": "abc123",
@@ -55,7 +55,7 @@ Every websocket request is a `JSON` encoded object containing keys `requestId`,
 }
 ```
 
-###watch
+### watch
 The `WATCH` method can be used to watch a resource for changes. All changes to
 that resource will be sent back to the client with the provided `requestId` from
 the request.
