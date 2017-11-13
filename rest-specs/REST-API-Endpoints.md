@@ -133,7 +133,7 @@ link to itself, the _rev is not defined and may be set to `0-0`.
 
 It is also worth noting that even though the above steps must happen in the
 defined sequence, updates to `_rev` can happen eventually.  This means there may be a
-delay between a resource changing it's `_rev` changing, and similarly for 
+delay between a resource changing it's `_rev` changing, and similarly for
 the links in parent documents.
 
 ### `_meta`
@@ -186,7 +186,7 @@ An example of a versioned link is:
 which should be interpreted as the `some_versioned_link` key actually being a
 reference to the resource 456, and the last known `_rev` of resource 456 is  
 "34-kjdf02jkld". A client wanting to only download the content of links when
-they change can use the current value of `_rev` to determine if it should 
+they change can use the current value of `_rev` to determine if it should
 follow the link by doing a follow-up GET request on `/resources/456`.
 Note that the parent resource's `_rev` must also update when a link's `_rev`
 updates and so a client may monitor just the parent's `_rev` to detect
@@ -195,7 +195,7 @@ changes to children.
 The `_rev` within a link is automatically set to the last known `_rev` for the
 resource given by the `_id` key regardless of the value sent by the client. It
 is expected that clients will typically set `_rev` to '0-0' when creating a link,
-to indicate to the cloud that they would like it to be a versioned link, however 
+to indicate to the cloud that they would like it to be a versioned link, however
 this particular value is not required.
 
 
@@ -273,11 +273,11 @@ For example, if the document stored at `/resources/234` is:
   "_id": "234",
   "_rev": "9-jk2f30j2323",
   "_meta": {
-    "_metaid": "234", 
+    "_metaid": "234",
     "_rev": "3-fdkj20fj2f"
   },
-  "a": { 
-    "_id": "345" 
+  "a": {
+    "_id": "345"
   }
 }
 ```
@@ -289,7 +289,7 @@ and the document stored at `/resources/345` is:
   "_id": "345",
   "_rev": "2-ia73mkjfxy2",
   "_meta": {
-    "_metaid": "345", 
+    "_metaid": "345",
     "_rev": "8-xk73dhafd7"
   },
   "c": "The Knights Who Say Ni"
@@ -302,14 +302,14 @@ Then a GET request to `/resources/234/a` evaluates to exactly the 345 resource:
   "_id": "345",
   "_rev": "2-ia73mkjfxy2",
   "_meta": {
-    "_metaid": "345", 
+    "_metaid": "345",
     "_rev": "8-xk73dhafd7"
   },
   "c": "The Knights Who Say Ni"
 }
 ```
 
-And a GET request to `/resoruces/234/a/c` is the same as `/resources/345/c`: 
+And a GET request to `/resoruces/234/a/c` is the same as `/resources/345/c`:
 
 ```json
 "The Knights Who Say Ni"
@@ -330,7 +330,7 @@ For example, the media type `application/json` tells a client that it should be
 able to parse it as valid JSON, but it does not tell it what keys to expect.
 ALternately, the media type `application/vnd.example.sensor.1+json` tells the client
 that the response is not only JSON but that it should also expect to see the
-keys defined by version 1 of the application/vnd.example.sensor model. 
+keys defined by version 1 of the application/vnd.example.sensor model.
 
 OADA maintains open media types for data that lack existing options.  While the
 project prefers to use existing and popular open formats, it is open to defining
@@ -339,7 +339,7 @@ new formats as needed moving forward.
 ### Query Parameters
 
 The only *officially* supported query parameter is `view`, however it is **not**
-required for OADA v1.0.0 conformance. More details can be found in the 
+required for OADA v1.0.0 conformance. More details can be found in the
 [View Proposal][view].
 
 Clouds may support other query parameters but they should not expect that any
@@ -366,7 +366,7 @@ incrementally add data in a scalable way.
 OADA’s versioned links make it possible to partition your data into sets of
 manageably-sized chunks as their own resources, and use the versioned links to
 allow a client to synchronize only the chunks that have changed since the last
-time they checked. 
+time they checked.
 
 A partitioning hash can be used as the key to chunk the data in a way that
 achieves some sort of lookup index. For example, geospatial data could use
@@ -409,7 +409,7 @@ The following is a example of a possible JSON prescription planting resource:
     "features": [
       {
         "type": "Feature",
-        "geometry": { 
+        "geometry": {
           "type": "Polygon",
           "coordinates": [ [ ] ]
         },
@@ -435,7 +435,7 @@ one meta-data document and it is used to help accomplish tasks such as:
 
 ### Meta Documents Are Basically Resources
 
-`_meta` documents are basically resources. They behave identically to resources, with the 
+`_meta` documents are basically resources. They behave identically to resources, with the
 single exception that `_meta` documents do not have `_meta` documents themselves
 and therefore also do not have the requirement of a top level `_meta` key.
 
@@ -461,7 +461,7 @@ start with the underscore character.
 
 #### `_mediaType`
 
-The media type stored in `_mediaType` must be the same value that is returned in 
+The media type stored in `_mediaType` must be the same value that is returned in
 the HTTP Content-Type header.
 
 #### `_stats`
@@ -484,7 +484,7 @@ The timestamp at which the resource was last modified.
 
 ##### `modifiedBy`
 
-A link to the user which last modified the resource (*Note: Users are 
+A link to the user which last modified the resource (*Note: Users are
 currently defined only in v1.0.0+*)
 
 #### `_remote_syncs` (DRAFT)
@@ -492,10 +492,10 @@ currently defined only in v1.0.0+*)
 This key is reserved for a list of documents
 describing OADA destinations to which to sync the document at `/resources/{resourceId}`.
 
-##### Example `/resources/{resourceId}/_meta/_remote_synscs/{syncId}` Document
+##### Example `/resources/{resourceId}/_meta/_remote_syncs/{syncId}` Document
 
 The following is an example `_remote_syncs` document.
-One would `POST` it to `/resources/{resourceId}/_meta/_remote_synscs/` to register it.
+One would `POST` it to `/resources/{resourceId}/_meta/_remote_syncs/` to register it.
 
 ```json
 {
@@ -571,7 +571,7 @@ resources and support significantly more useful and productive
 applications.
 
 The content of the document should be sets of key/value pairs that terminate in
-a versioned link to a resource. 
+a versioned link to a resource.
 
 ### `/bookmarks` Are Resources
 
@@ -625,7 +625,7 @@ Examples of some currently standardized keys are:
     "_rev": "5-iemxma"
   },
   "machines": {
-    "_id": "ETYGcaf4", 
+    "_id": "ETYGcaf4",
     "_rev": "2-kjdofd"
   }
 }
@@ -638,7 +638,7 @@ Examples of some currently standardized keys are:
 ## `/users/{userId}`
 
 `/users` provide details of a user's identity, such as, real name, email
-address, avatar, etc assuming that user is *known* to the currently-logged-in user. 
+address, avatar, etc assuming that user is *known* to the currently-logged-in user.
 Another user becomes *known* when it is:
 
 - Local to the cloud and has a public profile.
@@ -720,7 +720,7 @@ managed in the same way.
   "name": "Employees",
   "members": {
     "jaio3j": {
-      "_id": "kdufe3f", 
+      "_id": "kdufe3f",
       "_rev": "3-kdjf02fdd",
     },
     "ejijmc": {

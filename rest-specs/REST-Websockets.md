@@ -61,6 +61,6 @@ that resource will be sent back to the client with the provided `requestId` from
 the request.
 
 ## Errors:
-Error responses will be returned as a JSON object with `requestId`, `status`,
+An error response will be returned as a JSON object with `requestId`, `status`,
 and `data` keys. The `data` key will contain a standard error as described in
 [OADA Standard Error Response](Standard-Error.md).
