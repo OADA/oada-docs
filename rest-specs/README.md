@@ -48,7 +48,7 @@
 ## Synchronization and Push Notifications
 
 * [Cloud-to-Cloud Sync (DRAFT)](REST-API-Endpoints.md#_remote_syncs-draft)
-* [Websockets]()
+* [Websockets](REST-Websockets.md)
 
 ## Example API Use Cases
 
