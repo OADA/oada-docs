@@ -10,6 +10,8 @@
 | [Intro to the OADA API](https://cdn.rawgit.com/OADA/oada-docs/master/intro/OADA_API_Intro_Irrigation.html) | [Rest API Spec](rest-specs/README.md)
 | [Intro to OADA Authentication and Authorization](getting_started/auth/README.md) | [Authorization and Authentication](rest-specs/Authentication_and_Authorization.md) |
 
+## The Latest - Cache published!
+Sam and Servio have been hard at work on the awesome oada-cache library(s).  It's on NPM under the `@oada` organization [https://www.npmjs.com/org/oada](https://www.npmjs.com/org/oada).  We'll be adding some docs soon explaining how they work, but the basic idea is that you can just import a top-level module for a type of information (fields, yield, notes, etc.) and you have an awesome local cache of data with live change feeds, whether you're in node or in the browser.  We published a pure javascript implementation [(oada-cache)](https://github.com/oada/oada-cache), as well as some great [cerebral.js](https://cerebraljs.com/) providers [(cerebral-provider)](https://github.com/OADA/cerebral-provider) and modules [(cerebral-module)](https://github.com/OADA/cerebral-module) that really streamline React.js-based development.
 
 ## Overview
 The purpose of the Open Ag Data Alliance is to develop a standard API framework for 
