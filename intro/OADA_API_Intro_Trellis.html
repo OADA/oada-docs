@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>tl;dr OADA Intro - Irrigation</title>
+    <title>tl;dr OADA Intro - Trellis</title>
     <meta charset="utf-8">
     <style>
       @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
@@ -152,9 +152,9 @@ class: center, middle, inverse
 # tl;dr Intro to the OADA API 
 ## Flavored with Trellis
 -----------------------------------
-[http://openag.io](http://openag.io)  
+[http://trellisframework.org](http://trellisframework.org)  
 [http://github.com/oada](http://github.com/oada)  
-[http://github.com/oada/valleyix-formats](http://github.com/oada/valleyix-formats)
+[http://github.com/trellisfw](http://github.com/trellisfw)
 
 .footnote[
   created with [remark](http://github.com/gnab/remark)
@@ -400,7 +400,8 @@ Host: pets.com
 Authorization: Bearer 20kdjf20i3kjlejf03i
 ```
 
-OAuth2 is how you hand out tokens via OADA
+* OAuth2 is how you hand out tokens via Trellis.
+* Can do client grant flow, implicit flow, code flow, device flow
 
 
 ---
@@ -417,14 +418,14 @@ class: middle, inverse
 ## Solution: Single Sign-On
 
 * "Login with Google"
-* OADA does this via OpenIDConnect + oauth-dyn-reg
+* Trellis does this via OpenIDConnect + oauth-dyn-reg
 * Any trusted login can be used anywhere
 
 
 ---
 class: center, middle, inverse
 
-# OADA is a REST API spec + formats
+# Trellis is a REST API spec + formats
 
 ## So it's worth reviewing some things about REST API's...
 
@@ -560,7 +561,7 @@ class: middle, inverse
 
 * GET: give me the resource
 * PUT: idempotent* merge with existing resource, or create new one
-* POST: add new
+* POST: create a random id, then do a PUT there
 * DELETE: ummm.....delete
 
 ## --&gt; JSON types:
@@ -576,9 +577,9 @@ class: middle, inverse
 ```http
 GET /resources/123 HTTP/1.1
 {
-  "_id": "resources/123", "_rev": "4-kdjf02",
+  "_id": "resources/123", "_rev": "4",
   "_type": "application/vnd.montypython.grail.1+json",
-  "_meta": { "_id": "resources/123_meta", "_rev": "3-kljdfs09" },
+  "_meta": { "_id": "resources/123_meta", "_rev": "3" },
   "the_knights": "who say Ni!" 
 }
 ```
@@ -591,16 +592,16 @@ class: middle, inverse
 ```http
 GET /resources/123 HTTP/1.1
 {
-  "_id": "resources/123", "_rev": "4-kdjf02",
+  "_id": "resources/123", "_rev": "4",
   "_type": "application/vnd.montypython.grail.1+json",
-  "_meta": { "_id": "resources/123/_meta", "_rev": "3-kljdfs09" },
+  "_meta": { "_id": "resources/123/_meta", "_rev": "3" },
   "the_knights": "who say Ni!"
 }
 ```
 ## Versioned link to resource:
 ```http
 {
-  "_id": "resources/123", "_rev": "4-kdjf02"
+  "_id": "resources/123", "_rev": "4"
 }
 ```
 Link looks same as resource, just "unexpanded".
@@ -616,24 +617,30 @@ class: center, middle, inverse
 
 class: middle, inverse
 
-# Goal: Sync
+# Goal: Efficient Sync
 
-## Solution Part 1: `_rev` 
+## Solution Part 1: `_changes` as in-order stream of idempotent merges
 
 ```javascript
-format: 3-fj0202fj
-        ^ ^------^
-        |    |
-        |    +--- random
-        +-------- 'eventually' increasing number
+GET /resources/1kdi3/_meta/_changes/5
+{
+  body: {
+    a: {
+      b: 'hello',
+    },
+  }
+}
 ```
 
-`_rev` eventually changes when resource changes
+* Each resource is like its own Kafka topic
+* GET's can request changes since a version instead of the resource itself
+* PUT bodies send back the change document
+* Coming soon: reverse-changes!
 
 ---
 
 class: middle, inverse
-# Goal: Sync
+# Goal: Efficient Sync
 
 ## Solution Part 2: versioned links
 
@@ -642,16 +649,17 @@ class: middle, inverse
 ```http
 GET /bookmarks/trellis/certifications HTTP/1.1
 {
-  "_id": "resources/123", "_rev": "4-kdjf02",
+  "_id": "resources/123", "_rev": "4",
   "_type": "application/vnd.trellis.certifications.1+json",
-  "_meta": { "_id": "resources/123/_meta", "_rev": "3-kljdfs09" },
-  "111": { "_id": "resources/200", "_rev": "2-kdfj923ik" },
-  "222": { "_id": "resources/201", "_rev": "1-kc9jv4kik" },
-  "333": { "_id": "resources/202", "_rev": "6-88vjvjnjh" }
+  "_meta": { "_id": "resources/123/_meta", "_rev": "3" },
+  "111": { "_id": "resources/200", "_rev": "2" },
+  "222": { "_id": "resources/201", "_rev": "1" },
+  "333": { "_id": "resources/202", "_rev": "6" }
 }
 ```
 
-* ...so parent changes when child changes...and so on...
+* ...so parent changes shortly after child changes...and so on...
+* can efficiently poll for changes as simplest efficient case
 
 
 ---
@@ -666,6 +674,19 @@ class: middle, inverse
 * webhooks: server - to - server
 * websockets: browser/app - to - server
 
+
+---
+
+class: middle, inverse
+# Goal: Sync
+
+## Solution Part 4: OADA Intelligent Sync
+
+* Hey, we have a standard API...
+* "When this one changes, replay/merge those changes over here"
+* Basically a webhook that knows how to do the OADA PUT
+
+
 ---
 
 class: middel, inverse
@@ -676,7 +697,46 @@ Defined by [https://github.com/oada/oada-formats](https://github.com/oada/oada-f
 
 Trellis thus far: [https://github.com/OADA/oada-formats/tree/master/formats/application/vnd](https://github.com/OADA/oada-formats/tree/master/formats/application/vnd)
 
+
 ---
+
+class: center, middle, inverse
+# Goal: find the resources you want
+
+---
+
+class: middle, inverse
+# Goal: find the resources you want
+
+## Solution: `/bookmarks` resource discovery
+
+```http
+GET /bookmarks HTTP/1.1
+{
+  "_id": "123", "_rev": "6-k6i67i",
+  "_type": "application/vnd.oada.bookmarks.1+json".
+  "_meta": { "_id": "resources/123/_meta", "4-kdfj02fkd" },
+  "trellisfw"    : { "_id": "resources/0ijo2flk", "3-kdjf02fj2" },
+}
+```
+* it's a resource
+* each user has their own: `/bookmarks` === `/users/me/bookmarks`
+
+---
+class: center, middle, inverse
+
+# Goal: agnostic to ontology and format
+
+---
+class: middle, inverse
+
+# Goal: agnostic to ontology and format
+
+## Solution: _type
+
+* media type of /bookmarks and any other resources determine available graph structure
+
+* Duck typing!
 
 
     </textarea>
