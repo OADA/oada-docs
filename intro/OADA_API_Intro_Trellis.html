@@ -611,7 +611,7 @@ Link looks same as resource, just "unexpanded".
 
 class: center, middle, inverse
 
-# Goal: sync 
+# Goal: Efficient sync 
 
 ---
 
@@ -665,7 +665,7 @@ GET /bookmarks/trellis/certifications HTTP/1.1
 ---
 
 class: middle, inverse
-# Goal: Sync
+# Goal: Efficient Sync
 
 ## Solution Part 3: Webhooks and Websockets
 
@@ -678,7 +678,7 @@ class: middle, inverse
 ---
 
 class: middle, inverse
-# Goal: Sync
+# Goal: Efficient Sync
 
 ## Solution Part 4: OADA Intelligent Sync
 
@@ -686,6 +686,27 @@ class: middle, inverse
 * "When this one changes, replay/merge those changes over here"
 * Basically a webhook that knows how to do the OADA PUT
 
+
+---
+
+class: middle, inverse
+# Goal: Multiple formats, copies, derivatives, reactions, ...
+
+## Solution: Microservices!
+
+* OADA turns out to be a framework for microservices
+
+
+---
+
+class: middle, inverse
+# Goal: Use OADA to drive the browser
+
+## Solution: oada-cache
+
+* [https://github.com/oada/oada-cache](https://github.com/oada/oada-cache)
+* transparent cache in browser with real-time updates over websockets
+* Coming soon: native, transparent, offline-first!
 
 ---
 
@@ -737,6 +758,120 @@ class: middle, inverse
 * media type of /bookmarks and any other resources determine available graph structure
 
 * Duck typing!
+
+
+---
+class: middle, inverse
+
+# Example: Exploring Trellis
+
+
+---
+class: middle, inverse
+
+# Example: Exploring Trellis
+
+## GET list of certifications for this token:
+
+```http
+GET /bookmarks/trellisfw/certifications HTTP/1.1
+{
+    "_id": "resources/c8880a56-2761-4e9f-8abe-4fbba321fc6b",
+    "_rev": "38",
+    "_type": "application/vnd.trellisfw.certifications.1+json",
+    "_meta": {
+        "_id": "resources/c8880a56-2761-4e9f-8abe-4fbba321fc6b/_meta",
+        "_rev": "38"
+    },
+    "114a9322-1a87-4190-8d9c-a9d3c064119e": {
+        "_id": "resources/4bda9c16-de80-4a73-b586-d58d84862dbe",
+        "_rev": "37",
+    },
+    "fc7f5bfe-1fab-40d4-9ea5-62a295697f09": {
+        "_id": "resources/7a09a14e-c11b-41b8-99c0-98d45c5755a5",
+        "_rev": "31",
+    },
+}
+```
+
+---
+class: middle, inverse
+
+# Example: Exploring Trellis
+
+## GET information for one certification
+* Note that a "certification" is a combination of audit, corrective actions, and 
+  certificate
+* This one just has audit (note duck typing):
+
+```http
+GET /bookmarks/trellisfw/certifications HTTP/1.1
+{
+    "_id": "resources/4bda9c16-de80-4a73-b586-d58d84862dbe",
+    "_rev": "37",
+    "_meta": {
+        "_id": "resources/4bda9c16-de80-4a73-b586-d58d84862dbe/_meta",
+        "_rev": "37",
+    },
+    "_type": "application/vnd.trellisfw.certification.globalgap.1+json",
+    "audit": {
+        "_id": "resources/2be4b567-667b-4f4a-b21d-8602e4c43d85",
+        "_rev": "31",
+    }
+}
+```
+
+---
+class: middle, inverse
+
+# Example: Exploring Trellis
+
+## Create a new certification
+  1. Create a new resource with audit as body `POST /resources` -&gt; returns _id
+  2. Create a new certification resource that links to the new audit:
+
+```http
+POST /resources
+{
+  _type: "application/vnd.trellis.certification.1+json",
+  audit: { _id: "resources/12345jfd", _rev: "0" }
+}
+```
+
+---
+class: middle, inverse
+
+# Example: Exploring Trellis
+
+## Create a new certification
+  1. Create a new resource with audit as body `POST /resources` -&gt; returns _id
+
+  2. Create a new certification resource that links to the new audit:
+
+  3. Link the new resource under the user's list of certifications 
+    (example using PUT with client-generated uuid):
+
+```http
+PUT /bookmarks/certifications
+{
+  "kd0f2i3j3": { _id: "resources/98765kjdfk", _rev: "0" }
+}
+```
+
+  This merges the new uuid key in with the rest.
+
+
+---
+class: middle, inverse
+
+# Now you can try it yourself!
+
+```
+  git clone git@github.com:OADA/oada-srvc-docker.git
+  cd oada-srvc-docker
+  docker-compose up -d
+```
+[https://github.com/oada/oada-srvc-docker](https://github.com/oada/oada-srvc-docker)
 
 
     </textarea>
