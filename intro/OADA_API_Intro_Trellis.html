@@ -901,12 +901,14 @@ class: middle, inverse
 Do this in Chrome dev tools console:
 
 ```javascript
-var w = new Websocket('wss://localhost');
+var w = new WebSocket('wss://localhost');
+   w.onopen = function(evt) { console.log('open!!') };
+  w.onerror = function(evt) { console.log('ERROR! evt = ', evt); }
 w.onmessage = function(evt) { console.log('message! ', JSON.parse(evt.data)) };
 w.send(JSON.stringify({
   requestId: '1',
   method: 'watch',
-  header: { authorization: 'Bearer aaa' },
+  headers: { authorization: 'Bearer aaa' },
   path: '/bookmarks',
 }));
 ```
