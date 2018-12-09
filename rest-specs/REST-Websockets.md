@@ -21,9 +21,8 @@ Every websocket request is a `JSON` encoded object containing keys `requestId`,
 
 `data`: Data for `POST`/`PUT` methods.
 
-`authorization`: The HTTP `Authorization` header.
-
-`contentType`: The HTTP `Content-Type` header.
+`headers`: An object containing any headers that would have been sent with 
+a regular HTTP request.
 
 ## Example GET request:
 
@@ -32,7 +31,10 @@ Every websocket request is a `JSON` encoded object containing keys `requestId`,
 {
     "requestId": "abc123",
     "method": "GET",
-    "path": "/bookmarks"
+    "path": "/bookmarks",
+    "headers": {
+      "authorization": "Bearer aaa"
+    }
 }
 ```
 #### Response:
@@ -56,9 +58,20 @@ Every websocket request is a `JSON` encoded object containing keys `requestId`,
 ```
 
 ### `WATCH` Method:
-The `WATCH` method can be used to watch a resource for changes. All changes to
+The `WATCH` method can be used to watch a resource for changes. All changes documents to
 that resource will be sent back to the client with the provided `requestId` from
-the request.
+the request.  
+
+If you include the `x-oada-rev` header in the watch request set to a particular
+rev (for example, the last rev you've seen), the change documents since that
+rev will begin to stream in out in order as if those changes had just been
+made.  In this way, you can have a cache that is offline for some time,
+and when it starts back up it is very easy for it to catch up.
+
+Also note that in a graph of versioned links, a parent will receive a change
+document that includes the actual change to the children all the way down to
+the originating changes, eliminating the need to manually go get changes
+on children when the parent changes.
 
 ## Errors:
 An error response will be returned as a JSON object with `requestId`, `status`,
