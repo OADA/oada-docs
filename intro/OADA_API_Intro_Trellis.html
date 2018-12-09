@@ -894,7 +894,26 @@ class: middle, inverse
 ```
 [https://github.com/oada/oada-srvc-docker](https://github.com/oada/oada-srvc-docker)
 
+---
+class: middle, inverse
 
+# Fun with Websockets
+Do this in Chrome dev tools console:
+
+```javascript
+var w = new Websocket('wss://localhost');
+w.onmessage = function(evt) { console.log('message! ', JSON.parse(evt.data)) };
+w.send(JSON.stringify({
+  requestId: '1',
+  method: 'watch',
+  header: { authorization: 'Bearer aaa' },
+  path: '/bookmarks',
+}));
+```
+
+Then go to execute a PUT against bookmarks and see the change stream in!
+* You can send `x-oada-rev` with the watch to stream from last known rev
+* Changes to versioned-link children will _bubble up_: the parent's change document contains the child's data directly
     </textarea>
     <script src="remark-latest.min.js"></script>
     <script>
