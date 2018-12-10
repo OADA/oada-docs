@@ -25,50 +25,51 @@ top-level domain where their data sits in order for the app or service to use it
 The best way to get familiar with the OADA API is to use it.  Do that:
 
 1. Install the OADA demo server:
-   ```git clone git@github.com:OADA/oada-api-server.git```
+   ```git clone git@github.com:OADA/oada-srvc-docker.git```
 
 2. Get node.js if you don't have it, install libraries:
    ```
-   curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.6/install.sh | bash
+   curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
    nvm install node && nvm use node && npm install
    ```
 
-3. Start up the server (it runs localhost:3000):
+3. Start up the server (it runs on localhost at port 80):
    ```npm run start```
 
-4. Learn about your server.  Open a browser and go to 
-   (https://localhost:3000/.well-known/oada-configuration).
+4. Learn about your server and make sure it's up.  Open a browser and go to 
+   (https://localhost/.well-known/oada-configuration).
    Look for `oada_base_uri` (where the data is), and 
-   `authorization_endpoint` (where to ask for a token)
+   `authorization_endpoint` (where to ask for a token).  *NOTE*: the local SSL 
+   certificate is self-signed.  You have to approve it in your browser.
 
 5. Get an authorization token to your server:
-   Go to http://client.oada-dev.com, enter `localhost:3000` in the box beside 
-   "Get Access Token".  Click "Get Access Token".  Submit the default 
+   Go to http://client.oada-dev.com, enter `localhost` in the box beside 
+   "Get Access Token" and enter `trellis:all` in the box beside it labeled "Scope".  Click "Get Access Token".  Submit the default 
    username/password on the next screen, then click "Allow".
 
 6. Copy the access_token.  Looks something like `its8IrYYjlZba_uhdnVMjRNv6FWnZYA3SkCWdEdFa`
 
-7. Get an API tool like [Postman](https://www.getpostman.com/)
+7. Get an API tool like [Insomnia](https://insomnia.rest/).  *NOTE:* Postman currently has an issue with Express that leads to PUT requests taking up to 65 seconds.  Insomnia has no such issue, hence why we recommend using it.  Postman works fine with GET's.
 
-8. Discover what data is on your server for your token.  In Postman,
-   do a `GET` to `https://localhost:3000/bookmarks`.  Without an `Authorization:` header
+8. Discover what data is on your server for your token.  In Insomnia,
+   do a `GET` to `https://localhost/bookmarks`.  Without an `Authorization:` header
    it will fail.  Add it with the token you copied: 
    ```
    Authorization: Bearer its8IrYYjlZbuhdnVMjRNv6FWnZYA3SkCWdEdFa
    ```  
    Now you should get back some JSON listing the data that's available.
 
-9. Add some data to your server.  In Postman with  the same `Authorization:` header, 
-   do a `PUT` to `https://localhost:3000/bookmarks/theknights` with the body:
+9. Add some data to your server.  In Insomnia (Postman has issues with Express, so use Insomnia) with  the same `Authorization:` header, 
+   do a `PUT` to `https://localhost/bookmarks/theknights` with the body:
    ```json
    {
      "whosay": "Ni!"
    }
    ```
-   Add the `Content-Type: application/json` header to the request, too.
+   Add the `Content-Type: application/vnd.oada.bookmarks.1+json` header to the request, too.
 
-10. And get it back: do a `GET` to `https://localhost:3000/bookmarks` again
-    and you should see your data.
+10. And get it back: do a `GET` to `https://localhost/bookmarks` again
+    and you should see your new data data: now the resource has a key named `theknights`.
 
 Read up on the [Rest API Spec](rest-specs/README.md) with examples to learn how to
 create resources, link them between documents, track changes, and more.
