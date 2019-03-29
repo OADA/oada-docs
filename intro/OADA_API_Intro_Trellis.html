@@ -692,8 +692,12 @@ class: middle, inverse
 
 * Register for change notifications for any versioned sub-tree
 * i.e. "tell me when we get a change to the certifications list"
-* webhooks: server - to - server
-* websockets: browser/app - to - server
+* webhooks: 
+  * server - to - server
+* websockets: 
+  * browser/app - to - server
+  * `watch` sends stream of change documents for subtree
+  * can "restart" stream from any `_rev` =&gt; at-least-once delivery
 
 
 ---
