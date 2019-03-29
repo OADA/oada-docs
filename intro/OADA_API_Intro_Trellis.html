@@ -631,6 +631,49 @@ Link looks same as resource, just "unexpanded".
 ---
 
 class: center, middle, inverse
+# Goal: find the resources you want
+
+---
+
+class: middle, inverse
+# Goal: find the resources you want
+
+## Solution: `/bookmarks` resource discovery
+
+```http
+GET /bookmarks HTTP/1.1
+{
+  "_id": "123", "_rev": "6-k6i67i",
+  "_type": "application/vnd.oada.bookmarks.1+json".
+  "_meta": { "_id": "resources/123/_meta", "4-kdfj02fkd" },
+  "trellisfw"    : { "_id": "resources/0ijo2flk", "3-kdjf02fj2" },
+}
+```
+* it's a resource
+* each user has their own: `/bookmarks` === `/users/me/bookmarks`
+
+---
+class: center, middle, inverse
+
+# Goal: agnostic to ontology and format
+
+---
+class: middle, inverse
+
+# Goal: agnostic to ontology and format
+
+## Solution: _type
+
+* media type of /bookmarks and any other resources determine available graph structure
+
+* Duck typing!
+
+
+
+
+---
+
+class: center, middle, inverse
 
 # Goal: Efficient sync 
 
@@ -741,49 +784,14 @@ class: middel, inverse
 ## Solution: `oada-formats`
 Defined by [https://github.com/oada/oada-formats](https://github.com/oada/oada-formats)
 
-Trellis thus far: [https://github.com/OADA/oada-formats/tree/master/formats/application/vnd](https://github.com/OADA/oada-formats/tree/master/formats/application/vnd)
+Trellis thus far: 
+[https://github.com/OADA/oada-formats/tree/master/formats/application/vnd](https://github.com/OADA/oada-formats/tree/master/formats/application/vnd)
 
-
----
-
-class: center, middle, inverse
-# Goal: find the resources you want
-
----
-
-class: middle, inverse
-# Goal: find the resources you want
-
-## Solution: `/bookmarks` resource discovery
-
-```http
-GET /bookmarks HTTP/1.1
-{
-  "_id": "123", "_rev": "6-k6i67i",
-  "_type": "application/vnd.oada.bookmarks.1+json".
-  "_meta": { "_id": "resources/123/_meta", "4-kdfj02fkd" },
-  "trellisfw"    : { "_id": "resources/0ijo2flk", "3-kdjf02fj2" },
-}
-```
-* it's a resource
-* each user has their own: `/bookmarks` === `/users/me/bookmarks`
-
----
-class: center, middle, inverse
-
-# Goal: agnostic to ontology and format
-
----
-class: middle, inverse
-
-# Goal: agnostic to ontology and format
-
-## Solution: _type
-
-* media type of /bookmarks and any other resources determine available graph structure
-
-* Duck typing!
-
+Basics are:
+* every format has an example
+* every format has at least a javascript `validate()` function
+* every JSON format can just supply a json-schema 
+* extensions in the library to simplify indexing, traveling context, duck typing, vocabularies, and more!
 
 ---
 class: middle, inverse
