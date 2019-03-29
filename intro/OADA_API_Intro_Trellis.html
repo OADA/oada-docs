@@ -375,7 +375,7 @@ const response = await request.get('https://pets.com/api/dogs/fido/schedule');
 const fido_schedule = JSON.parse(response.body);
 const now = moment();
 fido_schedule.feedings.each(feeding => {
-  if (pastTimeToFeed(feeding) && !feeding.done) {
+  if (now.isAfter(moment(feeding)) && !feeding.done) {
     alert_steve('Fido needs food!!');
   }
 });
