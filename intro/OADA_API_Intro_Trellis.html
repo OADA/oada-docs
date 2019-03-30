@@ -757,6 +757,24 @@ class: middle, inverse
 
 ---
 
+class: center, middle, inverse
+
+# Goal: Concurrency
+
+---
+
+class: middle, inverse
+# Goal: Concurrency
+
+## Solution: Optimistic Locking
+
+* "Fail this write if `5` is no longer the current `_rev`"
+* VERY useful for safely building trees from browsers....(see `oada-cache`)
+* Requires server to actually know latest `_rev`...
+* If data model is CRDT, no merge conflicts!
+
+---
+
 class: middle, inverse
 # Goal: Multiple formats, copies, derivatives, reactions, ...
 
