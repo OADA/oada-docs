@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OADA/Trellis Ops</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      table {
+        margin: auto;
+        border-collapse: collapse;
+      }
+      table, th, td {
+        border: 1px solid #929897;
+      }
+      th, td {
+        padding: 10px;
+      }
+      th {
+        color: #66D9EF;
+        /*background-color: #474842; */
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: #66D9EF;
+        text-decoration: underline;
+      }
+      code {
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: 2px;
+        background-color: #474842;
+        color: rgb(249, 38, 114);
+      }
+      .remark-code {
+        font-family: 'Ubuntu Mono'; 
+      }
+      .remark-inline-code { 
+        font-family: 'Ubuntu Mono'; 
+      }
+      .remark-code-line-highlighted     { 
+        /* background-color: #373832;  */
+      }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        color: #777872;
+        /*text-shadow: 0 0 20px #333; */
+      }
+      .inverse h1 {
+        color: #f3f3f3;
+        line-height: 0.9em;
+      }
+      .inverse h2 {
+        color: rgb(249, 38, 114);
+        line-height: 0.9em;
+      }
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+      .left-column h2:last-of-type, .left-column h3:last-child {
+         color: #000;
+      }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+    </style>
+  </head>
+  <body>
+   <textarea id="source">
+
+name: title
+class: center, middle, inverse
+
+# Architecture, Deployment, and Operations 
+## with OADA/Trellis
+-----------------------------------
+[http://trellisframework.org](http://trellisframework.org)  
+[http://github.com/oada](http://github.com/oada)  
+[http://github.com/trellisfw](http://github.com/trellisfw)
+
+.footnote[
+  created with [remark](http://github.com/gnab/remark)
+]
+
+
+---
+name: cliffs_notes
+class: middle, inverse
+# OADA/Trellis Cliff's Notes
+
+* OADA/Trellis defines a data-model-agnostic REST API
+* API can push/notify/sync asynchronously (websockets, webhooks, OADA sync)
+* Data models published as graph schemas on top of OADA/Trellis REST API
+* Reference implementation is [https://github.com/oada/oada-srvc-docker](https://github.comoada/oada-srvc-docker)
+* Install reference implentation to get OADA/Trellis API in your domain
+
+---
+class: middle, inverse
+
+<img height="600px" src="internalexternal.png" />
+
+---
+class: middle, inverse
+
+<img height="600px" src="core.png" />
+
+
+---
+class: middle, inverse
+# Key Concept: `services-enabled`
+
+system is controlled/configured by docker-compose files
+
+* `oada-core/` 
+  * main services that implement OADA API
+  * has docker-compose.yml
+
+* `services-available/` 
+  *  place plugins/overrides here.  
+  *  merges each docker-compose.yml w/ core
+  *  any service can augment or override core by merging docker-compose.yml
+
+* `services-enabled/`
+  *  symlink to services-available to enable, can use 000-&lt;name&gt; for priority
+
+* `oada` script: 
+  * run docker-compose with merge of all docker-compose files
+  * `oada up -d`
+
+---
+class: center, middle, inverse
+
+# Deploying a new OADA/Trellis instance
+
+
+---
+name: system
+class: middle, inverse
+# Deploying a new OADA/Trellis instance
+
+## System Requirements:
+* RAM &gt;= 4 GB
+* Docker &gt;= 19
+* docker-compose &gt; 1.24
+
+## System Recommendations:
+* Recent Linux/Mac (Windows+Docker = tenuous relationship)
+
+
+---
+name: decisions
+class: middle, inverse
+# Deploying a new OADA/Trellis instance
+
+## Decisions to make:
+* Where to host `/.well-known/oada-configuration`
+* Domain(s)/subdomain(s) for OADA/Trellis API base
+
+## Recommended:
+* same domain for all, simple to remember (like trellis.ourcompany.com)
+
+
+---
+name: install
+class: middle, inverse
+# Deploying a new OADA/Trellis Instance
+
+## Get the code:
+```bash
+git clone git@github.com:OADA/oada-srvc-docker.git
+```
+
+## Install `oada` script, install npm libraries:
+```bash
+# cd oada-srvc-docker
+# oada --install-self
+```
+The `oada` script passes its arguments to `docker-compose`, so whatever works with docker-compose works with `oada`.
+
+---
+name: setup
+class: middle, inverse
+# Deploying a new OADA/Trellis Instance
+
+## Setup Domains
+1. Create domain folder for each domain to serve (`proxy` and `auth` use domain configs)
+  * can copy `localhost` domain and modify to suit
+2. Edit client certificate (used in openid-connect) with your info
+3. Sign client certificate as jwt (from within admin container: `oada run --rm admin`):
+```bash
+# oada run --rm admin oada-sign /domains-available/&lt;your_domain&gt;/unsigned_client_cert.js
+```
+
+## https certs
+* admin container has certbot, proxy expects cert in domain folder
+* in admin, symlink /etc/letsencrypt/live to proxy folder
+* you can renew manually w/ admin, or make a cron container
+```bash
+# oada run --rm admin certbot renew
+```
+
+---
+name: starting
+class: inverse
+
+# Starting/Running OADA/Trellis
+
+## Starting (will build or re-build containers as needed):
+```bash
+oada up -d
+```
+
+## Restarting any given service:
+```bash
+oada restart &lt;service_name&gt;
+```
+
+Docker will automatically restart failed services, and will restart all on host boot.
+
+---
+class: inverse
+
+# Debugging, Monitoring
+
+## Check up status:
+(restarts that service w/ terse logs)
+```bash
+oada ps
+```
+
+## Container logs:
+```bash
+oada logs --tail=1000 -f &lt;service_name&gt;
+```
+
+## Enable all debugging messages
+(restarts that service w/ verbose logs)
+```bash
+DEBUG="*" oada up -d &lt;service_name&gt;
+```
+`DEBUG="*info*"` for normal logs
+
+Better monitoring+notifications are on roadmap
+
+---
+class: inverse
+# Backups
+* no existing enforced backup scheme
+* can map docker data volumes to cloud block storage w/ `services-enabled` override
+* can cron `arangodump` nightly for protection against non-physical errors
+
+
+# Failover
+* no existing enforced failover scheme
+* future may use Kubernetes to coordinate hosts
+* option is to map docker data volumes to cloud block storage, then failover to new VM
+
+
+# Updates
+Rolling updates are on roadmap
+```bash
+git pull && oada run yarn && oada up -d && oada restart
+```
+Near-term roadmap could include `oada --upgrade` option to intelligently 
+restart/rebuild only those containers affected by update
+
+
+---
+class: inverse
+
+# Using custom internal identity service
+
+Do this as `services-enabled` plugin
+1. Override default OADA login template
+2. Add proxy route to your plugin
+3. Set userid in session upon identity discovery
+4. Redirect back to OADA default login to complete OAuth2 token handout
+
+
+---
+class: inverse, middle
+# Simple "up and running" test:
+```bash
+curl https://&lt;domain&gt;/.well-known/oada-configuration
+```
+You may need to allow an untrusted HTTPS certificate if on localhost or otherwise developing
+without a valid SSL cert.
+    </textarea>
+    <script src="remark-latest.min.js"></script>
+    <script>
+      var slideshow = remark.create({ratio: "16:9"});
+    </script>
+  </body>
+</html>
