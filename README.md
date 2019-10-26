@@ -10,6 +10,7 @@
 | [Intro to the OADA API: Irrigation](https://cdn.rawgit.com/OADA/oada-docs/master/intro/OADA_API_Intro_Irrigation.html) | [Rest API Spec](rest-specs/README.md)
 | [Intro to the OADA API: Trellis](https://cdn.rawgit.com/OADA/oada-docs/master/intro/OADA_API_Intro_Trellis.html) | 
 | [Intro to OADA Authentication and Authorization](getting_started/auth/README.md) | [Authorization and Authentication](rest-specs/Authentication_and_Authorization.md) |
+| [Deploy+Ops](https://cdn.rawgit.com/OADA/oada-docs/master/ops/Ops.html) | 
 
 ## Overview
 The purpose of the Open Ag Data Alliance is to develop a standard API framework for 
