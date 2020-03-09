@@ -251,33 +251,56 @@ git clone git@github.com:OADA/oada-srvc-docker.git
 
 ## Install `oada` script, install npm libraries:
 ```bash
-# cd oada-srvc-docker
-# oada --install-self
+cd oada-srvc-docker
+oada --install-self
 ```
 The `oada` script passes its arguments to `docker-compose`, so whatever works with docker-compose works with `oada`.
 
 ---
 name: setup
 class: middle, inverse
-# Deploying a new OADA/Trellis Instance
+# Deploying a new OADA/Trellis Instance - Setup Domains
 
-## Setup Domains
-1. Create domain folder for each domain to serve (`proxy` and `auth` use domain configs)
-  * can copy `localhost` domain and modify to suit
-2. Edit client certificate (used in openid-connect) with your info
-3. Sign client certificate as jwt (from within admin container: `oada run --rm admin`):
+1. In `domains-available/`, copy the localhost folder to a new folder named the same as your domain 
 ```bash
-# oada run --rm admin oada-sign /domains-available/&lt;your_domain&gt;/unsigned_client_cert.js
+cd domains-available && cp -rf localhost api.example.com
 ```
-NOTE: oada-sign CLI w/in admin coming soon.  Currently you have to use the js lib on npm.
+2. Edit config.js and unsigned_software_statement.js to replace `localhost` with your domain
+```bash
+cd api.example.com
+# Replace localhost with your domain in config.js and unsigned_software_statement.js
+```
+3. Create new signing keys for your domain, and then use them to sign the unsigned_software_statement.js:
+```bash
+# Create the keys:
+oada run --rm admin cd /domains-available/&lt;your_domain&gt; && oada-certs --create-keys --force
+# Sign the unsigned_software_statement.js:
+oada run --rm admin cd /domains-available/&lt;your_domain&gt; && oada-certs
+```
+4. Enable your domain and restart oada to take effect:
+```bash
+cd domains-enabled && ln -s ../domains-available/&lt;your_domain&gt; .
+oada restart
+```
 
+---
+name: setup
+class: middle, inverse
 ## https certs
-* admin container has certbot, proxy expects cert in domain folder
-* in admin, symlink /etc/letsencrypt/live to proxy folder
-* you can renew manually w/ admin, or make a cron container
+* Use script in admin container to request a letsencrypt certificate on all domains in `domains-enabled`
 ```bash
-# oada run --rm admin certbot renew
+oada run --rm admin initiate-letsencrypt-alldomains.sh
+# You have to restart proxy to get nginx to see the new certificate:
+oada restart proxy
 ```
+* you can renew manually every 90 days w/ admin, or make a cron container to do it for you
+```bash
+oada run --rm admin certbot renew
+```
+* If you have a manually-generated certificate, you can put it in your domain folder under `certs`.  Be sure to
+  name the CA certificate `fullchain.pem` and the private key `privkey.pem` because that's what the default
+  `sites-enabled` for nginx looks for.  You can also override the sites-enabled if you want to name them
+  something else.
 
 ---
 name: starting
