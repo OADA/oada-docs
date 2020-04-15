@@ -153,9 +153,11 @@ docker-compose file.
 ### An Overview of OADA Repos
 
 #### The core:
-[oada-docs](https://github.com/oada/oada-docs) The core API spec and associated documentation.
-[oada-srvc-docker](https://github.com/oada/oada-srvc-docker) The installable reference implementation of the OADA API.
-[oada-formats](https://github.com/oada/oada-formats) Sets of schemas and examples for various OADA content types.
+* [oada-docs](https://github.com/oada/oada-docs) The core API spec and associated documentation.
+
+* [oada-srvc-docker](https://github.com/oada/oada-srvc-docker) The installable reference implementation of the OADA API.
+
+* [oada-formats](https://github.com/oada/oada-formats) Sets of schemas and examples for various OADA content types.
 
 #### Installable services or modules:
 * [oada-backups](https://github.com/oada/oada-backups) An OADA installable service that creates a rolling backup of the internal 
