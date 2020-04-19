@@ -303,6 +303,25 @@ oada run --rm admin certbot renew
   something else.
 
 ---
+name: users
+class: middle, inverse
+# Deploying a new OADA/Trellis Instance - Setup admin user
+* Use script in admin container create first admin user
+* only admin users can add other users via API
+```bash
+oada run --rm admin useradd -a
+Username: <username>
+Password: <password>
+Domain: <domain for this user>
+```
+* Once initial admin user is created, you can create other users via API
+```http
+POST /users
+{ username: 'username', password: 'password' }
+```
+* add `scope: [ 'oada.admin.users' ]` to make this user an admin user
+
+---
 name: starting
 class: inverse
 
@@ -341,16 +360,16 @@ oada logs --tail=1000 -f &lt;service_name&gt;
 ```bash
 DEBUG="*" oada up -d &lt;service_name&gt;
 ```
-`DEBUG="*info*"` for normal logs
+`DEBUG="*info*,*warn*,*error*"` for normal logs
 
 Better monitoring+notifications are on roadmap
 
 ---
 class: inverse
 # Backups
-* no existing enforced backup scheme
+* no enforced backup scheme
 * can map docker data volumes to cloud block storage w/ `services-enabled` override
-* can cron `arangodump` nightly for protection against non-physical errors
+* https://github.com/oada/oada-backups can be dropped in services-available to dump rolling arangodb nightly to a volume
 
 
 # Failover

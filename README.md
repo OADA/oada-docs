@@ -123,7 +123,25 @@ The best way to get familiar with the OADA API is to use it.  Do this:
 Read up on the [Rest API Spec](rest-specs/README.md) with examples to learn how to
 create resources, link them between documents, track changes, add services or
 custom modules, and more.
-    
+
+### Create Users
+
+There is a script in the admin container for adding users.  If a user is an admin user,
+they can also add users via the `/users` part of the OADA API.
+
+To add an admin user:
+```bash
+# oada run --rm admin useradd -a
+Username: <username>
+Password: <password>
+Domain: <domain for this user>
+```
+Once the initial admin user is made, they can hand out tokens with permission to create users via the API:
+```http
+POST /users
+{ username: 'username', password: 'password' }
+```
+NOTE: the password is hashed and salted properly for login before inserting in the database.
 
 ### Services and Modules
 
