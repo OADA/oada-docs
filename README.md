@@ -131,7 +131,7 @@ they can also add users via the `/users` part of the OADA API.
 
 To add an admin user:
 ```bash
-$ oada run --rm admin useradd -a
+$ oada run --rm admin ./useradd -a
 Username: <username>
 Password: <password>
 Domain: <domain for this user>
@@ -141,7 +141,14 @@ Once the initial admin user is made, they can hand out tokens with permission to
 POST /users
 { "username": "username", "password": "password" }
 ```
+
 NOTE: the password is hashed and salted properly for login before inserting in the database.
+
+To create another admin user via the API, include the appropriate scope in the POST body:
+```http
+POST /users
+{ "username": "username", "password": "password", "scope": [ "oada.admin.user:all" ]
+```
 
 ### Services and Modules
 
