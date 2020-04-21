@@ -149,6 +149,7 @@ To create another admin user via the API, include the appropriate scope in the P
 POST /users
 { "username": "username", "password": "password", "scope": [ "oada.admin.user:all" ]
 ```
+IMPORTANT NOTE: API-driven user creation has 2 extra failsafes built-in.  Both the user and the token must have `oada.admin.user:all` scope in order to be able to create users.  When getting a token via `client.oada-dev.com`, this means that you have to remember to include that scope in the request: normally you could ask for scope of `all:all`, but for the token to also be able to create users, you need to ask for scope of `all:all oada.admin.user:all`.  
 
 ### Services and Modules
 
