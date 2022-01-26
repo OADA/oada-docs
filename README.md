@@ -5,8 +5,8 @@
 
 |   Getting Started       |       Specs                 |
 |:-----------------------:|:---------------------------:|
-| [Intro to the OADA API: Trellis](https://cdn.rawgit.com/OADA/oada-docs/master/intro/OADA_API_Intro_Trellis.html) | 
-| [Deploy+Ops](https://cdn.rawgit.com/OADA/oada-docs/master/ops/Ops.html) | 
+| [Intro to the OADA API: Trellis](https://openag.io/oada-docs/intro/OADA_API_Intro_Trellis.html) | 
+| [Deploy+Ops](https://openag.io/oada-docs/ops/Ops.html) | 
 | [Intro to OADA Authentication and Authorization](getting_started/auth/README.md) | [Authorization and Authentication](rest-specs/Authentication_and_Authorization.md) |
 
 ## Overview
